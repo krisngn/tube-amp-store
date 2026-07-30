@@ -414,7 +414,7 @@ export async function getProductBySlug(
         published_at,
         category:categories(id, slug, name_vi, name_en, parent_id),
         brand:brands(id, slug, name, name_en, logo_path),
-        product_translations!inner(
+        product_translations(
           name,
           short_description,
           description,
@@ -437,26 +437,22 @@ export async function getProductBySlug(
             )
             .eq('slug', slug)
             .eq('is_published', true)
-            .eq('product_translations.locale', locale)
-            .single();
+            .maybeSingle();
 
         if (error || !data) {
-            console.error('Error fetching product:', error);
+            if (error) console.error('Error fetching product:', error);
             return null;
         }
 
         const productData = data as unknown as ProductDetailRow;
-        const translation = productData.product_translations?.[0];
-
-        // Fetch English name separately for product title
-        const { data: englishData } = await supabase
-            .from('product_translations')
-            .select('name')
-            .eq('product_id', productData.id)
-            .eq('locale', 'en')
-            .single();
-
-        const englishName = englishData?.name;
+        // Pick the requested locale, falling back to VI then any — so a product
+        // with only one locale's translation still renders (no 404).
+        const allTranslations = productData.product_translations ?? [];
+        const translation =
+            allTranslations.find((t) => t.locale === locale) ??
+            allTranslations.find((t) => t.locale === 'vi') ??
+            allTranslations[0];
+        const englishName = allTranslations.find((t) => t.locale === 'en')?.name;
 
         // Build the full category ancestor path (root -> leaf) for the breadcrumb
         let categoryPath: Array<{ name: string; slug: string }> = [];

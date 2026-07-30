@@ -61,11 +61,17 @@ export function emptyTemplateCsv(entity: Entity): string {
 const normSlug = (s: string | undefined | null) =>
     (s ?? '').toString().toLowerCase().trim().replace(/\s+/g, '-');
 const toInt = (v: string | undefined, def = 0) => {
-    const n = parseInt((v ?? '').toString(), 10);
+    const n = parseInt((v ?? '').toString().replace(/[.,\s]/g, ''), 10);
     return Number.isFinite(n) ? n : def;
 };
 const toNum = (v: string | undefined): number => {
     const n = Number((v ?? '').toString().replace(/[, ]/g, ''));
+    return Number.isFinite(n) ? n : NaN;
+};
+// VND money: strip thousands separators ('.', ',', space). VND has no decimal part,
+// so "250.000" -> 250000 (not 250).
+const toMoney = (v: string | undefined): number => {
+    const n = Number((v ?? '').toString().replace(/[.,\s]/g, ''));
     return Number.isFinite(n) ? n : NaN;
 };
 const parseBool = (v: string | undefined, def = false): boolean => {
@@ -208,26 +214,27 @@ async function importBrands(csvText: string): Promise<ImportResult> {
     for (let i = 0; i < objs.length; i++) {
         const o = objs[i];
         const rowNum = i + 2; // header is row 1
+        const has = (k: string) => k in o;
         try {
             const slug = normSlug(o.slug || o.name);
             if (!slug) throw new Error('Thiếu slug/name');
-            const { error } = await sb.from('brands').upsert(
-                {
-                    slug,
-                    name: o.name || slug,
-                    name_en: o.name_en || null,
-                    description_vi: o.description_vi || null,
-                    description_en: o.description_en || null,
-                    sort_order: toInt(o.sort_order, 0),
-                    is_active: parseBool(o.is_active, true),
-                },
-                { onConflict: 'slug' }
-            );
+            const isNew = !existingSlugs.has(slug);
+            const payload: Record<string, unknown> = { slug };
+            if (has('name')) payload.name = o.name || slug;
+            else if (isNew) payload.name = slug;
+            if (has('name_en')) payload.name_en = o.name_en || null;
+            if (has('description_vi')) payload.description_vi = o.description_vi || null;
+            if (has('description_en')) payload.description_en = o.description_en || null;
+            if (has('sort_order')) payload.sort_order = toInt(o.sort_order, 0);
+            if (has('is_active')) payload.is_active = parseBool(o.is_active, true);
+
+            const { error } = await sb.from('brands').upsert(payload, { onConflict: 'slug' });
             if (error) throw new Error(error.message);
-            if (existingSlugs.has(slug)) result.updated++;
-            else {
+            if (isNew) {
                 result.created++;
                 existingSlugs.add(slug);
+            } else {
+                result.updated++;
             }
         } catch (e) {
             result.errors.push({ row: rowNum, message: msg(e) });
@@ -244,32 +251,33 @@ async function importCategories(csvText: string): Promise<ImportResult> {
     const existingSlugs = new Set((existing ?? []).map((c) => c.slug));
 
     // Pass 1: upsert base fields (parent resolved in pass 2)
-    const meta: { rowNum: number; slug: string; parentSlug: string }[] = [];
+    const meta: { rowNum: number; slug: string; parentSlug: string; hasParent: boolean }[] = [];
     for (let i = 0; i < objs.length; i++) {
         const o = objs[i];
         const rowNum = i + 2;
+        const has = (k: string) => k in o;
         try {
             const slug = normSlug(o.slug || o.name_vi);
             if (!slug) throw new Error('Thiếu slug');
-            const { error } = await sb.from('categories').upsert(
-                {
-                    slug,
-                    name_vi: o.name_vi || slug,
-                    name_en: o.name_en || null,
-                    description_vi: o.description_vi || null,
-                    description_en: o.description_en || null,
-                    sort_order: toInt(o.sort_order, 0),
-                    is_active: parseBool(o.is_active, true),
-                },
-                { onConflict: 'slug' }
-            );
+            const isNew = !existingSlugs.has(slug);
+            const payload: Record<string, unknown> = { slug };
+            if (has('name_vi')) payload.name_vi = o.name_vi || slug;
+            else if (isNew) payload.name_vi = slug;
+            if (has('name_en')) payload.name_en = o.name_en || null;
+            if (has('description_vi')) payload.description_vi = o.description_vi || null;
+            if (has('description_en')) payload.description_en = o.description_en || null;
+            if (has('sort_order')) payload.sort_order = toInt(o.sort_order, 0);
+            if (has('is_active')) payload.is_active = parseBool(o.is_active, true);
+
+            const { error } = await sb.from('categories').upsert(payload, { onConflict: 'slug' });
             if (error) throw new Error(error.message);
-            if (existingSlugs.has(slug)) result.updated++;
-            else {
+            if (isNew) {
                 result.created++;
                 existingSlugs.add(slug);
+            } else {
+                result.updated++;
             }
-            meta.push({ rowNum, slug, parentSlug: normSlug(o.parent_slug) });
+            meta.push({ rowNum, slug, parentSlug: normSlug(o.parent_slug), hasParent: has('parent_slug') });
         } catch (e) {
             result.errors.push({ row: rowNum, message: msg(e) });
         }
@@ -279,6 +287,7 @@ async function importCategories(csvText: string): Promise<ImportResult> {
     const { data: all } = await sb.from('categories').select('id, slug');
     const idBySlug = new Map((all ?? []).map((c) => [c.slug, c.id]));
     for (const m of meta) {
+        if (!m.hasParent) continue; // parent_slug column absent → leave existing hierarchy untouched
         const selfId = idBySlug.get(m.slug);
         if (!selfId) continue;
         if (!m.parentSlug) {
@@ -328,68 +337,102 @@ async function importProducts(csvText: string): Promise<ImportResult> {
     for (let i = 0; i < objs.length; i++) {
         const o = objs[i];
         const rowNum = i + 2;
+        // Only columns present in the uploaded CSV are written, so a partial file
+        // updates just those fields instead of nulling everything else.
+        const has = (k: string) => k in o;
         try {
             const slug = normSlug(o.slug);
             if (!slug) throw new Error('Thiếu slug');
-            const price = toNum(o.price);
-            if (!Number.isFinite(price) || price <= 0) throw new Error('Giá không hợp lệ');
+            const isNew = !existingSlugs.has(slug);
 
-            const categoryId = await ensureCategory(normSlug(o.category_slug));
-            const brandId = await ensureBrand(normSlug(o.brand_slug));
+            const payload: Record<string, unknown> = { slug };
+
+            if (has('price')) {
+                const price = toMoney(o.price);
+                if (!Number.isFinite(price) || price <= 0) throw new Error('Giá không hợp lệ');
+                payload.price = price;
+            } else if (isNew) {
+                throw new Error('Thiếu cột giá (price) cho sản phẩm mới');
+            }
+
+            if (has('condition')) {
+                const c = (o.condition || '').toLowerCase();
+                if (c && !['new', 'like_new', 'vintage'].includes(c)) throw new Error(`condition không hợp lệ: "${o.condition}"`);
+                payload.condition = c || 'new';
+            } else if (isNew) {
+                payload.condition = 'new';
+            }
+
+            if (has('sku')) payload.sku = o.sku || null;
+            if (has('compare_at_price')) payload.compare_at_price = o.compare_at_price ? toMoney(o.compare_at_price) : null;
+            if (has('stock_quantity')) payload.stock_quantity = toInt(o.stock_quantity, 0);
+            if (has('category_slug')) payload.category_id = await ensureCategory(normSlug(o.category_slug));
+            if (has('brand_slug')) payload.brand_id = await ensureBrand(normSlug(o.brand_slug));
+            if (has('topology')) {
+                const tp = (o.topology || '').toLowerCase();
+                if (tp && !['se', 'pp'].includes(tp)) throw new Error(`topology không hợp lệ: "${o.topology}"`);
+                payload.topology = tp || null;
+            }
+            if (has('tube_type')) payload.tube_type = o.tube_type || null;
+            if (has('power_watts')) payload.power_watts = o.power_watts ? toNum(o.power_watts) : null;
+            if (has('taps')) payload.taps = o.taps ? o.taps.split('|').map((s) => s.trim()).filter(Boolean) : [];
+            if (has('min_speaker_sensitivity'))
+                payload.min_speaker_sensitivity = o.min_speaker_sensitivity ? toInt(o.min_speaker_sensitivity) : null;
+            if (has('specifications')) payload.specifications = decodeSpecs(o.specifications);
+            if (has('is_published')) payload.is_published = parseBool(o.is_published, false);
+            if (has('is_featured')) payload.is_featured = parseBool(o.is_featured, false);
+            if (has('is_vintage')) payload.is_vintage = parseBool(o.is_vintage, false);
 
             const { data: prod, error } = await sb
                 .from('products')
-                .upsert(
-                    {
-                        slug,
-                        sku: o.sku || null,
-                        price,
-                        compare_at_price: o.compare_at_price ? toNum(o.compare_at_price) : null,
-                        stock_quantity: toInt(o.stock_quantity, 0),
-                        condition: ['new', 'like_new', 'vintage'].includes(o.condition) ? o.condition : 'new',
-                        category_id: categoryId,
-                        brand_id: brandId,
-                        topology: ['se', 'pp'].includes(o.topology) ? o.topology : null,
-                        tube_type: o.tube_type || null,
-                        power_watts: o.power_watts ? toNum(o.power_watts) : null,
-                        taps: o.taps ? o.taps.split('|').map((s) => s.trim()).filter(Boolean) : [],
-                        min_speaker_sensitivity: o.min_speaker_sensitivity ? toInt(o.min_speaker_sensitivity) : null,
-                        specifications: decodeSpecs(o.specifications),
-                        is_published: parseBool(o.is_published, false),
-                        is_featured: parseBool(o.is_featured, false),
-                        is_vintage: parseBool(o.is_vintage, false),
-                    },
-                    { onConflict: 'slug' }
-                )
+                .upsert(payload, { onConflict: 'slug' })
                 .select('id')
                 .single();
             if (error || !prod) throw new Error(error?.message || 'Upsert sản phẩm thất bại');
 
-            const translations = [
-                {
-                    product_id: prod.id,
-                    locale: 'vi',
-                    name: o.name_vi || slug,
-                    short_description: o.short_description_vi || null,
-                    description: o.description_vi || null,
-                },
-                {
-                    product_id: prod.id,
-                    locale: 'en',
-                    name: o.name_en || o.name_vi || slug,
-                    short_description: o.short_description_en || null,
-                    description: o.description_en || null,
-                },
-            ];
-            const { error: tErr } = await sb
-                .from('product_translations')
-                .upsert(translations, { onConflict: 'product_id,locale' });
-            if (tErr) throw new Error(tErr.message);
+            // Translations: only touch a locale when its columns are present (or on create),
+            // merging with existing values so a partial CSV doesn't wipe the other fields.
+            const wantVi = isNew || has('name_vi') || has('short_description_vi') || has('description_vi');
+            const wantEn = isNew || has('name_en') || has('short_description_en') || has('description_en');
+            if (wantVi || wantEn) {
+                const existingTrans = isNew
+                    ? []
+                    : ((await sb
+                          .from('product_translations')
+                          .select('locale, name, short_description, description')
+                          .eq('product_id', prod.id)).data ?? []);
+                const exVi = existingTrans.find((t) => t.locale === 'vi');
+                const exEn = existingTrans.find((t) => t.locale === 'en');
+                const transRows: Record<string, unknown>[] = [];
+                if (wantVi) {
+                    transRows.push({
+                        product_id: prod.id,
+                        locale: 'vi',
+                        name: has('name_vi') ? o.name_vi || slug : exVi?.name || slug,
+                        short_description: has('short_description_vi') ? o.short_description_vi || null : exVi?.short_description ?? null,
+                        description: has('description_vi') ? o.description_vi || null : exVi?.description ?? null,
+                    });
+                }
+                if (wantEn) {
+                    transRows.push({
+                        product_id: prod.id,
+                        locale: 'en',
+                        name: has('name_en') ? o.name_en || o.name_vi || slug : exEn?.name || o.name_vi || slug,
+                        short_description: has('short_description_en') ? o.short_description_en || null : exEn?.short_description ?? null,
+                        description: has('description_en') ? o.description_en || null : exEn?.description ?? null,
+                    });
+                }
+                const { error: tErr } = await sb
+                    .from('product_translations')
+                    .upsert(transRows, { onConflict: 'product_id,locale' });
+                if (tErr) throw new Error(tErr.message);
+            }
 
-            if (existingSlugs.has(slug)) result.updated++;
-            else {
+            if (isNew) {
                 result.created++;
                 existingSlugs.add(slug);
+            } else {
+                result.updated++;
             }
         } catch (e) {
             result.errors.push({ row: rowNum, message: msg(e) });

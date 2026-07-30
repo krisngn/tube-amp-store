@@ -31,7 +31,7 @@ export default async function BrandPage({ params, searchParams }: PageProps) {
     if (!brand) notFound();
 
     const sort = (search.sort as ProductSort) || 'newest';
-    const page = search.page ? Number(search.page) : 1;
+    const page = Math.max(1, Math.floor(Number(search.page)) || 1);
     const pageSize = 12;
 
     const [result, tc, tn] = await Promise.all([

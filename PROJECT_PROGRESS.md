@@ -1,11 +1,76 @@
-# Project Progress - Restore The Basic
+# Project Progress - Vintage Audio Accessories
 
-**Last Updated:** December 24, 2025  
-**Current Phase:** Phase 3 - Deployment & Reliability
+**Last Updated:** July 30, 2026  
+**Current Phase:** Phase 4 - Catalog Expansion (Categories, Brands, Import/Export)
+
+> Formerly "Restore The Basic" (tube-amp only). Rebranded to **Vintage Audio Accessories** and generalized into a multi-category vintage audio parts store (amps, tubes, capacitors, resistors, chassis, and more).
 
 ---
 
 ## 🎯 Recent Updates
+
+### ✅ Catalog Expansion: Categories, Brands, Import/Export (July 30, 2026)
+
+**Status:** ✅ Complete (pending 2 manual Supabase migrations on deploy)
+
+#### Overview
+Rebranded the store to **Vintage Audio Accessories** and turned a tube-amp-only shop into a general vintage-audio catalog: a self-managed multi-level category tree, brands with their own landing pages, flexible per-product specifications for any product type, and CSV import/export for bulk management.
+
+#### Features Implemented
+
+1. **Rebrand → Vintage Audio Accessories**
+   - i18n (`common`/`footer`/`emails`), Header logo, email templates, VietQR/bank placeholders, `package.json`, root `metadata`.
+   - Home page rebuilt as a server component: real featured products + "shop by category"; matching tool extracted to a client component.
+
+2. **Categories (multi-level tree) & Brands**
+   - New `categories` (adjacency list `parent_id`, **unlimited nesting** + cycle-prevention trigger) and `brands` tables; `products.category_id` / `brand_id` (nullable); amp-only columns made optional.
+   - Admin: **dashboard `/admin`**; categories as an expand/collapse tree (add child / edit / delete / reorder); brand CRUD (flat); product form has a category tree picker + brand select.
+   - Products list shows Category/Brand columns + filters; **live (debounced) search** (no button).
+
+3. **Multi-type products (flexible specifications)**
+   - Product form: free-form key/value specifications editor (caps, resistors, chassis, tubes… any type); amp fields optional.
+   - Product detail renders all specifications generically.
+
+4. **Storefront**
+   - `/products` collection with recursive category + brand facets (parent slug matches all descendants); `/tube-amplifiers` redirects to `/products`.
+   - **Brand landing pages** `/brand/[slug]` (logo + description + products, SEO metadata) and `/brands` directory.
+   - Product detail: full category breadcrumb + brand link; related products by category.
+
+5. **CSV Import / Export (`/admin/import-export`)**
+   - Export full CSV, template (with example rows) and blank template per entity (products/categories/brands).
+   - Import **upserts by slug**; product rows reference category/brand by slug and auto-create missing ones; per-row created/updated/error report.
+   - Dependency-free CSV util; `sep=,` + UTF-8 BOM so Excel splits columns and reads Vietnamese; files round-trip (importer skips the `sep=` hint). `specifications` packed as `Key=Value|Key=Value`.
+
+#### Database Migrations (run in Supabase SQL Editor, in order)
+1. `supabase/ADD_CATEGORIES_AND_BRANDS.sql`
+2. `supabase/ALLOW_MULTILEVEL_CATEGORIES.sql`
+(Optional) sample rows in `supabase/seed.sql`.
+
+#### Key Files
+- DB: `supabase/{ADD_CATEGORIES_AND_BRANDS,ALLOW_MULTILEVEL_CATEGORIES}.sql`, `schema.sql`, `seed.sql`
+- Repos: `src/lib/repositories/{products,categories,brands}.ts`, `src/lib/repositories/admin/{categories,brands,products}.ts`, `src/lib/utils/categoryTree.ts`
+- Import/export: `src/lib/import-export/{csv,columns,service}.ts`, `src/app/api/admin/{export,import}/[entity]/route.ts`, `src/app/admin/import-export/*`
+- Admin UI: `src/app/admin/{page,categories,brands,products}/*`
+- Storefront: `src/app/{products,brand/[slug],brands,product/[slug]}/*`, `src/components/layout/Header.tsx`
+
+#### Review fixes applied (July 30, 2026)
+- Import only writes columns present in the uploaded CSV (a partial file no longer nulls out untouched fields like SKU, flags, brand/category).
+- VND money parsing: `250.000` → 250000 (strips thousands separators for price/compare/stock).
+- Invalid `condition`/`topology` values now raise a per-row error instead of being silently changed.
+- Import route: 5 MB upload cap + `maxDuration`.
+- Product detail no longer 404s when a product has only one locale's translation (locale fallback + `maybeSingle`); pagination `page` param clamped.
+
+#### Known Limitations / Next
+- No hard-delete for products (unpublish only).
+- **Storefront listings/search still key off the English translation** (`!inner` on `product_translations`), so a product published with only a VI translation is excluded from grids and Vietnamese search won't match VI names. Fix requires decoupling search from the inner join (deferred).
+- CSV import is not transactional and runs row-by-row: a mid-row failure can leave a product without translations, and large files (thousands of rows) should be batched. Fine for typical catalogs.
+- Deactivating a mid-tree category detaches its still-active descendants from ancestor filtering.
+- `specifications` CSV cell uses `Key=Value|…`; values containing `|` and non-string JSON types don't round-trip perfectly.
+- Category/brand images & brand logos are entered as a URL/path (no file upload yet).
+
+---
+
+### (Earlier)
 
 ### ✅ Minimal User Auth + Order History + Order Claiming (December 24, 2025)
 

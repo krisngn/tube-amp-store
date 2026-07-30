@@ -26,7 +26,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     const priceMax = search.priceMax ? Number(search.priceMax) : undefined;
     const searchQuery = search.q as string | undefined;
     const sort = (search.sort as ProductSort) || 'newest';
-    const page = search.page ? Number(search.page) : 1;
+    const page = Math.max(1, Math.floor(Number(search.page)) || 1);
     const pageSize = 12;
 
     const [result, filterOptions, t] = await Promise.all([
