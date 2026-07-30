@@ -66,12 +66,17 @@ Rebranded the store to **Vintage Audio Accessories** and turned a tube-amp-only 
 - Product detail no longer 404s when a product has only one locale's translation (locale fallback + `maybeSingle`); pagination `page` param clamped.
 - **Storefront listings/search delocalized**: products show regardless of which locale's translation exists (dropped the English `!inner` gate); display name follows the request locale (fallback VI → any); search matches any locale, so Vietnamese product names are now searchable.
 
+#### Follow-up improvements (July 30, 2026)
+- **SEO**: dynamic `sitemap.xml` (static + product/category/brand URLs) + `robots.txt`. Set `NEXT_PUBLIC_SITE_URL` to the production domain.
+- **Low-stock alerts**: `/admin/inventory` page + dashboard count (products with stock ≤ threshold).
+- **Category/brand image upload**: generic `/api/admin/upload` + file picker in the category & brand forms (bucket `product-images`).
+- **Hard-delete products**: delete button on `/admin/products` (removes storage images + row; order history preserved via snapshot).
+
 #### Known Limitations / Next
-- No hard-delete for products (unpublish only).
 - CSV import is not transactional and runs row-by-row: a mid-row failure can leave a product without translations, and large files (thousands of rows) should be batched. Fine for typical catalogs.
 - Deactivating a mid-tree category detaches its still-active descendants from ancestor filtering.
 - `specifications` CSV cell uses `Key=Value|…`; values containing `|` and non-string JSON types don't round-trip perfectly.
-- Category/brand images & brand logos are entered as a URL/path (no file upload yet).
+- Multi-channel inventory sync (Shopee/TikTok) is operational — use CSV export + a Vietnamese multi-channel tool; no custom marketplace API integration.
 
 ---
 

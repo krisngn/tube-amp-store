@@ -4,6 +4,7 @@ import { adminListProducts } from '@/lib/repositories/admin/products';
 import { adminListCategories } from '@/lib/repositories/admin/categories';
 import { adminListBrands } from '@/lib/repositories/admin/brands';
 import ProductsFilters from './ProductsFilters';
+import DeleteProductButton from './DeleteProductButton';
 import styles from './page.module.css';
 
 interface ProductsListProps {
@@ -94,12 +95,15 @@ export default async function ProductsList({ searchParams }: ProductsListProps) 
                                     <td>{product.tubeType || '—'}</td>
                                     <td>{new Date(product.updatedAt).toLocaleDateString()}</td>
                                     <td>
-                                        <Link
-                                            href={`/admin/products/${product.id}`}
-                                            className="btn btn-ghost btn-sm"
-                                        >
-                                            {t('products.edit')}
-                                        </Link>
+                                        <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
+                                            <Link
+                                                href={`/admin/products/${product.id}`}
+                                                className="btn btn-ghost btn-sm"
+                                            >
+                                                {t('products.edit')}
+                                            </Link>
+                                            <DeleteProductButton id={product.id} name={product.name} />
+                                        </div>
                                     </td>
                                 </tr>
                             ))

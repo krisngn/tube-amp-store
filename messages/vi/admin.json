@@ -15,6 +15,9 @@
     "importExport": {
         "title": "Nhập / Xuất Dữ Liệu"
     },
+    "inventory": {
+        "title": "Tồn Kho"
+    },
     "login": {
         "title": "Đăng Nhập Quản Trị",
         "subtitle": "Đăng nhập để truy cập bảng quản trị",

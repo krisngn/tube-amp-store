@@ -35,7 +35,26 @@ export default function CategoryForm({ category, allCategories, defaultParentId 
         isActive: category?.isActive ?? true,
     });
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const handleImageUpload = async (file: File) => {
+        setError(null);
+        setUploading(true);
+        try {
+            const fd = new FormData();
+            fd.append('file', file);
+            fd.append('folder', 'categories');
+            const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Tải ảnh thất bại');
+            setForm((prev) => ({ ...prev, imagePath: data.url }));
+        } catch (e) {
+            setError(e instanceof Error ? e.message : 'Tải ảnh thất bại');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     // Parent options: every category, indented by depth, excluding self + descendants when editing.
     const parentOptions = useMemo(() => {
@@ -137,14 +156,30 @@ export default function CategoryForm({ category, allCategories, defaultParentId 
                             onChange={(e) => setForm({ ...form, sortOrder: Number(e.target.value) })}
                         />
                     </div>
-                    <div className={styles.group}>
-                        <label className="label">Ảnh (URL / storage path)</label>
+                    <div className={`${styles.group} ${styles.fullWidth}`}>
+                        <label className="label">Ảnh danh mục</label>
                         <input
                             className="input"
                             value={form.imagePath}
                             onChange={(e) => setForm({ ...form, imagePath: e.target.value })}
-                            placeholder="https://... hoặc để trống"
+                            placeholder="Dán URL, hoặc tải ảnh lên bên dưới"
                         />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', marginTop: 'var(--space-sm)' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                disabled={uploading}
+                                onChange={(e) => {
+                                    const f = e.target.files?.[0];
+                                    if (f) handleImageUpload(f);
+                                }}
+                            />
+                            {uploading && <span className={styles.muted}>Đang tải...</span>}
+                            {form.imagePath && !uploading && (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={form.imagePath} alt="preview" style={{ height: 48, borderRadius: 'var(--radius-sm)' }} />
+                            )}
+                        </div>
                     </div>
                     <div className={`${styles.group} ${styles.fullWidth}`}>
                         <label className="label">Mô tả (VI)</label>

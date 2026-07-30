@@ -484,3 +484,70 @@ export async function adminUpdateProduct(payload: UpdateProductPayload): Promise
     }
 }
 
+/**
+ * Hard-delete a product: removes its storage images (best-effort) then the row.
+ * product_translations / product_images cascade; order_items keep a snapshot
+ * (product_id is set null by FK), so order history is preserved.
+ */
+export async function adminDeleteProduct(id: string): Promise<void> {
+    const supabase = createServiceClient();
+
+    const { data: images } = await supabase.from('product_images').select('storage_path').eq('product_id', id);
+    const paths = (images ?? [])
+        .map((i) => (i as { storage_path: string | null }).storage_path)
+        .filter((p): p is string => !!p);
+    if (paths.length) {
+        await supabase.storage.from('product-images').remove(paths);
+    }
+
+    const { error } = await supabase.from('products').delete().eq('id', id);
+    if (error) {
+        console.error('Error deleting product:', error);
+        throw new Error(error.message || 'Failed to delete product');
+    }
+}
+
+export interface LowStockItem {
+    id: string;
+    slug: string;
+    name: string;
+    stock: number;
+    threshold: number;
+    status: 'published' | 'draft';
+}
+
+/**
+ * Products at or below their low-stock threshold (stock_quantity <= low_stock_threshold).
+ * Compared in JS since Supabase can't compare two columns in a filter.
+ */
+export async function adminListLowStock(): Promise<LowStockItem[]> {
+    const supabase = createServiceClient();
+    const { data, error } = await supabase
+        .from('products')
+        .select('id, slug, stock_quantity, low_stock_threshold, is_published, product_translations(name, locale)')
+        .order('stock_quantity', { ascending: true });
+
+    if (error) {
+        console.error('Error listing low-stock products:', error);
+        return [];
+    }
+
+    return (data ?? [])
+        .filter((p: any) => (p.stock_quantity ?? 0) <= (p.low_stock_threshold ?? 0))
+        .map((p: any) => {
+            const tr = p.product_translations || [];
+            const name =
+                tr.find((t: any) => t.locale === 'vi')?.name ||
+                tr.find((t: any) => t.locale === 'en')?.name ||
+                p.slug;
+            return {
+                id: p.id,
+                slug: p.slug,
+                name,
+                stock: p.stock_quantity ?? 0,
+                threshold: p.low_stock_threshold ?? 0,
+                status: p.is_published ? ('published' as const) : ('draft' as const),
+            };
+        });
+}
+

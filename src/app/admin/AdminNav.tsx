@@ -70,6 +70,12 @@ export default function AdminNav() {
                         {t('orders.title')}
                     </Link>
                     <Link
+                        href="/admin/inventory"
+                        className={pathname?.includes('/admin/inventory') ? styles.active : ''}
+                    >
+                        {t('inventory.title')}
+                    </Link>
+                    <Link
                         href="/admin/import-export"
                         className={pathname?.includes('/admin/import-export') ? styles.active : ''}
                     >

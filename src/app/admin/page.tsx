@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { requireAdmin } from '@/lib/admin/auth';
-import { adminListProducts } from '@/lib/repositories/admin/products';
+import { adminListProducts, adminListLowStock } from '@/lib/repositories/admin/products';
 import { adminListCategories } from '@/lib/repositories/admin/categories';
 import { adminListBrands } from '@/lib/repositories/admin/brands';
 import styles from './taxonomy.module.css';
@@ -12,16 +12,18 @@ export default async function AdminDashboardPage() {
     await requireAdmin();
     const t = await getTranslations({ locale: 'vi', namespace: 'admin' });
 
-    const [products, categories, brands] = await Promise.all([
+    const [products, categories, brands, lowStock] = await Promise.all([
         adminListProducts({ pagination: { page: 1, pageSize: 1 } }),
         adminListCategories(),
         adminListBrands(),
+        adminListLowStock(),
     ]);
 
     const cards: Array<{ href: string; label: string; count: number | null }> = [
         { href: '/admin/products', label: t('products.title'), count: products.total },
         { href: '/admin/categories', label: t('categories.title'), count: categories.length },
         { href: '/admin/brands', label: t('brands.title'), count: brands.length },
+        { href: '/admin/inventory', label: `${t('inventory.title')} (sắp hết)`, count: lowStock.length },
         { href: '/admin/orders', label: t('orders.title'), count: null },
         { href: '/admin/import-export', label: t('importExport.title'), count: null },
     ];

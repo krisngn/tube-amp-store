@@ -20,7 +20,26 @@ export default function BrandForm({ brand }: { brand?: AdminBrand }) {
         isActive: brand?.isActive ?? true,
     });
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const handleLogoUpload = async (file: File) => {
+        setError(null);
+        setUploading(true);
+        try {
+            const fd = new FormData();
+            fd.append('file', file);
+            fd.append('folder', 'brands');
+            const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Tải logo thất bại');
+            setForm((prev) => ({ ...prev, logoPath: data.url }));
+        } catch (e) {
+            setError(e instanceof Error ? e.message : 'Tải logo thất bại');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -99,13 +118,29 @@ export default function BrandForm({ brand }: { brand?: AdminBrand }) {
                         />
                     </div>
                     <div className={`${styles.group} ${styles.fullWidth}`}>
-                        <label className="label">Logo (URL / storage path)</label>
+                        <label className="label">Logo thương hiệu</label>
                         <input
                             className="input"
                             value={form.logoPath}
                             onChange={(e) => setForm({ ...form, logoPath: e.target.value })}
-                            placeholder="https://... hoặc để trống"
+                            placeholder="Dán URL, hoặc tải logo lên bên dưới"
                         />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', marginTop: 'var(--space-sm)' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                disabled={uploading}
+                                onChange={(e) => {
+                                    const f = e.target.files?.[0];
+                                    if (f) handleLogoUpload(f);
+                                }}
+                            />
+                            {uploading && <span className={styles.muted}>Đang tải...</span>}
+                            {form.logoPath && !uploading && (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={form.logoPath} alt="preview" style={{ height: 48, borderRadius: 'var(--radius-sm)' }} />
+                            )}
+                        </div>
                     </div>
                     <div className={`${styles.group} ${styles.fullWidth}`}>
                         <label className="label">Mô tả (VI)</label>

@@ -15,6 +15,9 @@
     "importExport": {
         "title": "Import / Export"
     },
+    "inventory": {
+        "title": "Inventory"
+    },
     "login": {
         "title": "Admin Login",
         "subtitle": "Sign in to access the admin panel",
