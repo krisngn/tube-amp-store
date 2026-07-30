@@ -12,6 +12,9 @@
         "add": "Add Brand",
         "edit": "Edit Brand"
     },
+    "importExport": {
+        "title": "Import / Export"
+    },
     "login": {
         "title": "Admin Login",
         "subtitle": "Sign in to access the admin panel",

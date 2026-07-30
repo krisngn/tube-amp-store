@@ -34,6 +34,13 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
     const [categoryId, setCategoryId] = useState(product?.categoryId || '');
     const [brandId, setBrandId] = useState(product?.brandId || '');
 
+    // Free-form specifications (key -> value), works for any product type (caps, resistors, chassis, tubes...)
+    const [specs, setSpecs] = useState<{ key: string; value: string }[]>(
+        product?.specs
+            ? Object.entries(product.specs).map(([key, value]) => ({ key, value: String(value ?? '') }))
+            : []
+    );
+
     const categoryOptions = flattenTree(categories).map((n) => ({
         id: n.item.id,
         label: `${'   '.repeat(n.depth)}${n.item.nameVi}`,
@@ -135,6 +142,9 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
                 powerWatts: formData.powerWatts || undefined,
                 taps: formData.taps.split(',').filter((t) => t.trim()).map((t) => t.trim()),
                 minSpeakerSensitivity: formData.minSpeakerSensitivity || undefined,
+                specifications: Object.fromEntries(
+                    specs.filter((s) => s.key.trim()).map((s) => [s.key.trim(), s.value])
+                ),
                 categoryId: selectedCategoryId,
                 brandId: brandId || null,
                 isPublished: publish,
@@ -401,6 +411,47 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
                         />
                     </div>
                 </div>
+            </div>
+
+            <div className={styles.formSection}>
+                <h2>Thông số chi tiết (mọi loại sản phẩm)</h2>
+                <p style={{ color: 'var(--color-text-secondary)', marginTop: 0, marginBottom: 'var(--space-md)', fontSize: '0.9rem' }}>
+                    Khai báo thông số tự do theo từng loại (VD tụ: Điện dung / Điện áp; trở: Trị số / Công suất / Sai số; khung máy: Kích thước / Chất liệu).
+                </p>
+                {specs.map((s, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 'var(--space-md)', marginBottom: 'var(--space-sm)' }}>
+                        <input
+                            className="input"
+                            placeholder="Tên thông số (VD: Điện dung)"
+                            value={s.key}
+                            onChange={(e) =>
+                                setSpecs((prev) => prev.map((x, j) => (j === i ? { ...x, key: e.target.value } : x)))
+                            }
+                        />
+                        <input
+                            className="input"
+                            placeholder="Giá trị (VD: 0.22uF)"
+                            value={s.value}
+                            onChange={(e) =>
+                                setSpecs((prev) => prev.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))
+                            }
+                        />
+                        <button
+                            type="button"
+                            className="btn btn-ghost btn-sm"
+                            onClick={() => setSpecs((prev) => prev.filter((_, j) => j !== i))}
+                        >
+                            Xóa
+                        </button>
+                    </div>
+                ))}
+                <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setSpecs((prev) => [...prev, { key: '', value: '' }])}
+                >
+                    + Thêm thông số
+                </button>
             </div>
 
             <div className={styles.formSection}>

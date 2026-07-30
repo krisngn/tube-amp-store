@@ -23,6 +23,7 @@ export default async function AdminDashboardPage() {
         { href: '/admin/categories', label: t('categories.title'), count: categories.length },
         { href: '/admin/brands', label: t('brands.title'), count: brands.length },
         { href: '/admin/orders', label: t('orders.title'), count: null },
+        { href: '/admin/import-export', label: t('importExport.title'), count: null },
     ];
 
     return (

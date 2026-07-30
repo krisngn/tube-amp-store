@@ -12,6 +12,9 @@
         "add": "Thêm Thương Hiệu",
         "edit": "Chỉnh Sửa Thương Hiệu"
     },
+    "importExport": {
+        "title": "Nhập / Xuất Dữ Liệu"
+    },
     "login": {
         "title": "Đăng Nhập Quản Trị",
         "subtitle": "Đăng nhập để truy cập bảng quản trị",

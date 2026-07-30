@@ -110,42 +110,14 @@ function SpecificationsTab({ product }: { product: ProductDetailDTO }) {
                         <td>{product.taps.join(', ')}</td>
                     </tr>
                 )}
-                {product.specs?.frequencyResponse && (
-                    <tr>
-                        <td>{t('specifications.frequency')}</td>
-                        <td>{product.specs.frequencyResponse}</td>
-                    </tr>
-                )}
-                {product.specs?.snr && (
-                    <tr>
-                        <td>{t('specifications.snr')}</td>
-                        <td>{product.specs.snr}</td>
-                    </tr>
-                )}
-                {product.specs?.thd && (
-                    <tr>
-                        <td>{t('specifications.thd')}</td>
-                        <td>{product.specs.thd}</td>
-                    </tr>
-                )}
-                {product.specs?.inputImpedance && (
-                    <tr>
-                        <td>{t('specifications.inputImpedance')}</td>
-                        <td>{product.specs.inputImpedance}</td>
-                    </tr>
-                )}
-                {product.specs?.dimensions && (
-                    <tr>
-                        <td>{t('specifications.dimensions')}</td>
-                        <td>{product.specs.dimensions}</td>
-                    </tr>
-                )}
-                {product.specs?.weight && (
-                    <tr>
-                        <td>{t('specifications.weight')}</td>
-                        <td>{product.specs.weight}</td>
-                    </tr>
-                )}
+                {Object.entries(product.specs || {})
+                    .filter(([, value]) => value !== undefined && value !== null && String(value) !== '')
+                    .map(([key, value]) => (
+                        <tr key={key}>
+                            <td>{key}</td>
+                            <td>{String(value)}</td>
+                        </tr>
+                    ))}
             </tbody>
         </table>
     );
