@@ -75,6 +75,10 @@ export interface CreateProductPayload {
     isVintage?: boolean;
     categoryId?: string | null;
     brandId?: string | null;
+    weightGrams?: number | null;
+    lengthCm?: number | null;
+    widthCm?: number | null;
+    heightCm?: number | null;
     translations: {
         vi: {
             name: string;
@@ -259,6 +263,10 @@ export async function adminGetProductById(id: string): Promise<ProductDetailDTO 
         isFeatured: data.is_featured,
         categoryId: data.category_id ?? undefined,
         brandId: data.brand_id ?? undefined,
+        weightGrams: data.weight_grams ?? undefined,
+        lengthCm: data.length_cm ?? undefined,
+        widthCm: data.width_cm ?? undefined,
+        heightCm: data.height_cm ?? undefined,
         shortDescription: viTranslation?.short_description,
         description: viTranslation?.description,
         soundCharacter: viTranslation?.sound_character,
@@ -328,6 +336,10 @@ export async function adminCreateProduct(payload: CreateProductPayload): Promise
             is_vintage: payload.isVintage || false,
             category_id: payload.categoryId || null,
             brand_id: payload.brandId || null,
+            weight_grams: payload.weightGrams ?? null,
+            length_cm: payload.lengthCm ?? null,
+            width_cm: payload.widthCm ?? null,
+            height_cm: payload.heightCm ?? null,
         })
         .select('id')
         .single();
@@ -414,6 +426,10 @@ export async function adminUpdateProduct(payload: UpdateProductPayload): Promise
     if (payload.isVintage !== undefined) updateData.is_vintage = payload.isVintage;
     if (payload.categoryId !== undefined) updateData.category_id = payload.categoryId || null;
     if (payload.brandId !== undefined) updateData.brand_id = payload.brandId || null;
+    if (payload.weightGrams !== undefined) updateData.weight_grams = payload.weightGrams ?? null;
+    if (payload.lengthCm !== undefined) updateData.length_cm = payload.lengthCm ?? null;
+    if (payload.widthCm !== undefined) updateData.width_cm = payload.widthCm ?? null;
+    if (payload.heightCm !== undefined) updateData.height_cm = payload.heightCm ?? null;
 
     // Update product
     const { error: productError } = await supabase.from('products').update(updateData).eq('id', payload.id);

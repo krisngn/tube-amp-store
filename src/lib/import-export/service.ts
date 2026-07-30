@@ -34,6 +34,7 @@ const TEMPLATE_ROWS: Record<Entity, Record<string, unknown>[]> = {
             name_vi: 'Tụ Mundorf MCap 0.22uF 630V', short_description_vi: 'Tụ phim cao cấp', description_vi: 'Tụ phim polypropylene cho mạch tín hiệu.',
             name_en: 'Mundorf MCap 0.22uF 630V', short_description_en: 'Premium film cap', description_en: 'Polypropylene film capacitor.',
             specifications: 'Điện dung=0.22uF|Điện áp=630V|Loại=Phim', topology: '', tube_type: '', power_watts: '', taps: '', min_speaker_sensitivity: '',
+            weight_grams: 30, length_cm: 5, width_cm: 4, height_cm: 3,
             is_published: false, is_featured: false, is_vintage: false,
         },
         {
@@ -42,6 +43,7 @@ const TEMPLATE_ROWS: Record<Entity, Record<string, unknown>[]> = {
             name_vi: 'Ampli đèn SE 300B (mẫu)', short_description_vi: 'Ampli SE 300B handmade', description_vi: 'Ví dụ sản phẩm ampli.',
             name_en: 'SE 300B Tube Amp (sample)', short_description_en: 'Handmade SE 300B amp', description_en: 'Amp product example.',
             specifications: 'Frequency response=20Hz-20kHz|THD=0.5%', topology: 'se', tube_type: '300B', power_watts: 8, taps: '4Ω|8Ω|16Ω', min_speaker_sensitivity: 88,
+            weight_grams: 18000, length_cm: 42, width_cm: 32, height_cm: 18,
             is_published: false, is_featured: false, is_vintage: false,
         },
     ],
@@ -137,6 +139,10 @@ interface ProductExportRow {
     power_watts: number | null;
     taps: string[] | null;
     min_speaker_sensitivity: number | null;
+    weight_grams: number | null;
+    length_cm: number | null;
+    width_cm: number | null;
+    height_cm: number | null;
     specifications: Record<string, unknown> | null;
     is_published: boolean;
     is_featured: boolean;
@@ -152,7 +158,8 @@ async function exportProducts(): Promise<string> {
         .from('products')
         .select(
             `slug, sku, price, compare_at_price, stock_quantity, condition, topology, tube_type,
-             power_watts, taps, min_speaker_sensitivity, specifications, is_published, is_featured, is_vintage,
+             power_watts, taps, min_speaker_sensitivity, weight_grams, length_cm, width_cm, height_cm,
+             specifications, is_published, is_featured, is_vintage,
              category:categories(slug), brand:brands(slug),
              product_translations(locale, name, short_description, description)`
         )
@@ -182,6 +189,10 @@ async function exportProducts(): Promise<string> {
             power_watts: p.power_watts ?? '',
             taps: (p.taps ?? []).join('|'),
             min_speaker_sensitivity: p.min_speaker_sensitivity ?? '',
+            weight_grams: p.weight_grams ?? '',
+            length_cm: p.length_cm ?? '',
+            width_cm: p.width_cm ?? '',
+            height_cm: p.height_cm ?? '',
             is_published: p.is_published,
             is_featured: p.is_featured,
             is_vintage: p.is_vintage,
@@ -378,6 +389,10 @@ async function importProducts(csvText: string): Promise<ImportResult> {
             if (has('taps')) payload.taps = o.taps ? o.taps.split('|').map((s) => s.trim()).filter(Boolean) : [];
             if (has('min_speaker_sensitivity'))
                 payload.min_speaker_sensitivity = o.min_speaker_sensitivity ? toInt(o.min_speaker_sensitivity) : null;
+            if (has('weight_grams')) payload.weight_grams = o.weight_grams ? toInt(o.weight_grams) : null;
+            if (has('length_cm')) payload.length_cm = o.length_cm ? toNum(o.length_cm) : null;
+            if (has('width_cm')) payload.width_cm = o.width_cm ? toNum(o.width_cm) : null;
+            if (has('height_cm')) payload.height_cm = o.height_cm ? toNum(o.height_cm) : null;
             if (has('specifications')) payload.specifications = decodeSpecs(o.specifications);
             if (has('is_published')) payload.is_published = parseBool(o.is_published, false);
             if (has('is_featured')) payload.is_featured = parseBool(o.is_featured, false);

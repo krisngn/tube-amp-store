@@ -236,6 +236,13 @@ ALTER TABLE public.products ALTER COLUMN topology DROP NOT NULL;
 ALTER TABLE public.products ALTER COLUMN tube_type DROP NOT NULL;
 ALTER TABLE public.products ALTER COLUMN power_watts DROP NOT NULL;
 
+-- Shipping weight & package dimensions (for marketplace listings / shipping fees)
+ALTER TABLE public.products
+    ADD COLUMN weight_grams INTEGER,
+    ADD COLUMN length_cm DECIMAL(6, 1),
+    ADD COLUMN width_cm DECIMAL(6, 1),
+    ADD COLUMN height_cm DECIMAL(6, 1);
+
 -- =====================================================
 -- ORDERS
 -- =====================================================

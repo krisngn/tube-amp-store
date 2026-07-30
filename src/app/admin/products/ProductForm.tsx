@@ -59,6 +59,10 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
         powerWatts: product?.powerWatts || 0,
         taps: (product?.taps || []).join(','),
         minSpeakerSensitivity: product?.recommendedSensitivityMin || 0,
+        weightGrams: product?.weightGrams || 0,
+        lengthCm: product?.lengthCm || 0,
+        widthCm: product?.widthCm || 0,
+        heightCm: product?.heightCm || 0,
         isPublished: product ? (product.publishedAt ? true : false) : false,
         isFeatured: product?.isFeatured || false,
         isVintage: product?.isVintage || false,
@@ -142,6 +146,10 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
                 powerWatts: formData.powerWatts || undefined,
                 taps: formData.taps.split(',').filter((t) => t.trim()).map((t) => t.trim()),
                 minSpeakerSensitivity: formData.minSpeakerSensitivity || undefined,
+                weightGrams: formData.weightGrams || undefined,
+                lengthCm: formData.lengthCm || undefined,
+                widthCm: formData.widthCm || undefined,
+                heightCm: formData.heightCm || undefined,
                 specifications: Object.fromEntries(
                     specs.filter((s) => s.key.trim()).map((s) => [s.key.trim(), s.value])
                 ),
@@ -408,6 +416,58 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
                             value={formData.minSpeakerSensitivity}
                             onChange={(e) => setFormData({ ...formData, minSpeakerSensitivity: Number(e.target.value) })}
                             min="0"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.formSection}>
+                <h2>Vận chuyển (khối lượng & kích thước)</h2>
+                <p style={{ color: 'var(--color-text-secondary)', marginTop: 0, marginBottom: 'var(--space-md)', fontSize: '0.9rem' }}>
+                    Cần cho Shopee/TikTok để tính phí ship. Khối lượng theo gram; kích thước theo cm.
+                </p>
+                <div className={styles.formGrid}>
+                    <div className={styles.formGroup}>
+                        <label className="label">Khối lượng (gram)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            value={formData.weightGrams}
+                            onChange={(e) => setFormData({ ...formData, weightGrams: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Dài (cm)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            step="0.1"
+                            value={formData.lengthCm}
+                            onChange={(e) => setFormData({ ...formData, lengthCm: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Rộng (cm)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            step="0.1"
+                            value={formData.widthCm}
+                            onChange={(e) => setFormData({ ...formData, widthCm: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Cao (cm)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            step="0.1"
+                            value={formData.heightCm}
+                            onChange={(e) => setFormData({ ...formData, heightCm: Number(e.target.value) })}
                         />
                     </div>
                 </div>

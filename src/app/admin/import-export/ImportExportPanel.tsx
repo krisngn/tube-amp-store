@@ -12,7 +12,7 @@ const LABELS: Record<Entity, string> = {
 
 const FORMAT_NOTES: Record<Entity, string> = {
     products:
-        'specifications: dạng "Khóa=Giá trị|Khóa=Giá trị" (vd: Điện dung=0.22uF|Điện áp=630V). taps: "4Ω|8Ω|16Ω". category_slug/brand_slug dùng slug — chưa có sẽ tự tạo. condition: new|like_new|vintage. is_*: true/false.',
+        'specifications: dạng "Khóa=Giá trị|Khóa=Giá trị" (vd: Điện dung=0.22uF|Điện áp=630V). taps: "4Ω|8Ω|16Ω". category_slug/brand_slug dùng slug — chưa có sẽ tự tạo. condition: new|like_new|vintage. is_*: true/false. weight_grams (gram) + length_cm/width_cm/height_cm dùng cho phí ship Shopee/TikTok.',
     categories: 'parent_slug: slug của danh mục cha (để trống nếu là danh mục gốc). is_active: true/false.',
     brands: 'is_active: true/false.',
 };

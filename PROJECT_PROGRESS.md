@@ -41,9 +41,14 @@ Rebranded the store to **Vintage Audio Accessories** and turned a tube-amp-only 
    - Import **upserts by slug**; product rows reference category/brand by slug and auto-create missing ones; per-row created/updated/error report.
    - Dependency-free CSV util; `sep=,` + UTF-8 BOM so Excel splits columns and reads Vietnamese; files round-trip (importer skips the `sep=` hint). `specifications` packed as `Key=Value|Key=Value`.
 
+#### Multi-channel prep (Shopee / TikTok Shop)
+- Strategy: keep the **website as source of truth**; list on marketplaces via CSV / a Vietnamese multi-channel tool (no custom Shopee/TikTok API integration for now).
+- Added shipping **weight (grams)** + **package dimensions (length/width/height cm)** on products — admin form + CSV import/export — since marketplaces require them for shipping-fee calc.
+
 #### Database Migrations (run in Supabase SQL Editor, in order)
 1. `supabase/ADD_CATEGORIES_AND_BRANDS.sql`
 2. `supabase/ALLOW_MULTILEVEL_CATEGORIES.sql`
+3. `supabase/ADD_PRODUCT_SHIPPING.sql`
 (Optional) sample rows in `supabase/seed.sql`.
 
 #### Key Files

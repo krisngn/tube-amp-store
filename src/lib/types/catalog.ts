@@ -99,6 +99,12 @@ export interface ProductDetailDTO extends ProductCardDTO {
     warrantyMonths?: number;
     returnDays?: number;
 
+    // Shipping (for marketplace listings / shipping fee calc)
+    weightGrams?: number;
+    lengthCm?: number;
+    widthCm?: number;
+    heightCm?: number;
+
     // SEO
     metaTitle?: string;
     metaDescription?: string;
