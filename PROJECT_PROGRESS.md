@@ -71,10 +71,10 @@ Rebranded the store to **Vintage Audio Accessories** and turned a tube-amp-only 
 - **Low-stock alerts**: `/admin/inventory` page + dashboard count (products with stock ≤ threshold).
 - **Category/brand image upload**: generic `/api/admin/upload` + file picker in the category & brand forms (bucket `product-images`).
 - **Hard-delete products**: delete button on `/admin/products` (removes storage images + row; order history preserved via snapshot).
+- **Category filtering fixed for inactive mid-tree nodes**: `resolveCategoryIds` builds the subtree from the full category set (service-role) so deactivating a middle category no longer drops its still-active descendants' products from an ancestor filter.
 
 #### Known Limitations / Next
 - CSV import is not transactional and runs row-by-row: a mid-row failure can leave a product without translations, and large files (thousands of rows) should be batched. Fine for typical catalogs.
-- Deactivating a mid-tree category detaches its still-active descendants from ancestor filtering.
 - `specifications` CSV cell uses `Key=Value|…`; values containing `|` and non-string JSON types don't round-trip perfectly.
 - Multi-channel inventory sync (Shopee/TikTok) is operational — use CSV export + a Vietnamese multi-channel tool; no custom marketplace API integration.
 

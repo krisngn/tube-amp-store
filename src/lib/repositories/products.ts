@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
 import { getPublicImageUrl } from '@/lib/utils/images';
 import { buildNestedTree, getDescendantIds, type NestedNode } from '@/lib/utils/categoryTree';
 import type {
@@ -208,13 +209,23 @@ async function resolveCategoryIds(
     supabase: Awaited<ReturnType<typeof createClient>>,
     slug: string
 ): Promise<string[] | null> {
-    // Fetch the whole (small) category set and resolve the subtree in JS so a
-    // parent slug matches products in ALL descendant categories, at any depth.
-    const { data: all } = await supabase.from('categories').select('id, slug, parent_id');
-    if (!all) return null;
-    const node = all.find((c) => c.slug === slug);
+    // Resolve the subtree from the FULL category set (service-role, bypassing RLS)
+    // so an inactive mid-tree category doesn't orphan its still-active descendants
+    // and drop them from the filter. Only category ids are read here; products are
+    // still gated by is_published in the main query. Falls back to the request
+    // client if the service key isn't configured.
+    type CatRow = { id: string; slug: string; parent_id: string | null };
+    let rows: CatRow[] | null = null;
+    try {
+        const admin = createServiceClient();
+        rows = (await admin.from('categories').select('id, slug, parent_id')).data as CatRow[] | null;
+    } catch {
+        rows = (await supabase.from('categories').select('id, slug, parent_id')).data as CatRow[] | null;
+    }
+    if (!rows) return null;
+    const node = rows.find((c) => c.slug === slug);
     if (!node) return null;
-    const items = all.map((c) => ({ id: c.id, parentId: c.parent_id as string | null }));
+    const items = rows.map((c) => ({ id: c.id, parentId: c.parent_id }));
     return [node.id, ...getDescendantIds(items, node.id)];
 }
 
