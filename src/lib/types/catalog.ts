@@ -147,6 +147,7 @@ export interface BrandDTO {
     slug: string;
     name: string; // resolved for the active locale
     logoUrl?: string;
+    description?: string; // resolved for the active locale (brand landing page)
     sortOrder: number;
 }
 

@@ -114,7 +114,7 @@ export default async function ProductPage({ params }: PageProps) {
             {product.brandName && (
               <p className="text-sm text-secondary" style={{ marginBottom: 'var(--space-sm)' }}>
                 {product.brandSlug ? (
-                  <Link href={`/products?brand=${product.brandSlug}`}>{product.brandName}</Link>
+                  <Link href={`/brand/${product.brandSlug}`}>{product.brandName}</Link>
                 ) : (
                   product.brandName
                 )}

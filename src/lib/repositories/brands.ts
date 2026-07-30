@@ -37,7 +37,7 @@ export async function getBrandBySlug(slug: string, locale: string = 'vi'): Promi
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('brands')
-            .select('id, slug, name, name_en, logo_path, sort_order')
+            .select('id, slug, name, name_en, description_vi, description_en, logo_path, sort_order')
             .eq('slug', slug)
             .eq('is_active', true)
             .maybeSingle();
@@ -47,6 +47,7 @@ export async function getBrandBySlug(slug: string, locale: string = 'vi'): Promi
             slug: data.slug,
             name: (locale === 'en' ? data.name_en || data.name : data.name) || data.slug,
             logoUrl: data.logo_path ? getPublicImageUrl(data.logo_path) : undefined,
+            description: (locale === 'en' ? data.description_en || data.description_vi : data.description_vi) || undefined,
             sortOrder: data.sort_order ?? 0,
         };
     } catch (error) {
