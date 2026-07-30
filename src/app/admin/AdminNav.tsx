@@ -35,15 +35,33 @@ export default function AdminNav() {
         <nav className={styles.adminNav}>
             <div className={styles.navContainer}>
                 <div className={styles.navBrand}>
-                    <Link href="/admin/products">{t('title')}</Link>
+                    <Link href="/admin">{t('title')}</Link>
                 </div>
 
                 <div className={styles.navLinks}>
+                    <Link
+                        href="/admin"
+                        className={pathname === '/admin' ? styles.active : ''}
+                    >
+                        {t('dashboard.title')}
+                    </Link>
                     <Link
                         href="/admin/products"
                         className={pathname?.includes('/admin/products') && !pathname?.includes('/new') && !pathname?.match(/\/[a-f0-9-]+$/) ? styles.active : ''}
                     >
                         {t('products.title')}
+                    </Link>
+                    <Link
+                        href="/admin/categories"
+                        className={pathname?.includes('/admin/categories') ? styles.active : ''}
+                    >
+                        {t('categories.title')}
+                    </Link>
+                    <Link
+                        href="/admin/brands"
+                        className={pathname?.includes('/admin/brands') ? styles.active : ''}
+                    >
+                        {t('brands.title')}
                     </Link>
                     <Link
                         href="/admin/orders"

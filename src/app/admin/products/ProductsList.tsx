@@ -1,6 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { adminListProducts } from '@/lib/repositories/admin/products';
+import { adminListCategories } from '@/lib/repositories/admin/categories';
+import { adminListBrands } from '@/lib/repositories/admin/brands';
 import ProductsFilters from './ProductsFilters';
 import styles from './page.module.css';
 
@@ -10,6 +12,8 @@ interface ProductsListProps {
         status?: string;
         condition?: string;
         topology?: string;
+        category?: string;
+        brand?: string;
         page?: string;
         sort?: string;
     };
@@ -21,23 +25,34 @@ export default async function ProductsList({ searchParams }: ProductsListProps) 
     const page = Number(searchParams.page) || 1;
     const pageSize = 20;
 
-    const result = await adminListProducts({
-        filters: {
-            search: searchParams.q,
-            status: searchParams.status as 'published' | 'draft' | undefined,
-            condition: searchParams.condition as any,
-            topology: searchParams.topology as any,
-        },
-        sort: {
-            field: 'updated_at',
-            direction: 'desc',
-        },
-        pagination: { page, pageSize },
-    });
+    const [result, categories, brands] = await Promise.all([
+        adminListProducts({
+            filters: {
+                search: searchParams.q,
+                status: searchParams.status as 'published' | 'draft' | undefined,
+                condition: searchParams.condition as 'new' | 'like_new' | 'vintage' | undefined,
+                topology: searchParams.topology as 'se' | 'pp' | undefined,
+                category: searchParams.category,
+                brand: searchParams.brand,
+            },
+            sort: { field: 'updated_at', direction: 'desc' },
+            pagination: { page, pageSize },
+        }),
+        adminListCategories(),
+        adminListBrands(),
+    ]);
+
+    const categoryOptions = categories.map((c) => ({
+        id: c.id,
+        nameVi: c.nameVi,
+        parentId: c.parentId,
+        sortOrder: c.sortOrder,
+    }));
+    const brandOptions = brands.map((b) => ({ id: b.id, name: b.name }));
 
     return (
         <div>
-            <ProductsFilters searchParams={searchParams} />
+            <ProductsFilters searchParams={searchParams} categories={categoryOptions} brands={brandOptions} />
 
             <div className={styles.productsTable}>
                 <table>
@@ -47,6 +62,8 @@ export default async function ProductsList({ searchParams }: ProductsListProps) 
                             <th>{t('products.list.status')}</th>
                             <th>{t('products.list.price')}</th>
                             <th>{t('products.list.stock')}</th>
+                            <th>{t('products.list.category')}</th>
+                            <th>{t('products.list.brand')}</th>
                             <th>{t('products.list.topology')}</th>
                             <th>{t('products.list.tubeType')}</th>
                             <th>{t('products.list.updatedAt')}</th>
@@ -56,7 +73,7 @@ export default async function ProductsList({ searchParams }: ProductsListProps) 
                     <tbody>
                         {result.items.length === 0 ? (
                             <tr>
-                                <td colSpan={8} className={styles.emptyCell}>
+                                <td colSpan={10} className={styles.emptyCell}>
                                     {t('products.list.empty')}
                                 </td>
                             </tr>
@@ -71,8 +88,10 @@ export default async function ProductsList({ searchParams }: ProductsListProps) 
                                     </td>
                                     <td>{product.price.toLocaleString()} VND</td>
                                     <td>{product.stock}</td>
-                                    <td>{product.topology.toUpperCase()}</td>
-                                    <td>{product.tubeType}</td>
+                                    <td>{product.categoryName || '—'}</td>
+                                    <td>{product.brandName || '—'}</td>
+                                    <td>{product.topology ? product.topology.toUpperCase() : '—'}</td>
+                                    <td>{product.tubeType || '—'}</td>
                                     <td>{new Date(product.updatedAt).toLocaleDateString()}</td>
                                     <td>
                                         <Link

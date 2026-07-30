@@ -3,8 +3,15 @@
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import type { ReactNode } from 'react';
+import type { CategoryDTO, BrandDTO } from '@/lib/types/catalog';
 
-export default function CollectionFilters() {
+interface CollectionFiltersProps {
+    categories: CategoryDTO[];
+    brands: BrandDTO[];
+}
+
+export default function CollectionFilters({ categories, brands }: CollectionFiltersProps) {
     const t = useTranslations('collection');
     const router = useRouter();
     const pathname = usePathname();
@@ -12,16 +19,13 @@ export default function CollectionFilters() {
 
     const updateFilters = (key: string, value: string | null) => {
         const params = new URLSearchParams(searchParams.toString());
-
         if (value) {
             params.set(key, value);
         } else {
             params.delete(key);
         }
-
         // Reset to page 1 when filters change
         params.delete('page');
-
         router.push(`${pathname}?${params.toString()}`);
     };
 
@@ -29,23 +33,78 @@ export default function CollectionFilters() {
         router.push(pathname);
     };
 
-    const isFilterActive = () => {
-        return searchParams.toString().length > 0;
-    };
+    const isFilterActive = () => searchParams.toString().length > 0;
+    const activeCategory = searchParams.get('category');
+    const activeBrand = searchParams.get('brand');
+
+    const renderCategoryNode = (cat: CategoryDTO, depth: number): ReactNode => (
+        <div key={cat.id} className="flex flex-col gap-1">
+            <label
+                className="checkbox-label flex items-center gap-2 text-sm cursor-pointer hover:text-accent"
+                style={{
+                    paddingLeft: `calc(${depth} * var(--space-lg))`,
+                    color: depth === 0 ? 'var(--color-text-secondary)' : 'var(--color-text-tertiary)',
+                }}
+            >
+                <input
+                    type="checkbox"
+                    checked={activeCategory === cat.slug}
+                    onChange={(e) => updateFilters('category', e.target.checked ? cat.slug : null)}
+                />
+                <span>{cat.name}</span>
+            </label>
+            {cat.children && cat.children.length > 0 && cat.children.map((c) => renderCategoryNode(c, depth + 1))}
+        </div>
+    );
 
     return (
         <aside className="filters-sidebar bg-secondary border border-subtle rounded-lg p-8 sticky top-24 h-fit">
             <div className="filters-header flex justify-between items-center mb-6">
                 <h3 className="text-lg m-0">{t('filters.title')}</h3>
                 {isFilterActive() && (
-                    <button
-                        onClick={clearAllFilters}
-                        className="btn btn-ghost text-sm"
-                    >
+                    <button onClick={clearAllFilters} className="btn btn-ghost text-sm">
                         {t('filters.clear')}
                     </button>
                 )}
             </div>
+
+            {/* Category Filter */}
+            {categories.length > 0 && (
+                <>
+                    <div className="filter-group flex flex-col gap-2 mb-6">
+                        <h4 className="filter-label text-sm font-semibold text-secondary mb-1">
+                            {t('filters.category.label')}
+                        </h4>
+                        {categories.map((c) => renderCategoryNode(c, 0))}
+                    </div>
+                    <div className="divider"></div>
+                </>
+            )}
+
+            {/* Brand Filter */}
+            {brands.length > 0 && (
+                <>
+                    <div className="filter-group flex flex-col gap-2 mb-6">
+                        <h4 className="filter-label text-sm font-semibold text-secondary mb-1">
+                            {t('filters.brand.label')}
+                        </h4>
+                        {brands.map((brand) => (
+                            <label
+                                key={brand.id}
+                                className="checkbox-label flex items-center gap-2 text-sm text-secondary cursor-pointer hover:text-accent"
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={activeBrand === brand.slug}
+                                    onChange={(e) => updateFilters('brand', e.target.checked ? brand.slug : null)}
+                                />
+                                <span>{brand.name}</span>
+                            </label>
+                        ))}
+                    </div>
+                    <div className="divider"></div>
+                </>
+            )}
 
             {/* Topology Filter */}
             <div className="filter-group flex flex-col gap-2 mb-6">
@@ -72,25 +131,6 @@ export default function CollectionFilters() {
 
             <div className="divider"></div>
 
-            {/* Tube Type Filter */}
-            <div className="filter-group flex flex-col gap-2 mb-6">
-                <h4 className="filter-label text-sm font-semibold text-secondary mb-1">
-                    {t('filters.tubeType.label')}
-                </h4>
-                {['300B', '2A3', 'EL34', 'KT88', 'KT66', '6L6', 'EL84', '6V6'].map((tube) => (
-                    <label key={tube} className="checkbox-label flex items-center gap-2 text-sm text-secondary cursor-pointer hover:text-accent">
-                        <input
-                            type="checkbox"
-                            checked={searchParams.get('tube') === tube}
-                            onChange={(e) => updateFilters('tube', e.target.checked ? tube : null)}
-                        />
-                        <span>{tube}</span>
-                    </label>
-                ))}
-            </div>
-
-            <div className="divider"></div>
-
             {/* Condition Filter */}
             <div className="filter-group flex flex-col gap-2 mb-6">
                 <h4 className="filter-label text-sm font-semibold text-secondary mb-1">
@@ -101,7 +141,10 @@ export default function CollectionFilters() {
                     { value: 'like_new', label: t('filters.condition.options.likeNew') },
                     { value: 'vintage', label: t('filters.condition.options.vintage') },
                 ].map(({ value, label }) => (
-                    <label key={value} className="checkbox-label flex items-center gap-2 text-sm text-secondary cursor-pointer hover:text-accent">
+                    <label
+                        key={value}
+                        className="checkbox-label flex items-center gap-2 text-sm text-secondary cursor-pointer hover:text-accent"
+                    >
                         <input
                             type="checkbox"
                             checked={searchParams.get('condition') === value}

@@ -1,8 +1,15 @@
 {
     "title": "Ampli Đèn",
+    "allProductsTitle": "Sản Phẩm",
     "filters": {
         "title": "Lọc",
         "clear": "Xóa Bộ Lọc",
+        "category": {
+            "label": "Danh Mục"
+        },
+        "brand": {
+            "label": "Thương Hiệu"
+        },
         "topology": {
             "label": "Topology",
             "options": {

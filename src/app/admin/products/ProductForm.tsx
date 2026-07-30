@@ -4,17 +4,41 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ProductDetailDTO } from '@/lib/types/catalog';
+import { flattenTree } from '@/lib/utils/categoryTree';
 import ProductImageManager from './ProductImageManager';
 import styles from './ProductForm.module.css';
 
-interface ProductFormProps {
-    product?: ProductDetailDTO;
+interface CategoryOption {
+    id: string;
+    nameVi: string;
+    parentId: string | null;
 }
 
-export default function ProductForm({ product }: ProductFormProps) {
+interface BrandOption {
+    id: string;
+    name: string;
+}
+
+interface ProductFormProps {
+    product?: ProductDetailDTO;
+    categories?: CategoryOption[];
+    brands?: BrandOption[];
+}
+
+export default function ProductForm({ product, categories = [], brands = [] }: ProductFormProps) {
     const t = useTranslations('admin');
     const router = useRouter();
     const isEdit = !!product;
+
+    // Category picker: a single indented tree select (unlimited depth)
+    const [categoryId, setCategoryId] = useState(product?.categoryId || '');
+    const [brandId, setBrandId] = useState(product?.brandId || '');
+
+    const categoryOptions = flattenTree(categories).map((n) => ({
+        id: n.item.id,
+        label: `${'   '.repeat(n.depth)}${n.item.nameVi}`,
+    }));
+    const selectedCategoryId = categoryId || null;
 
     const [formData, setFormData] = useState({
         // Core fields
@@ -23,7 +47,7 @@ export default function ProductForm({ product }: ProductFormProps) {
         compareAtPrice: product?.compareAtPriceVnd || 0,
         stockQuantity: product?.stockQuantity || 0,
         condition: product?.condition || 'new',
-        topology: product?.topology || 'se',
+        topology: product?.topology || '',
         tubeType: product?.tubeType || '',
         powerWatts: product?.powerWatts || 0,
         taps: (product?.taps || []).join(','),
@@ -106,11 +130,13 @@ export default function ProductForm({ product }: ProductFormProps) {
                 compareAtPrice: formData.compareAtPrice || undefined,
                 stockQuantity: formData.stockQuantity,
                 condition: formData.condition,
-                topology: formData.topology,
-                tubeType: formData.tubeType,
-                powerWatts: formData.powerWatts,
+                topology: formData.topology || undefined,
+                tubeType: formData.tubeType || undefined,
+                powerWatts: formData.powerWatts || undefined,
                 taps: formData.taps.split(',').filter((t) => t.trim()).map((t) => t.trim()),
                 minSpeakerSensitivity: formData.minSpeakerSensitivity || undefined,
+                categoryId: selectedCategoryId,
+                brandId: brandId || null,
                 isPublished: publish,
                 isFeatured: formData.isFeatured,
                 isVintage: formData.isVintage,
@@ -270,6 +296,42 @@ export default function ProductForm({ product }: ProductFormProps) {
             </div>
 
             <div className={styles.formSection}>
+                <h2>Phân loại</h2>
+                <div className={styles.formGrid}>
+                    <div className={styles.formGroup}>
+                        <label className="label">Danh mục</label>
+                        <select
+                            className="input"
+                            value={categoryId}
+                            onChange={(e) => setCategoryId(e.target.value)}
+                        >
+                            <option value="">— Chọn danh mục —</option>
+                            {categoryOptions.map((o) => (
+                                <option key={o.id} value={o.id}>
+                                    {o.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Thương hiệu</label>
+                        <select
+                            className="input"
+                            value={brandId}
+                            onChange={(e) => setBrandId(e.target.value)}
+                        >
+                            <option value="">— Chọn thương hiệu —</option>
+                            {brands.map((b) => (
+                                <option key={b.id} value={b.id}>
+                                    {b.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.formSection}>
                 <h2>{t('products.form.specifications')}</h2>
                 <div className={styles.formGrid}>
                     <div className={styles.formGroup}>
@@ -286,36 +348,34 @@ export default function ProductForm({ product }: ProductFormProps) {
                         </select>
                     </div>
                     <div className={styles.formGroup}>
-                        <label className="label">{t('products.fields.topology')} *</label>
+                        <label className="label">{t('products.fields.topology')}</label>
                         <select
                             className="input"
                             value={formData.topology}
                             onChange={(e) => setFormData({ ...formData, topology: e.target.value as any })}
-                            required
                         >
+                            <option value="">—</option>
                             <option value="se">SE</option>
                             <option value="pp">PP</option>
                         </select>
                     </div>
                     <div className={styles.formGroup}>
-                        <label className="label">{t('products.fields.tubeType')} *</label>
+                        <label className="label">{t('products.fields.tubeType')}</label>
                         <input
                             type="text"
                             className="input"
                             value={formData.tubeType}
                             onChange={(e) => setFormData({ ...formData, tubeType: e.target.value })}
-                            required
                             placeholder="300B, EL34, KT88..."
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label className="label">{t('products.fields.power')} (W) *</label>
+                        <label className="label">{t('products.fields.power')} (W)</label>
                         <input
                             type="number"
                             className="input"
                             value={formData.powerWatts}
                             onChange={(e) => setFormData({ ...formData, powerWatts: Number(e.target.value) })}
-                            required
                             min="0"
                             step="0.1"
                         />

@@ -17,14 +17,20 @@ export interface ProductCardDTO {
     priceVnd: number;
     compareAtPriceVnd?: number;
     imageUrl: string;
-    topology: Topology;
-    tubeType: TubeType;
-    powerWatts: number;
-    recommendedSensitivityMin: number;
+    // Amp-specific attributes (optional — not every product is an amplifier)
+    topology?: Topology;
+    tubeType?: TubeType;
+    powerWatts?: number;
+    recommendedSensitivityMin?: number;
     condition: Condition;
     isInStock: boolean;
     isVintage: boolean;
     isFeatured: boolean;
+    // Category & brand
+    categoryName?: string;
+    categorySlug?: string;
+    brandName?: string;
+    brandSlug?: string;
 }
 
 /**
@@ -55,6 +61,12 @@ export interface ProductSpecs {
  * Product Detail DTO - Used for product detail page
  */
 export interface ProductDetailDTO extends ProductCardDTO {
+    // Category & brand (detail view)
+    categoryId?: string;
+    categoryPath?: { name: string; slug: string }[]; // ancestors root -> leaf, for breadcrumb
+    brandId?: string;
+    brandLogoUrl?: string;
+
     // Additional fields for detail view
     shortDescription?: string;
     description?: string;
@@ -110,6 +122,32 @@ export interface ProductFilters {
     search?: string;
     isVintage?: boolean;
     isFeatured?: boolean;
+    category?: string; // category slug; a top-level slug also matches its subcategories
+    brand?: string; // brand slug
+}
+
+/**
+ * Category (2-level taxonomy: parent -> child)
+ */
+export interface CategoryDTO {
+    id: string;
+    slug: string;
+    parentId: string | null;
+    name: string; // resolved for the active locale
+    imageUrl?: string;
+    sortOrder: number;
+    children?: CategoryDTO[];
+}
+
+/**
+ * Brand
+ */
+export interface BrandDTO {
+    id: string;
+    slug: string;
+    name: string; // resolved for the active locale
+    logoUrl?: string;
+    sortOrder: number;
 }
 
 /**

@@ -2,6 +2,16 @@
     "title": "Quản Trị",
     "loading": "Đang tải...",
     "logout": "Đăng xuất",
+    "categories": {
+        "title": "Danh Mục",
+        "add": "Thêm Danh Mục",
+        "edit": "Chỉnh Sửa Danh Mục"
+    },
+    "brands": {
+        "title": "Thương Hiệu",
+        "add": "Thêm Thương Hiệu",
+        "edit": "Chỉnh Sửa Thương Hiệu"
+    },
     "login": {
         "title": "Đăng Nhập Quản Trị",
         "subtitle": "Đăng nhập để truy cập bảng quản trị",
@@ -36,6 +46,10 @@
             "condition": "Tình Trạng",
             "topology": "Topology",
             "tubeType": "Loại Đèn",
+            "category": "Danh Mục",
+            "brand": "Thương Hiệu",
+            "categoryAll": "Tất Cả",
+            "brandAll": "Tất Cả",
             "updatedAt": "Cập Nhật",
             "actions": "Thao Tác",
             "empty": "Không tìm thấy sản phẩm",

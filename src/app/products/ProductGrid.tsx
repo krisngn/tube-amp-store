@@ -13,7 +13,6 @@ export default function ProductGrid({ products }: ProductGridProps) {
     const t = useTranslations('collection');
     const tCommon = useTranslations('common');
 
-
     return (
         <div className="products-grid grid gap-8" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
             {products.map((product) => (
@@ -36,9 +35,11 @@ export default function ProductGrid({ products }: ProductGridProps) {
                     <div className="product-info flex-1 flex flex-col">
                         {/* Badges */}
                         <div className="product-badges flex gap-1 mb-2 flex-wrap">
-                            <span className="badge badge-accent">
-                                {product.topology.toUpperCase()} {product.tubeType}
-                            </span>
+                            {product.topology && product.tubeType && (
+                                <span className="badge badge-accent">
+                                    {product.topology.toUpperCase()} {product.tubeType}
+                                </span>
+                            )}
                             <span className="badge">
                                 {product.condition === 'new' && tCommon('new')}
                                 {product.condition === 'like_new' && tCommon('likeNew')}
@@ -50,6 +51,11 @@ export default function ProductGrid({ products }: ProductGridProps) {
                                 </span>
                             )}
                         </div>
+
+                        {/* Brand */}
+                        {product.brandName && (
+                            <p className="text-sm text-tertiary m-0 mb-1">{product.brandName}</p>
+                        )}
 
                         {/* Product Name */}
                         <h3 className="product-name text-lg mb-2">{product.name}</h3>
@@ -64,12 +70,18 @@ export default function ProductGrid({ products }: ProductGridProps) {
                             )}
                         </p>
 
-                        {/* Specs */}
-                        <div className="product-specs text-sm text-tertiary mb-4">
-                            <span>{t('productCard.power', { watts: product.powerWatts })}</span>
-                            <span> • </span>
-                            <span>{t('productCard.minSensitivity', { db: product.recommendedSensitivityMin })}</span>
-                        </div>
+                        {/* Specs (amp-specific — only when present) */}
+                        {product.powerWatts != null && (
+                            <div className="product-specs text-sm text-tertiary mb-4">
+                                <span>{t('productCard.power', { watts: product.powerWatts })}</span>
+                                {product.recommendedSensitivityMin != null && (
+                                    <>
+                                        <span> • </span>
+                                        <span>{t('productCard.minSensitivity', { db: product.recommendedSensitivityMin })}</span>
+                                    </>
+                                )}
+                            </div>
+                        )}
 
                         {/* Actions */}
                         <div className="product-actions mt-auto flex flex-col gap-2">

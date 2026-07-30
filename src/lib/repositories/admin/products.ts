@@ -12,6 +12,8 @@ export interface AdminProductFilters {
     status?: 'all' | 'published' | 'draft';
     condition?: 'new' | 'like_new' | 'vintage';
     topology?: 'se' | 'pp';
+    category?: string; // category id
+    brand?: string; // brand id
 }
 
 export interface AdminProductSort {
@@ -36,8 +38,10 @@ export interface AdminProductListResponse {
         status: 'published' | 'draft';
         price: number;
         stock: number;
-        topology: string;
-        tubeType: string;
+        topology: string | null;
+        tubeType: string | null;
+        categoryName: string | null;
+        brandName: string | null;
         updatedAt: string;
     }>;
     total: number;
@@ -53,9 +57,9 @@ export interface CreateProductPayload {
     stockQuantity: number;
     lowStockThreshold?: number;
     condition: 'new' | 'like_new' | 'vintage';
-    topology: 'se' | 'pp';
-    tubeType: string;
-    powerWatts: number;
+    topology?: 'se' | 'pp';
+    tubeType?: string;
+    powerWatts?: number;
     taps?: string[];
     minSpeakerSensitivity?: number;
     specifications?: Record<string, string>;
@@ -69,6 +73,8 @@ export interface CreateProductPayload {
     isPublished?: boolean;
     isFeatured?: boolean;
     isVintage?: boolean;
+    categoryId?: string | null;
+    brandId?: string | null;
     translations: {
         vi: {
             name: string;
@@ -123,6 +129,8 @@ export async function adminListProducts(
             tube_type,
             updated_at,
             is_published,
+            category:categories(name_vi),
+            brand:brands(name),
             product_translations(name, locale)
         `,
             { count: 'exact' }
@@ -146,6 +154,14 @@ export async function adminListProducts(
 
     if (filters.topology) {
         query = query.eq('topology', filters.topology);
+    }
+
+    if (filters.category) {
+        query = query.eq('category_id', filters.category);
+    }
+
+    if (filters.brand) {
+        query = query.eq('brand_id', filters.brand);
     }
 
     // Apply sorting
@@ -180,6 +196,8 @@ export async function adminListProducts(
                 stock: product.stock_quantity,
                 topology: product.topology,
                 tubeType: product.tube_type,
+                categoryName: product.category?.name_vi ?? null,
+                brandName: product.brand?.name ?? null,
                 updatedAt: product.updated_at,
             };
         }) || [];
@@ -231,14 +249,16 @@ export async function adminGetProductById(id: string): Promise<ProductDetailDTO 
         priceVnd: data.price,
         compareAtPriceVnd: data.compare_at_price || undefined,
         imageUrl: images.find((img: any) => img.is_primary)?.url || images[0]?.url || '',
-        topology: data.topology as 'se' | 'pp',
-        tubeType: data.tube_type as any,
-        powerWatts: data.power_watts,
-        recommendedSensitivityMin: data.min_speaker_sensitivity,
+        topology: (data.topology as 'se' | 'pp') ?? undefined,
+        tubeType: (data.tube_type as any) ?? undefined,
+        powerWatts: data.power_watts ?? undefined,
+        recommendedSensitivityMin: data.min_speaker_sensitivity ?? undefined,
         condition: data.condition as 'new' | 'like_new' | 'vintage',
         isInStock: data.stock_quantity > 0,
         isVintage: data.is_vintage,
         isFeatured: data.is_featured,
+        categoryId: data.category_id ?? undefined,
+        brandId: data.brand_id ?? undefined,
         shortDescription: viTranslation?.short_description,
         description: viTranslation?.description,
         soundCharacter: viTranslation?.sound_character,
@@ -306,6 +326,8 @@ export async function adminCreateProduct(payload: CreateProductPayload): Promise
             is_published: payload.isPublished || false,
             is_featured: payload.isFeatured || false,
             is_vintage: payload.isVintage || false,
+            category_id: payload.categoryId || null,
+            brand_id: payload.brandId || null,
         })
         .select('id')
         .single();
@@ -390,6 +412,8 @@ export async function adminUpdateProduct(payload: UpdateProductPayload): Promise
     }
     if (payload.isFeatured !== undefined) updateData.is_featured = payload.isFeatured;
     if (payload.isVintage !== undefined) updateData.is_vintage = payload.isVintage;
+    if (payload.categoryId !== undefined) updateData.category_id = payload.categoryId || null;
+    if (payload.brandId !== undefined) updateData.brand_id = payload.brandId || null;
 
     // Update product
     const { error: productError } = await supabase.from('products').update(updateData).eq('id', payload.id);

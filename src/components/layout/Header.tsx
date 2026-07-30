@@ -4,14 +4,16 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import type { CategoryDTO } from '@/lib/types/catalog';
 import LocaleSwitcher from '../LocaleSwitcher';
 import styles from './Header.module.css';
 
-export default function Header() {
+export default function Header({ categories = [] }: { categories?: CategoryDTO[] }) {
   const t = useTranslations('nav');
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +24,6 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/tube-amplifiers', label: t('tubeAmplifiers') },
     { href: '/guides', label: t('guides') },
     { href: '/reviews', label: t('reviews') },
     { href: '/contact', label: t('contact') },
@@ -35,11 +36,69 @@ export default function Header() {
         <div className={styles['header-content']}>
           {/* Logo */}
           <Link href="/" className={styles.logo}>
-            <span className={styles['logo-text']}>Restore The Basic</span>
+            <span className={styles['logo-text']}>Vintage Audio Accessories</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className={styles['nav-desktop']}>
+            {/* Products dropdown */}
+            <div
+              style={{ position: 'relative' }}
+              onMouseEnter={() => setIsProductsOpen(true)}
+              onMouseLeave={() => setIsProductsOpen(false)}
+            >
+              <Link
+                href="/products"
+                className={`${styles['nav-link']} ${pathname === '/products' ? styles.active : ''}`}
+              >
+                {t('products')}
+              </Link>
+              {categories.length > 0 && isProductsOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    left: 0,
+                    background: 'var(--color-bg-secondary)',
+                    border: '1px solid var(--color-border-subtle)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: 'var(--space-md)',
+                    minWidth: 240,
+                    zIndex: 100,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 'var(--space-xs)',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
+                  }}
+                >
+                  <Link href="/products" className={styles['nav-link']} style={{ fontWeight: 600 }}>
+                    {t('allProducts')}
+                  </Link>
+                  {categories.map((cat) => (
+                    <div key={cat.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                      <Link
+                        href={`/products?category=${cat.slug}`}
+                        className={styles['nav-link']}
+                        style={{ fontWeight: 600 }}
+                      >
+                        {cat.name}
+                      </Link>
+                      {cat.children?.map((child) => (
+                        <Link
+                          key={child.id}
+                          href={`/products?category=${child.slug}`}
+                          className={styles['nav-link']}
+                          style={{ paddingLeft: 'var(--space-md)', fontSize: '0.9rem' }}
+                        >
+                          {child.name}
+                        </Link>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -86,6 +145,24 @@ export default function Header() {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <nav className={styles['nav-mobile']}>
+            <Link
+              href="/products"
+              className={`${styles['nav-link']} ${pathname === '/products' ? styles.active : ''}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {t('products')}
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/products?category=${cat.slug}`}
+                className={styles['nav-link']}
+                style={{ paddingLeft: 'var(--space-md)' }}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {cat.name}
+              </Link>
+            ))}
             {navLinks.map((link) => (
               <Link
                 key={link.href}
