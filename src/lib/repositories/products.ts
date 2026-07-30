@@ -114,7 +114,7 @@ const CARD_SELECT = `
     is_published,
     category:categories(id, slug, name_vi, name_en),
     brand:brands(id, slug, name, name_en),
-    product_translations!inner(
+    product_translations(
       name,
       short_description,
       locale
@@ -167,7 +167,11 @@ function resolveCardImageUrl(images?: ProductImageRow[]): string {
  * Map a product row to a ProductCardDTO.
  */
 function mapCardRow(product: ProductRow, locale: string): ProductCardDTO {
-    const translation = product.product_translations?.[0];
+    const translations = product.product_translations ?? [];
+    const translation =
+        translations.find((t) => t.locale === locale) ??
+        translations.find((t) => t.locale === 'vi') ??
+        translations[0];
     return {
         id: product.id,
         slug: product.slug,
@@ -256,12 +260,22 @@ export async function listProducts(
             brandId = b.id;
         }
 
+        // Name search across ALL locales (so Vietnamese terms match VI names too)
+        let searchIds: string[] | null = null;
+        if (filters.search) {
+            const { data: matches } = await supabase
+                .from('product_translations')
+                .select('product_id')
+                .ilike('name', `%${filters.search}%`);
+            searchIds = [...new Set((matches ?? []).map((m) => m.product_id))];
+            if (searchIds.length === 0) return emptyResult;
+        }
+
         // Start building the query
         let query = supabase
             .from('products')
             .select(CARD_SELECT, { count: 'exact' })
-            .eq('is_published', true)
-            .eq('product_translations.locale', 'en'); // Always use English for product names
+            .eq('is_published', true);
 
         // Apply filters
         if (categoryIds) {
@@ -311,9 +325,8 @@ export async function listProducts(
             query = query.eq('is_featured', filters.isFeatured);
         }
 
-        // Search by name (simple text search)
-        if (filters.search) {
-            query = query.ilike('product_translations.name', `%${filters.search}%`);
+        if (searchIds) {
+            query = query.in('id', searchIds);
         }
 
         // Apply sorting
@@ -515,7 +528,7 @@ export async function getProductBySlug(
         const product: ProductDetailDTO = {
             id: productData.id,
             slug: productData.slug,
-            name: englishName || translation?.name || 'Untitled Product', // Always use English name
+            name: translation?.name || englishName || 'Untitled Product', // locale name, fallback English
             priceVnd: productData.price,
             compareAtPriceVnd: productData.compare_at_price || undefined,
             imageUrl: (() => {
@@ -602,7 +615,6 @@ export async function getRelatedProducts(
                 .eq('is_published', true)
                 .eq(column, value)
                 .neq('id', productId)
-                .eq('product_translations.locale', 'en')
                 .limit(limit * 2);
             for (const row of (data || []) as unknown as ProductRow[]) {
                 if (!seen.has(row.id)) {
@@ -622,7 +634,6 @@ export async function getRelatedProducts(
                 .select(CARD_SELECT)
                 .eq('is_published', true)
                 .neq('id', productId)
-                .eq('product_translations.locale', 'en')
                 .order('created_at', { ascending: false })
                 .limit(limit * 2);
             for (const row of (data || []) as unknown as ProductRow[]) {

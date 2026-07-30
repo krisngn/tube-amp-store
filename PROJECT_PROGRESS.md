@@ -59,10 +59,10 @@ Rebranded the store to **Vintage Audio Accessories** and turned a tube-amp-only 
 - Invalid `condition`/`topology` values now raise a per-row error instead of being silently changed.
 - Import route: 5 MB upload cap + `maxDuration`.
 - Product detail no longer 404s when a product has only one locale's translation (locale fallback + `maybeSingle`); pagination `page` param clamped.
+- **Storefront listings/search delocalized**: products show regardless of which locale's translation exists (dropped the English `!inner` gate); display name follows the request locale (fallback VI → any); search matches any locale, so Vietnamese product names are now searchable.
 
 #### Known Limitations / Next
 - No hard-delete for products (unpublish only).
-- **Storefront listings/search still key off the English translation** (`!inner` on `product_translations`), so a product published with only a VI translation is excluded from grids and Vietnamese search won't match VI names. Fix requires decoupling search from the inner join (deferred).
 - CSV import is not transactional and runs row-by-row: a mid-row failure can leave a product without translations, and large files (thousands of rows) should be batched. Fine for typical catalogs.
 - Deactivating a mid-tree category detaches its still-active descendants from ancestor filtering.
 - `specifications` CSV cell uses `Key=Value|…`; values containing `|` and non-string JSON types don't round-trip perfectly.
