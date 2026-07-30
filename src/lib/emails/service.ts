@@ -132,7 +132,7 @@ function getEmailTranslations(locale: Locale) {
                         paymentBank: { title: 'Payment Method: Bank Transfer', message: 'Please transfer payment', bank: 'Bank', accountNumber: 'Account', accountName: 'Name', amount: 'Amount', content: 'Content' },
                         support: 'Contact support for questions',
                         footer: '',
-                        footerBrand: 'Restore The Basic',
+                        footerBrand: 'Vintage Audio Accessories',
                     },
                     statusUpdate: {
                         subject: 'Order {orderCode} - Status: {status}',
@@ -143,7 +143,7 @@ function getEmailTranslations(locale: Locale) {
                         statusLabels: {},
                         statusDescriptions: {},
                         support: 'Contact support for questions',
-                        footerBrand: 'Restore The Basic',
+                        footerBrand: 'Vintage Audio Accessories',
                     },
                     refund: {
                         header: 'Refund Processed',
@@ -153,7 +153,7 @@ function getEmailTranslations(locale: Locale) {
                         trackOrder: 'Track Your Order',
                         trackButton: 'Track Order',
                         support: 'If you have any questions, please contact us',
-                        footerBrand: 'Restore The Basic',
+                        footerBrand: 'Vintage Audio Accessories',
                         partialRefund: {
                             subject: 'Partial Refund Processed - Order {orderCode}',
                             title: 'Partial Refund Processed',
@@ -183,7 +183,7 @@ function getEmailTranslations(locale: Locale) {
                 paymentBank: { title: 'Payment Method: Bank Transfer', message: 'Please transfer payment', bank: 'Bank', accountNumber: 'Account', accountName: 'Name', amount: 'Amount', content: 'Content' },
                 support: 'Contact support for questions',
                 footer: '',
-                footerBrand: 'Restore The Basic',
+                footerBrand: 'Vintage Audio Accessories',
             },
             statusUpdate: {
                 subject: 'Order {orderCode} - Status: {status}',
@@ -194,7 +194,7 @@ function getEmailTranslations(locale: Locale) {
                 statusLabels: {},
                 statusDescriptions: {},
                 support: 'Contact support for questions',
-                footerBrand: 'Restore The Basic',
+                footerBrand: 'Vintage Audio Accessories',
             },
             refund: {
                 header: 'Refund Processed',
@@ -204,7 +204,7 @@ function getEmailTranslations(locale: Locale) {
                 trackOrder: 'Track Your Order',
                 trackButton: 'Track Order',
                 support: 'If you have any questions, please contact us',
-                footerBrand: 'Restore The Basic',
+                footerBrand: 'Vintage Audio Accessories',
                 partialRefund: {
                     subject: 'Partial Refund Processed - Order {orderCode}',
                     title: 'Partial Refund Processed',
@@ -417,7 +417,7 @@ async function generateOrderConfirmationEmail(
                     <tr>
                         <td style="background-color: #0a0a0a; padding: 20px; text-align: center;">
                             <p style="margin: 0; color: #d4a574; font-size: 14px;">
-                                ${t.orderConfirmation.footerBrand || 'Restore The Basic'}
+                                ${t.orderConfirmation.footerBrand || 'Vintage Audio Accessories'}
                             </p>
                         </td>
                     </tr>
@@ -549,7 +549,7 @@ async function generateStatusUpdateEmail(
                     <tr>
                         <td style="background-color: #0a0a0a; padding: 20px; text-align: center;">
                             <p style="margin: 0; color: #d4a574; font-size: 14px;">
-                                ${t.statusUpdate.footerBrand || 'Restore The Basic'}
+                                ${t.statusUpdate.footerBrand || 'Vintage Audio Accessories'}
                             </p>
                         </td>
                     </tr>
@@ -996,7 +996,7 @@ async function generateRefundEmail(
                     <tr>
                         <td style="background-color: #0a0a0a; padding: 20px; text-align: center;">
                             <p style="margin: 0; color: #d4a574; font-size: 14px;">
-                                ${t.refund?.footerBrand || 'Restore The Basic'}
+                                ${t.refund?.footerBrand || 'Vintage Audio Accessories'}
                             </p>
                         </td>
                     </tr>
@@ -1213,7 +1213,7 @@ async function generateOrderCancellationEmail(
                     <tr>
                         <td style="background-color: #0a0a0a; padding: 20px; text-align: center;">
                             <p style="margin: 0; color: #d4a574; font-size: 14px;">
-                                ${t.orderCancellation?.footerBrand || 'Restore The Basic'}
+                                ${t.orderCancellation?.footerBrand || 'Vintage Audio Accessories'}
                             </p>
                         </td>
                     </tr>
@@ -1433,7 +1433,7 @@ export async function sendChangeRequestEmail(
                     <tr>
                         <td style="background-color: #0a0a0a; padding: 20px; text-align: center;">
                             <p style="margin: 0; color: #d4a574; font-size: 14px;">
-                                Restore The Basic - Admin Notification
+                                Vintage Audio Accessories - Admin Notification
                             </p>
                         </td>
                     </tr>
@@ -1562,7 +1562,7 @@ export async function sendDepositApprovedEmail(
                     <tr>
                         <td style="background-color: #0a0a0a; padding: 20px; text-align: center;">
                             <p style="margin: 0; color: #d4a574; font-size: 14px;">
-                                ${t.depositApproved?.footerBrand || 'Restore The Basic'}
+                                ${t.depositApproved?.footerBrand || 'Vintage Audio Accessories'}
                             </p>
                         </td>
                     </tr>
@@ -1715,7 +1715,7 @@ export async function sendDepositRejectedEmail(
                     <tr>
                         <td style="background-color: #0a0a0a; padding: 20px; text-align: center;">
                             <p style="margin: 0; color: #d4a574; font-size: 14px;">
-                                ${t.depositRejected?.footerBrand || 'Restore The Basic'}
+                                ${t.depositRejected?.footerBrand || 'Vintage Audio Accessories'}
                             </p>
                         </td>
                     </tr>

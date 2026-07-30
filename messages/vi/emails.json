@@ -26,7 +26,7 @@
         },
         "support": "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại support@restorethebasic.com hoặc gọi +84 XXX XXX XXX.",
         "footer": "Nếu bạn không đặt đơn hàng này, vui lòng bỏ qua email này.",
-        "footerBrand": "Restore The Basic",
+        "footerBrand": "Vintage Audio Accessories",
         "trackOrder": "Theo Dõi Đơn Hàng",
         "trackButton": "Theo Dõi Đơn Hàng",
         "trackNote": "Sử dụng liên kết này để theo dõi trạng thái đơn hàng bất cứ lúc nào.",
@@ -56,7 +56,7 @@
             "cancelled": "Đơn hàng của bạn đã bị hủy. Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi."
         },
         "support": "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại support@restorethebasic.com hoặc gọi +84 XXX XXX XXX.",
-        "footerBrand": "Restore The Basic",
+        "footerBrand": "Vintage Audio Accessories",
         "trackOrder": "Theo Dõi Đơn Hàng",
         "trackButton": "Theo Dõi Đơn Hàng",
         "trackNote": "Sử dụng liên kết này để theo dõi trạng thái đơn hàng bất cứ lúc nào."
@@ -69,7 +69,7 @@
         "trackOrder": "Theo Dõi Đơn Hàng",
         "trackButton": "Theo Dõi Đơn Hàng",
         "support": "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại support@restorethebasic.com hoặc gọi +84 XXX XXX XXX.",
-        "footerBrand": "Restore The Basic",
+        "footerBrand": "Vintage Audio Accessories",
         "partialRefund": {
             "subject": "Đã Hoàn Tiền Một Phần - Đơn Hàng {orderCode}",
             "title": "Đã Hoàn Tiền Một Phần",
@@ -91,7 +91,7 @@
         "trackOrder": "Xem Chi Tiết Đơn Hàng",
         "trackButton": "Xem Đơn Hàng",
         "support": "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại support@restorethebasic.com hoặc gọi +84 XXX XXX XXX.",
-        "footerBrand": "Restore The Basic"
+        "footerBrand": "Vintage Audio Accessories"
     },
     "changeRequest": {
         "header": "Yêu Cầu Thay Đổi",
@@ -110,7 +110,7 @@
         "nextSteps": "Chúng tôi sẽ tiến hành xử lý đơn hàng của bạn. Bạn có thể theo dõi trạng thái bằng liên kết bên dưới.",
         "trackButton": "Theo Dõi Đơn Hàng",
         "support": "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại support@restorethebasic.com",
-        "footerBrand": "Restore The Basic"
+        "footerBrand": "Vintage Audio Accessories"
     },
     "depositRejected": {
         "subject": "Minh Chứng Cọc Cần Chú Ý - Đơn Hàng {orderCode}",
@@ -121,7 +121,7 @@
         "action": "Vui lòng tải lên hình ảnh rõ nét hơn của minh chứng chuyển khoản bằng liên kết bên dưới.",
         "uploadButton": "Tải Lên Minh Chứng Mới",
         "support": "Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi tại support@restorethebasic.com",
-        "footerBrand": "Restore The Basic"
+        "footerBrand": "Vintage Audio Accessories"
     }
 }
 

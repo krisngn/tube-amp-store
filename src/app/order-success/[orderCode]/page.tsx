@@ -238,7 +238,7 @@ export default async function OrderSuccessPage({ params, searchParams }: OrderSu
                         bankConfig={{
                             bankBin: process.env.VIETQR_BANK_BIN || process.env.BANK_BIN || '970436',
                             accountNumber: process.env.VIETQR_ACCOUNT_NUMBER || process.env.BANK_ACCOUNT_NUMBER || '',
-                            accountName: process.env.VIETQR_ACCOUNT_NAME || process.env.BANK_ACCOUNT_NAME || 'RESTORE THE BASIC',
+                            accountName: process.env.VIETQR_ACCOUNT_NAME || process.env.BANK_ACCOUNT_NAME || 'VINTAGE AUDIO ACCESSORIES',
                             bankName: getBankNameFromBin(process.env.VIETQR_BANK_BIN || process.env.BANK_BIN || '970436'),
                         }}
                     />
@@ -391,7 +391,7 @@ export default async function OrderSuccessPage({ params, searchParams }: OrderSu
                                         {t('nextSteps.bankTransfer.bankInfo.accountName')}:
                                     </strong>{' '}
                                     {/* TODO: Add actual account name */}
-                                    Restore The Basic
+                                    Vintage Audio Accessories
                                 </p>
                                 <p>
                                     <strong>{t('nextSteps.bankTransfer.bankInfo.amount')}:</strong>{' '}

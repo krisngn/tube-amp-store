@@ -1,14 +1,14 @@
 {
     "hero": {
-        "title": "Authentic Tube Sound",
-        "subtitle": "Premium tube amplifiers for true music lovers. Rare vintage and modern handmade.",
+        "title": "Authentic Vintage Audio",
+        "subtitle": "Premium vintage audio accessories for true music lovers — tube amps, speakers, turntables and more.",
         "cta": {
-            "browse": "Browse Tube Amps",
+            "browse": "Browse Products",
             "matching": "Get Matching Advice"
         }
     },
     "quickEntry": {
-        "title": "Find Your Perfect Amp",
+        "title": "Shop by Category",
         "vocals": {
             "title": "Vocals / Jazz",
             "description": "SE 300B/2A3 - Sweet, detailed sound"
@@ -28,6 +28,7 @@
     },
     "featured": {
         "title": "Featured Products",
+        "viewAll": "View all",
         "tabs": {
             "bestSellers": "Best Sellers",
             "newArrivals": "New Arrivals",
