@@ -26,7 +26,7 @@
         },
         "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
         "footer": "If you did not place this order, please ignore this email.",
-        "footerBrand": "Restore The Basic",
+        "footerBrand": "Vintage Audio Accessories",
         "trackOrder": "Track Your Order",
         "trackButton": "Track Order",
         "trackNote": "Use this link to track your order status anytime."
@@ -54,7 +54,7 @@
             "cancelled": "Your order has been cancelled. If you have any questions, please contact us."
         },
         "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
-        "footerBrand": "Restore The Basic",
+        "footerBrand": "Vintage Audio Accessories",
         "trackOrder": "Track Your Order",
         "trackButton": "Track Order",
         "trackNote": "Use this link to track your order status anytime."
@@ -67,7 +67,7 @@
         "trackOrder": "Track Your Order",
         "trackButton": "Track Order",
         "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
-        "footerBrand": "Restore The Basic",
+        "footerBrand": "Vintage Audio Accessories",
         "partialRefund": {
             "subject": "Partial Refund Processed - Order {orderCode}",
             "title": "Partial Refund Processed",
@@ -89,7 +89,7 @@
         "trackOrder": "View Order Details",
         "trackButton": "View Order",
         "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
-        "footerBrand": "Restore The Basic"
+        "footerBrand": "Vintage Audio Accessories"
     },
     "changeRequest": {
         "header": "Change Request",
@@ -108,7 +108,7 @@
         "nextSteps": "We will now process your order. You can track the status using the link below.",
         "trackButton": "Track Your Order",
         "support": "If you have any questions, please contact us at support@restorethebasic.com",
-        "footerBrand": "Restore The Basic"
+        "footerBrand": "Vintage Audio Accessories"
     },
     "depositRejected": {
         "subject": "Deposit Proof Needs Attention - Order {orderCode}",
@@ -119,7 +119,7 @@
         "action": "Please upload a clearer image of your bank transfer proof using the link below.",
         "uploadButton": "Upload New Proof",
         "support": "If you have any questions, please contact us at support@restorethebasic.com",
-        "footerBrand": "Restore The Basic"
+        "footerBrand": "Vintage Audio Accessories"
     }
 }
 

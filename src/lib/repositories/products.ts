@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
 import { getPublicImageUrl } from '@/lib/utils/images';
+import { buildNestedTree, getDescendantIds, type NestedNode } from '@/lib/utils/categoryTree';
 import type {
     ProductCardDTO,
     ProductDetailDTO,
@@ -7,6 +9,8 @@ import type {
     ListProductsParams,
     ProductImage,
     ProductSpecs,
+    CategoryDTO,
+    BrandDTO,
 } from '@/lib/types/catalog';
 
 // Types for Supabase response objects
@@ -26,6 +30,22 @@ interface ProductImageRow {
     is_primary?: boolean; // Primary image flag
 }
 
+interface CategoryEmbed {
+    id: string;
+    slug: string;
+    name_vi: string;
+    name_en?: string | null;
+    parent_id?: string | null;
+}
+
+interface BrandEmbed {
+    id: string;
+    slug: string;
+    name: string;
+    name_en?: string | null;
+    logo_path?: string | null;
+}
+
 interface ProductRow {
     id: string;
     slug: string;
@@ -34,12 +54,14 @@ interface ProductRow {
     stock_quantity: number;
     low_stock_threshold?: number;
     condition: string;
-    topology: string;
-    tube_type: string;
-    power_watts: number;
-    min_speaker_sensitivity: number;
+    topology?: string | null;
+    tube_type?: string | null;
+    power_watts?: number | null;
+    min_speaker_sensitivity?: number | null;
     is_featured: boolean;
     is_vintage: boolean;
+    category?: CategoryEmbed | null;
+    brand?: BrandEmbed | null;
     product_translations?: ProductTranslationRow[];
     product_images?: ProductImageRow[];
 }
@@ -48,6 +70,8 @@ interface ProductDetailRow extends ProductRow {
     sku?: string;
     taps?: string[];
     specifications?: ProductSpecs;
+    category_id?: string | null;
+    brand_id?: string | null;
     allow_deposit: boolean;
     deposit_type?: 'percent' | 'fixed';
     deposit_amount?: number;
@@ -73,10 +97,137 @@ interface ProductDetailRow extends ProductRow {
     }>;
 }
 
+// Columns for a product card query (shared by list & related)
+const CARD_SELECT = `
+    id,
+    slug,
+    price,
+    compare_at_price,
+    stock_quantity,
+    low_stock_threshold,
+    condition,
+    topology,
+    tube_type,
+    power_watts,
+    min_speaker_sensitivity,
+    is_featured,
+    is_vintage,
+    is_published,
+    category:categories(id, slug, name_vi, name_en),
+    brand:brands(id, slug, name, name_en),
+    product_translations(
+      name,
+      short_description,
+      locale
+    ),
+    product_images!left(
+      id,
+      storage_path,
+      url,
+      alt_text,
+      sort_order,
+      is_primary
+    )
+`;
+
+/**
+ * Resolve a localized display name from a categories/brands row.
+ */
+function localeName(
+    row: { name_vi?: string | null; name_en?: string | null; name?: string | null } | null | undefined,
+    locale: string
+): string | undefined {
+    if (!row) return undefined;
+    if (locale === 'en') return row.name_en || row.name || row.name_vi || undefined;
+    return row.name_vi || row.name || row.name_en || undefined;
+}
+
+/**
+ * Resolve the display image URL for a product row.
+ */
+function resolveCardImageUrl(images?: ProductImageRow[]): string {
+    const primaryImage =
+        images?.find((img) => img.is_primary === true) ||
+        images?.find((img) => img.sort_order === 0) ||
+        images?.[0];
+
+    let imageUrl = '/images/placeholder-product.jpg';
+    if (primaryImage?.storage_path) {
+        imageUrl = getPublicImageUrl(primaryImage.storage_path);
+    } else if (
+        primaryImage?.url &&
+        primaryImage.url !== '' &&
+        (primaryImage.url.startsWith('http://') || primaryImage.url.startsWith('https://'))
+    ) {
+        imageUrl = primaryImage.url;
+    }
+    return imageUrl;
+}
+
+/**
+ * Map a product row to a ProductCardDTO.
+ */
+function mapCardRow(product: ProductRow, locale: string): ProductCardDTO {
+    const translations = product.product_translations ?? [];
+    const translation =
+        translations.find((t) => t.locale === locale) ??
+        translations.find((t) => t.locale === 'vi') ??
+        translations[0];
+    return {
+        id: product.id,
+        slug: product.slug,
+        name: translation?.name || 'Untitled Product',
+        priceVnd: product.price,
+        compareAtPriceVnd: product.compare_at_price || undefined,
+        imageUrl: resolveCardImageUrl(product.product_images),
+        topology: (product.topology as ProductCardDTO['topology']) ?? undefined,
+        tubeType: (product.tube_type as ProductCardDTO['tubeType']) ?? undefined,
+        powerWatts: product.power_watts ?? undefined,
+        recommendedSensitivityMin: product.min_speaker_sensitivity ?? undefined,
+        condition: product.condition as ProductCardDTO['condition'],
+        isInStock: product.stock_quantity > 0,
+        isVintage: product.is_vintage,
+        isFeatured: product.is_featured,
+        categoryName: localeName(product.category, locale),
+        categorySlug: product.category?.slug,
+        brandName: localeName(product.brand, locale),
+        brandSlug: product.brand?.slug,
+    };
+}
+
 /**
  * Products Repository
  * Single source of truth for product data access
  */
+
+/**
+ * Resolve a category slug to the set of category ids it should match.
+ * A top-level slug also matches all of its subcategories.
+ * Returns null if the slug does not exist.
+ */
+async function resolveCategoryIds(
+    supabase: Awaited<ReturnType<typeof createClient>>,
+    slug: string
+): Promise<string[] | null> {
+    // Resolve the subtree from the FULL category set (service-role, bypassing RLS)
+    // so an inactive mid-tree category doesn't orphan its still-active descendants
+    // and drop them from the filter. Only category ids are read here; products are
+    // still gated by is_published in the main query. Falls back to the request
+    // client if the service key isn't configured.
+    type CatRow = { id: string; slug: string; parent_id: string | null };
+    let rows: CatRow[] | null = null;
+    try {
+        const admin = createServiceClient();
+        rows = (await admin.from('categories').select('id, slug, parent_id')).data as CatRow[] | null;
+    } catch {
+        rows = (await supabase.from('categories').select('id, slug, parent_id')).data as CatRow[] | null;
+    }
+    if (!rows) return null;
+    const node = rows.find((c) => c.slug === slug);
+    if (!node) return null;
+    const items = rows.map((c) => ({ id: c.id, parentId: c.parent_id }));
+    return [node.id, ...getDescendantIds(items, node.id)];
+}
 
 /**
  * List products with filters, sorting, and pagination
@@ -91,66 +242,73 @@ export async function listProducts(
         pagination = { page: 1, pageSize: 12 },
     } = params;
 
+    const emptyResult: ProductListResponse = {
+        items: [],
+        total: 0,
+        page: pagination.page,
+        pageSize: pagination.pageSize,
+        totalPages: 0,
+    };
+
     try {
         const supabase = await createClient();
+
+        // Resolve category/brand slug filters to ids up front (short-circuit on no match)
+        let categoryIds: string[] | null = null;
+        if (filters.category) {
+            categoryIds = await resolveCategoryIds(supabase, filters.category);
+            if (!categoryIds || categoryIds.length === 0) return emptyResult;
+        }
+
+        let brandId: string | null = null;
+        if (filters.brand) {
+            const { data: b } = await supabase
+                .from('brands')
+                .select('id')
+                .eq('slug', filters.brand)
+                .maybeSingle();
+            if (!b) return emptyResult;
+            brandId = b.id;
+        }
+
+        // Name search across ALL locales (so Vietnamese terms match VI names too)
+        let searchIds: string[] | null = null;
+        if (filters.search) {
+            const { data: matches } = await supabase
+                .from('product_translations')
+                .select('product_id')
+                .ilike('name', `%${filters.search}%`);
+            searchIds = [...new Set((matches ?? []).map((m) => m.product_id))];
+            if (searchIds.length === 0) return emptyResult;
+        }
 
         // Start building the query
         let query = supabase
             .from('products')
-            .select(
-                `
-        id,
-        slug,
-        price,
-        compare_at_price,
-        stock_quantity,
-        low_stock_threshold,
-        condition,
-        topology,
-        tube_type,
-        power_watts,
-        min_speaker_sensitivity,
-        is_featured,
-        is_vintage,
-        is_published,
-        product_translations!inner(
-          name,
-          short_description,
-          locale
-        ),
-        product_images!left(
-          id,
-          storage_path,
-          url,
-          alt_text,
-          sort_order,
-          is_primary
-        )
-      `,
-                { count: 'exact' }
-            )
-            .eq('is_published', true)
-            .eq('product_translations.locale', 'en'); // Always use English for product names
+            .select(CARD_SELECT, { count: 'exact' })
+            .eq('is_published', true);
 
         // Apply filters
+        if (categoryIds) {
+            query = query.in('category_id', categoryIds);
+        }
+
+        if (brandId) {
+            query = query.eq('brand_id', brandId);
+        }
+
         if (filters.topology) {
-            const topologies = Array.isArray(filters.topology)
-                ? filters.topology
-                : [filters.topology];
+            const topologies = Array.isArray(filters.topology) ? filters.topology : [filters.topology];
             query = query.in('topology', topologies);
         }
 
         if (filters.tubeType) {
-            const tubeTypes = Array.isArray(filters.tubeType)
-                ? filters.tubeType
-                : [filters.tubeType];
+            const tubeTypes = Array.isArray(filters.tubeType) ? filters.tubeType : [filters.tubeType];
             query = query.in('tube_type', tubeTypes);
         }
 
         if (filters.condition) {
-            const conditions = Array.isArray(filters.condition)
-                ? filters.condition
-                : [filters.condition];
+            const conditions = Array.isArray(filters.condition) ? filters.condition : [filters.condition];
             query = query.in('condition', conditions);
         }
 
@@ -178,9 +336,8 @@ export async function listProducts(
             query = query.eq('is_featured', filters.isFeatured);
         }
 
-        // Search by name (simple text search)
-        if (filters.search) {
-            query = query.ilike('product_translations.name', `%${filters.search}%`);
+        if (searchIds) {
+            query = query.in('id', searchIds);
         }
 
         // Apply sorting
@@ -199,7 +356,6 @@ export async function listProducts(
                 break;
             case 'best_sellers':
                 // For MVP, fallback to newest
-                // TODO: Implement order count tracking
                 query = query.order('created_at', { ascending: false });
                 break;
         }
@@ -217,44 +373,9 @@ export async function listProducts(
             throw new Error('Failed to fetch products');
         }
 
-        // Map to DTOs
-        const items: ProductCardDTO[] = (data || []).map((product: ProductRow) => {
-            const translation = product.product_translations?.[0];
-            // Find primary image: prefer is_primary flag, fallback to sort_order = 0, then first image
-            const primaryImage = product.product_images?.find(
-                (img: ProductImageRow) => img.is_primary === true
-            ) || product.product_images?.find(
-                (img: ProductImageRow) => img.sort_order === 0
-            ) || product.product_images?.[0]; // Fallback to first image
-
-            // Determine image URL - prefer storage_path first (most reliable), then url
-            // This matches the admin ProductImageManager logic
-            let imageUrl = '/images/placeholder-product.jpg';
-            if (primaryImage?.storage_path) {
-                // Always prefer storage_path - construct URL from it
-                imageUrl = getPublicImageUrl(primaryImage.storage_path);
-            } else if (primaryImage?.url && primaryImage.url !== '' && (primaryImage.url.startsWith('http://') || primaryImage.url.startsWith('https://'))) {
-                // Use url only if it's a valid full URL
-                imageUrl = primaryImage.url;
-            }
-
-            return {
-                id: product.id,
-                slug: product.slug,
-                name: translation?.name || 'Untitled Product',
-                priceVnd: product.price,
-                compareAtPriceVnd: product.compare_at_price || undefined,
-                imageUrl,
-                topology: product.topology as ProductCardDTO['topology'],
-                tubeType: product.tube_type as ProductCardDTO['tubeType'],
-                powerWatts: product.power_watts,
-                recommendedSensitivityMin: product.min_speaker_sensitivity,
-                condition: product.condition as ProductCardDTO['condition'],
-                isInStock: product.stock_quantity > 0,
-                isVintage: product.is_vintage,
-                isFeatured: product.is_featured,
-            };
-        });
+        const items: ProductCardDTO[] = (data || []).map((product) =>
+            mapCardRow(product as unknown as ProductRow, locale)
+        );
 
         const totalPages = count ? Math.ceil(count / pagination.pageSize) : 0;
 
@@ -267,14 +388,7 @@ export async function listProducts(
         };
     } catch (error) {
         console.error('Repository error in listProducts:', error);
-        // Return empty result on error
-        return {
-            items: [],
-            total: 0,
-            page: pagination.page,
-            pageSize: pagination.pageSize,
-            totalPages: 0,
-        };
+        return emptyResult;
     }
 }
 
@@ -306,6 +420,8 @@ export async function getProductBySlug(
         taps,
         min_speaker_sensitivity,
         specifications,
+        category_id,
+        brand_id,
         allow_deposit,
         deposit_type,
         deposit_amount,
@@ -320,7 +436,9 @@ export async function getProductBySlug(
         meta_description,
         created_at,
         published_at,
-        product_translations!inner(
+        category:categories(id, slug, name_vi, name_en, parent_id),
+        brand:brands(id, slug, name, name_en, logo_path),
+        product_translations(
           name,
           short_description,
           description,
@@ -343,59 +461,68 @@ export async function getProductBySlug(
             )
             .eq('slug', slug)
             .eq('is_published', true)
-            .eq('product_translations.locale', locale)
-            .single();
+            .maybeSingle();
 
         if (error || !data) {
-            console.error('Error fetching product:', error);
+            if (error) console.error('Error fetching product:', error);
             return null;
         }
 
-        const productData = data as ProductDetailRow;
-        const translation = productData.product_translations?.[0];
-        
-        // Fetch English name separately for product title
-        const { data: englishData } = await supabase
-            .from('product_translations')
-            .select('name')
-            .eq('product_id', productData.id)
-            .eq('locale', 'en')
-            .single();
-        
-        const englishName = englishData?.name;
+        const productData = data as unknown as ProductDetailRow;
+        // Pick the requested locale, falling back to VI then any — so a product
+        // with only one locale's translation still renders (no 404).
+        const allTranslations = productData.product_translations ?? [];
+        const translation =
+            allTranslations.find((t) => t.locale === locale) ??
+            allTranslations.find((t) => t.locale === 'vi') ??
+            allTranslations[0];
+        const englishName = allTranslations.find((t) => t.locale === 'en')?.name;
+
+        // Build the full category ancestor path (root -> leaf) for the breadcrumb
+        let categoryPath: Array<{ name: string; slug: string }> = [];
+        const leafCatId = productData.category?.id ?? productData.category_id ?? null;
+        if (leafCatId) {
+            const { data: allCats } = await supabase
+                .from('categories')
+                .select('id, slug, name_vi, name_en, parent_id');
+            if (allCats) {
+                const byId = new Map(allCats.map((c) => [c.id, c]));
+                const chain: Array<{ name: string; slug: string }> = [];
+                const guard = new Set<string>();
+                let cur = byId.get(leafCatId);
+                while (cur && !guard.has(cur.id)) {
+                    guard.add(cur.id);
+                    chain.unshift({ name: localeName(cur, locale) || cur.slug, slug: cur.slug });
+                    cur = cur.parent_id ? byId.get(cur.parent_id) : undefined;
+                }
+                categoryPath = chain;
+            }
+        }
 
         // Map images - use is_primary and sort_order
         const images: ProductImage[] = (productData.product_images || [])
             .sort((a, b) => {
-                // Sort by sort_order (primary should be 0)
                 const aOrder = a.sort_order ?? 0;
                 const bOrder = b.sort_order ?? 0;
                 return aOrder - bOrder;
             })
             .map((img) => {
                 const sortOrder = img.sort_order ?? 0;
-                // Primary: explicit is_primary flag, or sort_order = 0 if no flag set
                 const isPrimary = img.is_primary === true || (img.is_primary === undefined && sortOrder === 0);
-                
-                // Prefer storage_path first (most reliable), then url, then placeholder
-                // This matches the admin ProductImageManager logic
+
                 let imageUrl = '';
                 if (img.storage_path) {
-                    // Always prefer storage_path - construct URL from it
                     imageUrl = getPublicImageUrl(img.storage_path);
-                } else if (img.url && img.url !== '' && (img.url.startsWith('http://') || img.url.startsWith('https://'))) {
-                    // Use url only if it's a valid full URL
+                } else if (
+                    img.url &&
+                    img.url !== '' &&
+                    (img.url.startsWith('http://') || img.url.startsWith('https://'))
+                ) {
                     imageUrl = img.url;
                 } else {
-                    // Fallback to placeholder
                     imageUrl = '/images/placeholder-product.jpg';
                 }
-                
-                // Debug logging (remove in production)
-                if (process.env.NODE_ENV === 'development' && !imageUrl.includes('placeholder')) {
-                    console.log(`[Product Image] ID: ${img.id}, URL: ${imageUrl}, Storage Path: ${img.storage_path}, DB URL: ${img.url}`);
-                }
-                
+
                 return {
                     id: img.id,
                     url: imageUrl,
@@ -412,22 +539,33 @@ export async function getProductBySlug(
         const product: ProductDetailDTO = {
             id: productData.id,
             slug: productData.slug,
-            name: englishName || translation?.name || 'Untitled Product', // Always use English name
+            name: translation?.name || englishName || 'Untitled Product', // locale name, fallback English
             priceVnd: productData.price,
             compareAtPriceVnd: productData.compare_at_price || undefined,
             imageUrl: (() => {
-                // Find primary image: prefer explicit isPrimary flag, fallback to first image
                 const primaryImg = images.find((img) => img.isPrimary) || images[0];
                 return primaryImg?.url || '/images/placeholder-product.jpg';
             })(),
-            topology: productData.topology as ProductCardDTO['topology'],
-            tubeType: productData.tube_type as ProductCardDTO['tubeType'],
-            powerWatts: productData.power_watts,
-            recommendedSensitivityMin: productData.min_speaker_sensitivity,
+            topology: (productData.topology as ProductCardDTO['topology']) ?? undefined,
+            tubeType: (productData.tube_type as ProductCardDTO['tubeType']) ?? undefined,
+            powerWatts: productData.power_watts ?? undefined,
+            recommendedSensitivityMin: productData.min_speaker_sensitivity ?? undefined,
             condition: productData.condition as ProductCardDTO['condition'],
             isInStock: productData.stock_quantity > 0,
             isVintage: productData.is_vintage,
             isFeatured: productData.is_featured,
+
+            // Category & brand
+            categoryId: productData.category?.id ?? productData.category_id ?? undefined,
+            categoryName: localeName(productData.category, locale),
+            categorySlug: productData.category?.slug,
+            categoryPath,
+            brandId: productData.brand?.id ?? productData.brand_id ?? undefined,
+            brandName: localeName(productData.brand, locale),
+            brandSlug: productData.brand?.slug,
+            brandLogoUrl: productData.brand?.logo_path
+                ? getPublicImageUrl(productData.brand.logo_path)
+                : undefined,
 
             // Detail-specific fields
             shortDescription: translation?.short_description,
@@ -467,145 +605,57 @@ export async function getProductBySlug(
 }
 
 /**
- * Get related products based on topology or tube type
+ * Get related products by category, falling back to brand, then newest.
  */
 export async function getRelatedProducts(
     productId: string,
-    topology: string,
-    tubeType: string,
+    categoryId: string | null | undefined,
+    brandId: string | null | undefined,
     locale: string,
     limit: number = 3
 ): Promise<ProductCardDTO[]> {
     try {
         const supabase = await createClient();
+        const collected: ProductRow[] = [];
+        const seen = new Set<string>([productId]);
 
-        // First, try to get products with matching topology
-        const { data: topologyMatches } = await supabase
-            .from('products')
-            .select(
-                `
-        id,
-        slug,
-        price,
-        compare_at_price,
-        stock_quantity,
-        condition,
-        topology,
-        tube_type,
-        power_watts,
-        min_speaker_sensitivity,
-        is_featured,
-        is_vintage,
-        product_translations!inner(
-          name,
-          short_description,
-          locale
-        ),
-        product_images!left(
-          id,
-          storage_path,
-          url,
-          alt_text,
-          sort_order,
-          is_primary
-        )
-      `
-            )
-            .eq('is_published', true)
-            .eq('topology', topology)
-            .neq('id', productId)
-            .eq('product_translations.locale', 'en') // Always use English for product names
-            .limit(limit);
-
-        let relatedProducts = topologyMatches || [];
-
-        // If we don't have enough, supplement with tube type matches
-        if (relatedProducts.length < limit) {
-            const { data: tubeMatches } = await supabase
+        const runQuery = async (column: 'category_id' | 'brand_id', value: string) => {
+            const { data } = await supabase
                 .from('products')
-                .select(
-                    `
-          id,
-          slug,
-          price,
-          compare_at_price,
-          stock_quantity,
-          condition,
-          topology,
-          tube_type,
-          power_watts,
-          min_speaker_sensitivity,
-          is_featured,
-          is_vintage,
-          product_translations!inner(
-            name,
-            short_description,
-            locale
-          ),
-          product_images!left(
-            id,
-            storage_path,
-            url,
-            alt_text,
-            sort_order,
-            position,
-            is_primary
-          )
-        `
-                )
+                .select(CARD_SELECT)
                 .eq('is_published', true)
-                .eq('tube_type', tubeType)
+                .eq(column, value)
                 .neq('id', productId)
-                .eq('product_translations.locale', locale)
-                .limit(limit - relatedProducts.length);
+                .limit(limit * 2);
+            for (const row of (data || []) as unknown as ProductRow[]) {
+                if (!seen.has(row.id)) {
+                    seen.add(row.id);
+                    collected.push(row);
+                }
+            }
+        };
 
-            // Combine and deduplicate
-            const tubeMatchesFiltered = (tubeMatches || []).filter(
-                (tm: ProductRow) => !relatedProducts.some((rp: ProductRow) => rp.id === tm.id)
-            );
-            relatedProducts = [...relatedProducts, ...tubeMatchesFiltered];
+        if (categoryId) await runQuery('category_id', categoryId);
+        if (collected.length < limit && brandId) await runQuery('brand_id', brandId);
+
+        // Fallback: newest published products
+        if (collected.length < limit) {
+            const { data } = await supabase
+                .from('products')
+                .select(CARD_SELECT)
+                .eq('is_published', true)
+                .neq('id', productId)
+                .order('created_at', { ascending: false })
+                .limit(limit * 2);
+            for (const row of (data || []) as unknown as ProductRow[]) {
+                if (!seen.has(row.id)) {
+                    seen.add(row.id);
+                    collected.push(row);
+                }
+            }
         }
 
-        // Map to DTOs
-        const items: ProductCardDTO[] = relatedProducts.map((product: ProductRow) => {
-            const translation = product.product_translations?.[0];
-            // Find primary image: prefer is_primary flag, fallback to sort_order = 0, then first image
-            const primaryImage = product.product_images?.find(
-                (img: ProductImageRow) => img.is_primary === true
-            ) || product.product_images?.find(
-                (img: ProductImageRow) => img.sort_order === 0
-            ) || product.product_images?.[0]; // Fallback to first image
-
-            // Determine image URL - prefer storage_path first (most reliable), then url
-            // This matches the admin ProductImageManager logic
-            let imageUrl = '/images/placeholder-product.jpg';
-            if (primaryImage?.storage_path) {
-                // Always prefer storage_path - construct URL from it
-                imageUrl = getPublicImageUrl(primaryImage.storage_path);
-            } else if (primaryImage?.url && primaryImage.url !== '' && (primaryImage.url.startsWith('http://') || primaryImage.url.startsWith('https://'))) {
-                // Use url only if it's a valid full URL
-                imageUrl = primaryImage.url;
-            }
-
-            return {
-                id: product.id,
-                slug: product.slug,
-                name: translation?.name || 'Untitled Product',
-                priceVnd: product.price,
-                compareAtPriceVnd: product.compare_at_price || undefined,
-                imageUrl,
-                topology: product.topology as ProductCardDTO['topology'],
-                tubeType: product.tube_type as ProductCardDTO['tubeType'],
-                powerWatts: product.power_watts,
-                recommendedSensitivityMin: product.min_speaker_sensitivity,
-                condition: product.condition as ProductCardDTO['condition'],
-                isInStock: product.stock_quantity > 0,
-                isVintage: product.is_vintage,
-                isFeatured: product.is_featured,
-            };
-        });
-
-        return items.slice(0, limit);
+        return collected.slice(0, limit).map((row) => mapCardRow(row, locale));
     } catch (error) {
         console.error('Repository error in getRelatedProducts:', error);
         return [];
@@ -613,30 +663,71 @@ export async function getRelatedProducts(
 }
 
 /**
- * Get unique filter values for UI (optional helper)
+ * Get filter options for the collection UI: category tree, brands, and the
+ * amp-specific facets derived from published products.
  */
-export async function getFilterOptions() {
+export async function getFilterOptions(locale: string = 'vi') {
     try {
         const supabase = await createClient();
 
-        const { data: products } = await supabase
-            .from('products')
-            .select('topology, tube_type, condition')
-            .eq('is_published', true);
+        const [{ data: products }, { data: categoryRows }, { data: brandRows }] = await Promise.all([
+            supabase.from('products').select('topology, tube_type, condition').eq('is_published', true),
+            supabase
+                .from('categories')
+                .select('id, slug, parent_id, name_vi, name_en, image_path, sort_order')
+                .eq('is_active', true)
+                .order('sort_order', { ascending: true }),
+            supabase
+                .from('brands')
+                .select('id, slug, name, name_en, logo_path, sort_order')
+                .eq('is_active', true)
+                .order('sort_order', { ascending: true }),
+        ]);
 
-        if (!products) return null;
+        const topologies = [...new Set((products || []).map((p) => p.topology).filter(Boolean))];
+        const tubeTypes = [...new Set((products || []).map((p) => p.tube_type).filter(Boolean))];
+        const conditions = [...new Set((products || []).map((p) => p.condition).filter(Boolean))];
 
-        const topologies = [...new Set(products.map((p) => p.topology))];
-        const tubeTypes = [...new Set(products.map((p) => p.tube_type))];
-        const conditions = [...new Set(products.map((p) => p.condition))];
+        const categories = buildCategoryTree(categoryRows || [], locale);
+        const brands: BrandDTO[] = (brandRows || []).map((b) => ({
+            id: b.id,
+            slug: b.slug,
+            name: (locale === 'en' ? b.name_en || b.name : b.name) || b.slug,
+            logoUrl: b.logo_path ? getPublicImageUrl(b.logo_path) : undefined,
+            sortOrder: b.sort_order ?? 0,
+        }));
 
-        return {
-            topologies,
-            tubeTypes,
-            conditions,
-        };
+        return { topologies, tubeTypes, conditions, categories, brands };
     } catch (error) {
         console.error('Error fetching filter options:', error);
         return null;
     }
+}
+
+interface CategoryRowRaw {
+    id: string;
+    slug: string;
+    parent_id: string | null;
+    name_vi: string;
+    name_en?: string | null;
+    image_path?: string | null;
+    sort_order?: number | null;
+}
+
+/**
+ * Build a nested category tree (unlimited depth) from flat rows.
+ */
+export function buildCategoryTree(rows: CategoryRowRaw[], locale: string): CategoryDTO[] {
+    const input = rows.map((r) => ({ ...r, parentId: r.parent_id, sortOrder: r.sort_order ?? 0 }));
+    const nameOf = (r: CategoryRowRaw) => (locale === 'en' ? r.name_en || r.name_vi : r.name_vi) || r.slug;
+    const convert = (node: NestedNode<(typeof input)[number]>): CategoryDTO => ({
+        id: node.item.id,
+        slug: node.item.slug,
+        parentId: node.item.parent_id,
+        name: nameOf(node.item),
+        imageUrl: node.item.image_path ? getPublicImageUrl(node.item.image_path) : undefined,
+        sortOrder: node.item.sort_order ?? 0,
+        children: node.children.map(convert),
+    });
+    return buildNestedTree(input).map(convert);
 }

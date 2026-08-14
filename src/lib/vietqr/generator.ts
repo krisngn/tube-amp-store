@@ -254,7 +254,7 @@ export function generateVietQRForOrder(
     // Get bank config from environment
     const bankBin = process.env.VIETQR_BANK_BIN || process.env.BANK_BIN || '970436'; // Default: Vietcombank
     const accountNumber = process.env.VIETQR_ACCOUNT_NUMBER || process.env.BANK_ACCOUNT_NUMBER || '';
-    const accountName = process.env.VIETQR_ACCOUNT_NAME || process.env.BANK_ACCOUNT_NAME || 'RESTORE THE BASIC';
+    const accountName = process.env.VIETQR_ACCOUNT_NAME || process.env.BANK_ACCOUNT_NAME || 'VINTAGE AUDIO ACCESSORIES';
     
     if (!accountNumber) {
         throw new Error('Bank account number not configured. Set VIETQR_ACCOUNT_NUMBER or BANK_ACCOUNT_NUMBER environment variable.');

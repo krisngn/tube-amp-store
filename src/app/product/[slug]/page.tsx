@@ -6,7 +6,7 @@ import { formatPrice, generateSummaryBullets } from '@/lib/utils/formatters';
 import ProductGallery from './ProductGallery';
 import ProductActions from './ProductActions';
 import ProductTabs from './ProductTabs';
-import ProductGrid from '../../tube-amplifiers/ProductGrid';
+import ProductGrid from '../../products/ProductGrid';
 import type { Metadata } from 'next';
 import styles from './ProductPage.module.css';
 
@@ -50,11 +50,11 @@ export default async function ProductPage({ params }: PageProps) {
     notFound();
   }
 
-  // Fetch related products
+  // Fetch related products (by category, falling back to brand)
   const relatedProducts = await getRelatedProducts(
     product.id,
-    product.topology,
-    product.tubeType,
+    product.categoryId,
+    product.brandId,
     locale,
     3
   );
@@ -73,7 +73,13 @@ export default async function ProductPage({ params }: PageProps) {
         <nav className={styles.breadcrumb}>
           <Link href="/">{t('breadcrumb.home')}</Link>
           <span>/</span>
-          <Link href="/tube-amplifiers">{t('breadcrumb.collection')}</Link>
+          <Link href="/products">{t('breadcrumb.collection')}</Link>
+          {(product.categoryPath ?? []).map((c) => (
+            <span key={c.slug} style={{ display: 'contents' }}>
+              <span>/</span>
+              <Link href={`/products?category=${c.slug}`}>{c.name}</Link>
+            </span>
+          ))}
           <span>/</span>
           <span>{product.name}</span>
         </nav>
@@ -89,9 +95,11 @@ export default async function ProductPage({ params }: PageProps) {
           <div className={styles.infoSection}>
             {/* Badges */}
             <div className={`${styles.badges} mb - 4`}>
-              <span className="badge badge-accent">
-                {product.topology.toUpperCase()} {product.tubeType}
-              </span>
+              {product.topology && product.tubeType && (
+                <span className="badge badge-accent">
+                  {product.topology.toUpperCase()} {product.tubeType}
+                </span>
+              )}
               <span className="badge">
                 {product.condition === 'new' && tCommon('new')}
                 {product.condition === 'like_new' && tCommon('likeNew')}
@@ -101,6 +109,17 @@ export default async function ProductPage({ params }: PageProps) {
                 <span className="badge badge-success">{tCommon('recommended')}</span>
               )}
             </div>
+
+            {/* Brand */}
+            {product.brandName && (
+              <p className="text-sm text-secondary" style={{ marginBottom: 'var(--space-sm)' }}>
+                {product.brandSlug ? (
+                  <Link href={`/brand/${product.brandSlug}`}>{product.brandName}</Link>
+                ) : (
+                  product.brandName
+                )}
+              </p>
+            )}
 
             {/* Product Name */}
             <h1 className={styles.title}>{product.name}</h1>

@@ -1,5 +1,5 @@
 -- =====================================================
--- Sample Seed Data for Restore The Basic
+-- Sample Seed Data for Vintage Audio Accessories
 -- =====================================================
 -- This file contains sample data to help you get started
 -- Run this AFTER running schema.sql
@@ -194,6 +194,33 @@ INSERT INTO public.product_tags (product_id, tag) VALUES
     ('550e8400-e29b-41d4-a716-446655440003', 'vintage'),
     ('550e8400-e29b-41d4-a716-446655440003', 'rare'),
     ('550e8400-e29b-41d4-a716-446655440003', 'collector');
+
+-- =====================================================
+-- SAMPLE CATEGORIES & BRANDS
+-- (requires ADD_CATEGORIES_AND_BRANDS.sql / updated schema.sql)
+-- =====================================================
+
+-- Top-level categories + one subcategory (Amplifiers -> Tube Amplifiers)
+INSERT INTO public.categories (id, slug, parent_id, name_vi, name_en, sort_order) VALUES
+    ('750e8400-e29b-41d4-a716-446655440001', 'amplifiers', NULL, 'Ampli', 'Amplifiers', 1),
+    ('750e8400-e29b-41d4-a716-446655440003', 'speakers', NULL, 'Loa', 'Speakers', 2),
+    ('750e8400-e29b-41d4-a716-446655440004', 'accessories', NULL, 'Phụ kiện', 'Accessories', 3);
+
+INSERT INTO public.categories (id, slug, parent_id, name_vi, name_en, sort_order) VALUES
+    ('750e8400-e29b-41d4-a716-446655440002', 'tube-amplifiers', '750e8400-e29b-41d4-a716-446655440001', 'Ampli đèn', 'Tube Amplifiers', 1);
+
+-- Sample brands
+INSERT INTO public.brands (id, slug, name, name_en, sort_order) VALUES
+    ('850e8400-e29b-41d4-a716-446655440001', 'vintage-house', 'Vintage House', 'Vintage House', 1),
+    ('850e8400-e29b-41d4-a716-446655440002', 'western-electric', 'Western Electric', 'Western Electric', 2);
+
+-- Assign the existing sample products to the Tube Amplifiers subcategory + a brand
+UPDATE public.products SET category_id = '750e8400-e29b-41d4-a716-446655440002', brand_id = '850e8400-e29b-41d4-a716-446655440001'
+    WHERE id = '550e8400-e29b-41d4-a716-446655440001';
+UPDATE public.products SET category_id = '750e8400-e29b-41d4-a716-446655440002', brand_id = '850e8400-e29b-41d4-a716-446655440001'
+    WHERE id = '550e8400-e29b-41d4-a716-446655440002';
+UPDATE public.products SET category_id = '750e8400-e29b-41d4-a716-446655440002', brand_id = '850e8400-e29b-41d4-a716-446655440002'
+    WHERE id = '550e8400-e29b-41d4-a716-446655440003';
 
 -- =====================================================
 -- SAMPLE GUIDES

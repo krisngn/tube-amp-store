@@ -1,8 +1,16 @@
 {
     "title": "Tube Amplifiers",
+    "allProductsTitle": "Products",
+    "brandsTitle": "Brands",
     "filters": {
         "title": "Filters",
         "clear": "Clear Filters",
+        "category": {
+            "label": "Category"
+        },
+        "brand": {
+            "label": "Brand"
+        },
         "topology": {
             "label": "Topology",
             "options": {

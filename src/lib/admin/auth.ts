@@ -23,12 +23,7 @@ export async function isAdmin(): Promise<boolean> {
         } = await supabase.auth.getUser();
 
         if (error) {
-            // Log but don't throw - 404 from auth.getUser() is normal for unauthenticated users
-            if (error.message?.includes('404') || error.message?.includes('NOT_FOUND')) {
-                console.log('User not authenticated (expected for public pages)');
-            } else {
-                console.error('Error getting user from Supabase auth:', error);
-            }
+            // No valid session — expected for unauthenticated visitors. Return quietly.
             return false;
         }
 
@@ -55,7 +50,7 @@ export async function requireAdmin(locale?: string) {
         } = await supabase.auth.getUser();
 
         if (error) {
-            console.error('Error getting user in requireAdmin:', error);
+            // No valid session — send to login without logging (expected when signed out).
             const { redirect: nextRedirect } = await import('next/navigation');
             nextRedirect('/admin/login');
             return; // Never reached, but satisfies TypeScript
@@ -96,17 +91,8 @@ export async function getAdminUser() {
         } = await supabase.auth.getUser();
 
         if (error) {
-            // 404 from auth.getUser() is normal for unauthenticated users
-            // Don't log it as an error to avoid noise
-            if (error.message?.includes('404') || error.message?.includes('NOT_FOUND') || error.code === 'NOT_FOUND') {
-                // This is expected - user is not authenticated
-                return null;
-            }
-            // Log other auth errors
-            console.error('[getAdminUser] Auth error:', {
-                code: error.code,
-                message: error.message,
-            });
+            // No valid session (e.g. AuthSessionMissingError) — expected when the
+            // visitor is not signed in. Return null quietly instead of logging noise.
             return null;
         }
 

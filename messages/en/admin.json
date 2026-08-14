@@ -2,6 +2,22 @@
     "title": "Admin",
     "loading": "Loading...",
     "logout": "Logout",
+    "categories": {
+        "title": "Categories",
+        "add": "Add Category",
+        "edit": "Edit Category"
+    },
+    "brands": {
+        "title": "Brands",
+        "add": "Add Brand",
+        "edit": "Edit Brand"
+    },
+    "importExport": {
+        "title": "Import / Export"
+    },
+    "inventory": {
+        "title": "Inventory"
+    },
     "login": {
         "title": "Admin Login",
         "subtitle": "Sign in to access the admin panel",
@@ -36,6 +52,10 @@
             "condition": "Condition",
             "topology": "Topology",
             "tubeType": "Tube Type",
+            "category": "Category",
+            "brand": "Brand",
+            "categoryAll": "All",
+            "brandAll": "All",
             "updatedAt": "Updated",
             "actions": "Actions",
             "empty": "No products found",

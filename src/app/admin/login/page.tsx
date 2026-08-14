@@ -38,8 +38,8 @@ export default function AdminLoginPage() {
             }
 
             if (data.user) {
-                // Redirect to admin products page
-                router.push('/admin/products');
+                // Redirect to the admin dashboard
+                router.push('/admin');
             }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Login failed');

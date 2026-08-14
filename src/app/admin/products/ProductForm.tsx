@@ -4,17 +4,48 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import type { ProductDetailDTO } from '@/lib/types/catalog';
+import { flattenTree } from '@/lib/utils/categoryTree';
 import ProductImageManager from './ProductImageManager';
 import styles from './ProductForm.module.css';
 
-interface ProductFormProps {
-    product?: ProductDetailDTO;
+interface CategoryOption {
+    id: string;
+    nameVi: string;
+    parentId: string | null;
 }
 
-export default function ProductForm({ product }: ProductFormProps) {
+interface BrandOption {
+    id: string;
+    name: string;
+}
+
+interface ProductFormProps {
+    product?: ProductDetailDTO;
+    categories?: CategoryOption[];
+    brands?: BrandOption[];
+}
+
+export default function ProductForm({ product, categories = [], brands = [] }: ProductFormProps) {
     const t = useTranslations('admin');
     const router = useRouter();
     const isEdit = !!product;
+
+    // Category picker: a single indented tree select (unlimited depth)
+    const [categoryId, setCategoryId] = useState(product?.categoryId || '');
+    const [brandId, setBrandId] = useState(product?.brandId || '');
+
+    // Free-form specifications (key -> value), works for any product type (caps, resistors, chassis, tubes...)
+    const [specs, setSpecs] = useState<{ key: string; value: string }[]>(
+        product?.specs
+            ? Object.entries(product.specs).map(([key, value]) => ({ key, value: String(value ?? '') }))
+            : []
+    );
+
+    const categoryOptions = flattenTree(categories).map((n) => ({
+        id: n.item.id,
+        label: `${'   '.repeat(n.depth)}${n.item.nameVi}`,
+    }));
+    const selectedCategoryId = categoryId || null;
 
     const [formData, setFormData] = useState({
         // Core fields
@@ -23,11 +54,15 @@ export default function ProductForm({ product }: ProductFormProps) {
         compareAtPrice: product?.compareAtPriceVnd || 0,
         stockQuantity: product?.stockQuantity || 0,
         condition: product?.condition || 'new',
-        topology: product?.topology || 'se',
+        topology: product?.topology || '',
         tubeType: product?.tubeType || '',
         powerWatts: product?.powerWatts || 0,
         taps: (product?.taps || []).join(','),
         minSpeakerSensitivity: product?.recommendedSensitivityMin || 0,
+        weightGrams: product?.weightGrams || 0,
+        lengthCm: product?.lengthCm || 0,
+        widthCm: product?.widthCm || 0,
+        heightCm: product?.heightCm || 0,
         isPublished: product ? (product.publishedAt ? true : false) : false,
         isFeatured: product?.isFeatured || false,
         isVintage: product?.isVintage || false,
@@ -106,11 +141,20 @@ export default function ProductForm({ product }: ProductFormProps) {
                 compareAtPrice: formData.compareAtPrice || undefined,
                 stockQuantity: formData.stockQuantity,
                 condition: formData.condition,
-                topology: formData.topology,
-                tubeType: formData.tubeType,
-                powerWatts: formData.powerWatts,
+                topology: formData.topology || undefined,
+                tubeType: formData.tubeType || undefined,
+                powerWatts: formData.powerWatts || undefined,
                 taps: formData.taps.split(',').filter((t) => t.trim()).map((t) => t.trim()),
                 minSpeakerSensitivity: formData.minSpeakerSensitivity || undefined,
+                weightGrams: formData.weightGrams || undefined,
+                lengthCm: formData.lengthCm || undefined,
+                widthCm: formData.widthCm || undefined,
+                heightCm: formData.heightCm || undefined,
+                specifications: Object.fromEntries(
+                    specs.filter((s) => s.key.trim()).map((s) => [s.key.trim(), s.value])
+                ),
+                categoryId: selectedCategoryId,
+                brandId: brandId || null,
                 isPublished: publish,
                 isFeatured: formData.isFeatured,
                 isVintage: formData.isVintage,
@@ -270,6 +314,42 @@ export default function ProductForm({ product }: ProductFormProps) {
             </div>
 
             <div className={styles.formSection}>
+                <h2>Phân loại</h2>
+                <div className={styles.formGrid}>
+                    <div className={styles.formGroup}>
+                        <label className="label">Danh mục</label>
+                        <select
+                            className="input"
+                            value={categoryId}
+                            onChange={(e) => setCategoryId(e.target.value)}
+                        >
+                            <option value="">— Chọn danh mục —</option>
+                            {categoryOptions.map((o) => (
+                                <option key={o.id} value={o.id}>
+                                    {o.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Thương hiệu</label>
+                        <select
+                            className="input"
+                            value={brandId}
+                            onChange={(e) => setBrandId(e.target.value)}
+                        >
+                            <option value="">— Chọn thương hiệu —</option>
+                            {brands.map((b) => (
+                                <option key={b.id} value={b.id}>
+                                    {b.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.formSection}>
                 <h2>{t('products.form.specifications')}</h2>
                 <div className={styles.formGrid}>
                     <div className={styles.formGroup}>
@@ -286,36 +366,34 @@ export default function ProductForm({ product }: ProductFormProps) {
                         </select>
                     </div>
                     <div className={styles.formGroup}>
-                        <label className="label">{t('products.fields.topology')} *</label>
+                        <label className="label">{t('products.fields.topology')}</label>
                         <select
                             className="input"
                             value={formData.topology}
                             onChange={(e) => setFormData({ ...formData, topology: e.target.value as any })}
-                            required
                         >
+                            <option value="">—</option>
                             <option value="se">SE</option>
                             <option value="pp">PP</option>
                         </select>
                     </div>
                     <div className={styles.formGroup}>
-                        <label className="label">{t('products.fields.tubeType')} *</label>
+                        <label className="label">{t('products.fields.tubeType')}</label>
                         <input
                             type="text"
                             className="input"
                             value={formData.tubeType}
                             onChange={(e) => setFormData({ ...formData, tubeType: e.target.value })}
-                            required
                             placeholder="300B, EL34, KT88..."
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label className="label">{t('products.fields.power')} (W) *</label>
+                        <label className="label">{t('products.fields.power')} (W)</label>
                         <input
                             type="number"
                             className="input"
                             value={formData.powerWatts}
                             onChange={(e) => setFormData({ ...formData, powerWatts: Number(e.target.value) })}
-                            required
                             min="0"
                             step="0.1"
                         />
@@ -341,6 +419,99 @@ export default function ProductForm({ product }: ProductFormProps) {
                         />
                     </div>
                 </div>
+            </div>
+
+            <div className={styles.formSection}>
+                <h2>Vận chuyển (khối lượng & kích thước)</h2>
+                <p style={{ color: 'var(--color-text-secondary)', marginTop: 0, marginBottom: 'var(--space-md)', fontSize: '0.9rem' }}>
+                    Cần cho Shopee/TikTok để tính phí ship. Khối lượng theo gram; kích thước theo cm.
+                </p>
+                <div className={styles.formGrid}>
+                    <div className={styles.formGroup}>
+                        <label className="label">Khối lượng (gram)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            value={formData.weightGrams}
+                            onChange={(e) => setFormData({ ...formData, weightGrams: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Dài (cm)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            step="0.1"
+                            value={formData.lengthCm}
+                            onChange={(e) => setFormData({ ...formData, lengthCm: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Rộng (cm)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            step="0.1"
+                            value={formData.widthCm}
+                            onChange={(e) => setFormData({ ...formData, widthCm: Number(e.target.value) })}
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label className="label">Cao (cm)</label>
+                        <input
+                            type="number"
+                            className="input"
+                            min="0"
+                            step="0.1"
+                            value={formData.heightCm}
+                            onChange={(e) => setFormData({ ...formData, heightCm: Number(e.target.value) })}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.formSection}>
+                <h2>Thông số chi tiết (mọi loại sản phẩm)</h2>
+                <p style={{ color: 'var(--color-text-secondary)', marginTop: 0, marginBottom: 'var(--space-md)', fontSize: '0.9rem' }}>
+                    Khai báo thông số tự do theo từng loại (VD tụ: Điện dung / Điện áp; trở: Trị số / Công suất / Sai số; khung máy: Kích thước / Chất liệu).
+                </p>
+                {specs.map((s, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 'var(--space-md)', marginBottom: 'var(--space-sm)' }}>
+                        <input
+                            className="input"
+                            placeholder="Tên thông số (VD: Điện dung)"
+                            value={s.key}
+                            onChange={(e) =>
+                                setSpecs((prev) => prev.map((x, j) => (j === i ? { ...x, key: e.target.value } : x)))
+                            }
+                        />
+                        <input
+                            className="input"
+                            placeholder="Giá trị (VD: 0.22uF)"
+                            value={s.value}
+                            onChange={(e) =>
+                                setSpecs((prev) => prev.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))
+                            }
+                        />
+                        <button
+                            type="button"
+                            className="btn btn-ghost btn-sm"
+                            onClick={() => setSpecs((prev) => prev.filter((_, j) => j !== i))}
+                        >
+                            Xóa
+                        </button>
+                    </div>
+                ))}
+                <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setSpecs((prev) => [...prev, { key: '', value: '' }])}
+                >
+                    + Thêm thông số
+                </button>
             </div>
 
             <div className={styles.formSection}>

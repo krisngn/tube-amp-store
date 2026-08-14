@@ -11,6 +11,8 @@ interface AdminProductsPageProps {
         status?: string;
         condition?: string;
         topology?: string;
+        category?: string;
+        brand?: string;
         page?: string;
         sort?: string;
     }>;

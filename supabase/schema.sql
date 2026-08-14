@@ -186,9 +186,62 @@ CREATE TABLE public.product_tags (
     product_id UUID REFERENCES public.products(id) ON DELETE CASCADE,
     tag TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
-    
+
     UNIQUE(product_id, tag)
 );
+
+-- =====================================================
+-- CATEGORIES & BRANDS
+-- (also delivered as supabase/ADD_CATEGORIES_AND_BRANDS.sql for existing DBs)
+-- =====================================================
+
+-- Brands
+CREATE TABLE public.brands (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    slug TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    name_en TEXT,
+    description_vi TEXT,
+    description_en TEXT,
+    logo_path TEXT,
+    sort_order INTEGER DEFAULT 0,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Categories (2-level: parent -> child)
+CREATE TABLE public.categories (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    slug TEXT UNIQUE NOT NULL,
+    parent_id UUID REFERENCES public.categories(id) ON DELETE CASCADE,
+    name_vi TEXT NOT NULL,
+    name_en TEXT,
+    description_vi TEXT,
+    description_en TEXT,
+    image_path TEXT,
+    sort_order INTEGER DEFAULT 0,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Link products to a category and a brand (nullable: not every product has both)
+ALTER TABLE public.products
+    ADD COLUMN category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
+    ADD COLUMN brand_id UUID REFERENCES public.brands(id) ON DELETE SET NULL;
+
+-- Amp-specific columns are optional now that the catalog is general
+ALTER TABLE public.products ALTER COLUMN topology DROP NOT NULL;
+ALTER TABLE public.products ALTER COLUMN tube_type DROP NOT NULL;
+ALTER TABLE public.products ALTER COLUMN power_watts DROP NOT NULL;
+
+-- Shipping weight & package dimensions (for marketplace listings / shipping fees)
+ALTER TABLE public.products
+    ADD COLUMN weight_grams INTEGER,
+    ADD COLUMN length_cm DECIMAL(6, 1),
+    ADD COLUMN width_cm DECIMAL(6, 1),
+    ADD COLUMN height_cm DECIMAL(6, 1);
 
 -- =====================================================
 -- ORDERS

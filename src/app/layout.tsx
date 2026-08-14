@@ -1,12 +1,27 @@
 // Import polyfills first
 import '@/lib/polyfills';
 
+import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getLocale } from 'next-intl/server';
 import StorefrontWrapper from '@/components/layout/StorefrontWrapper';
+import { listCategories } from '@/lib/repositories/categories';
 import { defaultLocale } from '@/config/locales';
 import { GlobalErrorHandler } from './error-handler';
 import './globals.css';
+
+export const metadata: Metadata = {
+    title: {
+        default: 'Vintage Audio Accessories',
+        template: '%s | Vintage Audio Accessories',
+    },
+    description:
+        'Phụ kiện audio vintage cao cấp — ampli đèn, loa, đầu đĩa và hơn thế nữa. Premium vintage audio accessories.',
+    openGraph: {
+        siteName: 'Vintage Audio Accessories',
+        type: 'website',
+    },
+};
 
 // This app uses cookies, headers and next-intl in Server Components.
 // Force dynamic rendering globally to avoid DYNAMIC_SERVER_USAGE errors.
@@ -48,12 +63,15 @@ export default async function RootLayout({
         }
     }
 
+    // Categories power the storefront navigation dropdown (safe fallback to []).
+    const categories = await listCategories(locale);
+
     return (
         <html lang={locale}>
             <body>
                 <GlobalErrorHandler />
                 <NextIntlClientProvider messages={messages}>
-                    <StorefrontWrapper>{children}</StorefrontWrapper>
+                    <StorefrontWrapper categories={categories}>{children}</StorefrontWrapper>
                 </NextIntlClientProvider>
             </body>
         </html>

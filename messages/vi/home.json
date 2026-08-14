@@ -1,14 +1,14 @@
 {
     "hero": {
-        "title": "Âm Thanh Đèn Chân Thực",
-        "subtitle": "Ampli đèn cao cấp cho người yêu nhạc chân chính. Vintage quý hiếm và handmade hiện đại.",
+        "title": "Âm Thanh Vintage Đích Thực",
+        "subtitle": "Phụ kiện audio vintage cao cấp cho người yêu nhạc chân chính — ampli đèn, loa, đầu đĩa và hơn thế nữa.",
         "cta": {
-            "browse": "Khám Phá Ampli Đèn",
+            "browse": "Khám Phá Sản Phẩm",
             "matching": "Tư Vấn Phối Ghép"
         }
     },
     "quickEntry": {
-        "title": "Tìm Ampli Phù Hợp",
+        "title": "Khám Phá Danh Mục",
         "vocals": {
             "title": "Vocal / Jazz",
             "description": "SE 300B/2A3 - Âm thanh ngọt ngào, chi tiết"
@@ -28,6 +28,7 @@
     },
     "featured": {
         "title": "Sản Phẩm Nổi Bật",
+        "viewAll": "Xem tất cả",
         "tabs": {
             "bestSellers": "Bán Chạy",
             "newArrivals": "Hàng Mới",

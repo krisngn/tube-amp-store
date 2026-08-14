@@ -1,26 +1,28 @@
-'use client';
-
-import { useTranslations } from 'next-intl';
+import { getTranslations, getLocale } from 'next-intl/server';
 import Link from 'next/link';
-import { useState } from 'react';
+import { listProducts } from '@/lib/repositories/products';
+import { listCategories } from '@/lib/repositories/categories';
+import ProductGrid from './products/ProductGrid';
+import MatchingForm from './MatchingForm';
 import styles from './HomePage.module.css';
 
-export default function HomePage() {
-    const t = useTranslations('home');
-    const tCommon = useTranslations('common');
-    const [matchingForm, setMatchingForm] = useState({
-        sensitivity: '',
-        impedance: '8',
-        roomSize: 'medium',
-        listeningLevel: 'medium',
-        genres: '',
-    });
+export default async function HomePage() {
+    const locale = await getLocale();
+    const t = await getTranslations('home');
 
-    const handleMatchingSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // TODO: Implement matching logic
-        console.log('Matching form submitted:', matchingForm);
-    };
+    const [categories, featured] = await Promise.all([
+        listCategories(locale),
+        listProducts({ locale, filters: { isFeatured: true }, pagination: { page: 1, pageSize: 8 } }),
+    ]);
+
+    // Fall back to newest products if nothing is flagged as featured yet
+    let featuredItems = featured.items;
+    if (featuredItems.length === 0) {
+        const newest = await listProducts({ locale, sort: 'newest', pagination: { page: 1, pageSize: 8 } });
+        featuredItems = newest.items;
+    }
+
+    const topCategories = categories.slice(0, 4);
 
     return (
         <div className={styles.homePage}>
@@ -34,154 +36,59 @@ export default function HomePage() {
                         <h1 className={`${styles.heroTitle} fade-in`}>{t('hero.title')}</h1>
                         <p className={`${styles.heroSubtitle} fade-in`}>{t('hero.subtitle')}</p>
                         <div className={`${styles.heroCta} fade-in`}>
-                            <Link href="/tube-amplifiers" className="btn btn-primary">
+                            <Link href="/products" className="btn btn-primary">
                                 {t('hero.cta.browse')}
                             </Link>
-                            <button className="btn btn-secondary">
+                            <Link href="#matching" className="btn btn-secondary">
                                 {t('hero.cta.matching')}
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Quick Entry Tiles */}
-            <section className={styles.section}>
-                <div className="container">
-                    <h2 className={styles.sectionTitle}>{t('quickEntry.title')}</h2>
-                    <div className="grid grid-4">
-                        <Link href="/tube-amplifiers?filter=vocals" className={`${styles.quickEntryCard} card`}>
-                            <h3>{t('quickEntry.vocals.title')}</h3>
-                            <p>{t('quickEntry.vocals.description')}</p>
-                        </Link>
-                        <Link href="/tube-amplifiers?filter=power" className={`${styles.quickEntryCard} card`}>
-                            <h3>{t('quickEntry.power.title')}</h3>
-                            <p>{t('quickEntry.power.description')}</p>
-                        </Link>
-                        <Link href="/tube-amplifiers?filter=small-room" className={`${styles.quickEntryCard} card`}>
-                            <h3>{t('quickEntry.smallRoom.title')}</h3>
-                            <p>{t('quickEntry.smallRoom.description')}</p>
-                        </Link>
-                        <Link href="/tube-amplifiers?filter=hard-speakers" className={`${styles.quickEntryCard} card`}>
-                            <h3>{t('quickEntry.hardSpeakers.title')}</h3>
-                            <p>{t('quickEntry.hardSpeakers.description')}</p>
-                        </Link>
+            {/* Shop by Category */}
+            {topCategories.length > 0 && (
+                <section className={styles.section}>
+                    <div className="container">
+                        <h2 className={styles.sectionTitle}>{t('quickEntry.title')}</h2>
+                        <div className="grid grid-4">
+                            {topCategories.map((cat) => (
+                                <Link
+                                    key={cat.id}
+                                    href={`/products?category=${cat.slug}`}
+                                    className={`${styles.quickEntryCard} card`}
+                                >
+                                    <h3>{cat.name}</h3>
+                                    {cat.children && cat.children.length > 0 && (
+                                        <p>{cat.children.map((c) => c.name).join(' · ')}</p>
+                                    )}
+                                </Link>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* Featured Products */}
-            <section className={styles.section}>
-                <div className="container">
-                    <h2 className={styles.sectionTitle}>{t('featured.title')}</h2>
-                    <div className={styles.featuredTabs}>
-                        <button className={`${styles.tabBtn} ${styles.tabBtnActive}`}>{t('featured.tabs.bestSellers')}</button>
-                        <button className={styles.tabBtn}>{t('featured.tabs.newArrivals')}</button>
-                        <button className={styles.tabBtn}>{t('featured.tabs.vintage')}</button>
+            {featuredItems.length > 0 && (
+                <section className={styles.section}>
+                    <div className="container">
+                        <div className={styles.guidesHeader}>
+                            <h2 className={styles.sectionTitle}>{t('featured.title')}</h2>
+                            <Link href="/products" className="btn btn-secondary">
+                                {t('featured.viewAll')}
+                            </Link>
+                        </div>
+                        <ProductGrid products={featuredItems} />
                     </div>
-                    <div className="grid grid-3">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className={`${styles.productCard} card`}>
-                                <div className={`${styles.productImage} skeleton`}></div>
-                                <div className={styles.productInfo}>
-                                    <div className={styles.productBadges}>
-                                        <span className="badge badge-accent">SE 300B</span>
-                                        <span className="badge">{tCommon('new')}</span>
-                                    </div>
-                                    <h3 className={styles.productName}>Classic SE 300B Amplifier</h3>
-                                    <p className={styles.productPrice}>45,000,000{tCommon('currency')}</p>
-                                    <div className={styles.productSpecs}>
-                                        <span>8W • Min 88dB</span>
-                                    </div>
-                                    <div className={styles.productActions}>
-                                        <Link href={`/product/sample-${i}`} className="btn btn-secondary">
-                                            {tCommon('view')}
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* Matching Advice Tool */}
-            <section className={`${styles.matching} ${styles.section}`}>
-                <div className="container">
-                    <div>
-                        <div>
-                            <h2 className={styles.sectionTitle}>{t('matching.title')}</h2>
-                            <p className={styles.sectionSubtitle}>{t('matching.subtitle')}</p>
-                        </div>
-                        <form onSubmit={handleMatchingSubmit} className={`${styles.matchingForm} card-elevated`}>
-                            <div className={styles.formGrid}>
-                                <div className={styles.formGroup}>
-                                    <label className="label">{t('matching.form.sensitivity.label')}</label>
-                                    <input
-                                        type="number"
-                                        className="input"
-                                        placeholder={t('matching.form.sensitivity.placeholder')}
-                                        value={matchingForm.sensitivity}
-                                        onChange={(e) => setMatchingForm({ ...matchingForm, sensitivity: e.target.value })}
-                                    />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label className="label">{t('matching.form.impedance.label')}</label>
-                                    <select
-                                        className="input select"
-                                        value={matchingForm.impedance}
-                                        onChange={(e) => setMatchingForm({ ...matchingForm, impedance: e.target.value })}
-                                    >
-                                        <option value="4">{t('matching.form.impedance.options.4')}</option>
-                                        <option value="6">{t('matching.form.impedance.options.6')}</option>
-                                        <option value="8">{t('matching.form.impedance.options.8')}</option>
-                                        <option value="16">{t('matching.form.impedance.options.16')}</option>
-                                    </select>
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label className="label">{t('matching.form.roomSize.label')}</label>
-                                    <select
-                                        className="input select"
-                                        value={matchingForm.roomSize}
-                                        onChange={(e) => setMatchingForm({ ...matchingForm, roomSize: e.target.value })}
-                                    >
-                                        <option value="small">{t('matching.form.roomSize.options.small')}</option>
-                                        <option value="medium">{t('matching.form.roomSize.options.medium')}</option>
-                                        <option value="large">{t('matching.form.roomSize.options.large')}</option>
-                                    </select>
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label className="label">{t('matching.form.listeningLevel.label')}</label>
-                                    <select
-                                        className="input select"
-                                        value={matchingForm.listeningLevel}
-                                        onChange={(e) => setMatchingForm({ ...matchingForm, listeningLevel: e.target.value })}
-                                    >
-                                        <option value="low">{t('matching.form.listeningLevel.options.low')}</option>
-                                        <option value="medium">{t('matching.form.listeningLevel.options.medium')}</option>
-                                        <option value="loud">{t('matching.form.listeningLevel.options.loud')}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label className="label">{t('matching.form.genres.label')}</label>
-                                <input
-                                    type="text"
-                                    className="input"
-                                    placeholder={t('matching.form.genres.placeholder')}
-                                    value={matchingForm.genres}
-                                    onChange={(e) => setMatchingForm({ ...matchingForm, genres: e.target.value })}
-                                />
-                            </div>
-                            <div className={styles.formSubmit}>
-                                <button type="submit" className="btn btn-primary">
-                                    {t('matching.form.submit')}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
+            <div id="matching">
+                <MatchingForm />
+            </div>
 
             {/* Trust Section */}
             <section className={styles.section}>
