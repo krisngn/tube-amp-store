@@ -28,23 +28,35 @@
 .heroContent {
     position: relative;
     z-index: 1;
-    max-width: 800px;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
     padding: var(--space-2xl) var(--space-lg);
 }
 
 .heroTitle {
-    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-size: clamp(2.25rem, 4.2vw, 4rem);
     margin-bottom: var(--space-lg);
     background: linear-gradient(135deg, var(--color-accent-bright), var(--color-accent-primary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .heroTitle {
+        white-space: nowrap;
+    }
 }
 
 .heroSubtitle {
     font-size: clamp(1rem, 2vw, 1.25rem);
     margin-bottom: var(--space-2xl);
     color: var(--color-text-secondary);
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .heroCta {

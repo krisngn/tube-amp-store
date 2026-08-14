@@ -126,7 +126,8 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            {/* Guides Preview */}
+            {/* Guides Preview - hidden until real guide content is available */}
+            {/*
             <section className={styles.section}>
                 <div className="container">
                     <div className={styles.guidesHeader}>
@@ -146,6 +147,7 @@ export default async function HomePage() {
                     </div>
                 </div>
             </section>
+            */}
         </div>
     );
 }

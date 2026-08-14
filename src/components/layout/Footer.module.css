@@ -18,9 +18,10 @@
 
 .trustGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-lg);
-    max-width: 900px;
+    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -31,6 +32,7 @@
     font-size: 0.875rem;
     color: var(--color-text-secondary);
     justify-content: center;
+    white-space: nowrap;
 }
 
 .trustItem :global(svg) {
@@ -109,6 +111,11 @@
 }
 
 @media (max-width: 1024px) {
+    .trustGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-lg);
+    }
+
     .footerMain {
         grid-template-columns: 1fr 1fr;
     }
@@ -122,6 +129,11 @@
     .trustGrid {
         grid-template-columns: 1fr;
         gap: var(--space-md);
+    }
+
+    .trustItem {
+        white-space: normal;
+        justify-content: flex-start;
     }
 
     .footerMain {
