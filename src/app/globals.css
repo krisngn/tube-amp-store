@@ -1244,3 +1244,90 @@ section:first-of-type {
   margin: 0 auto;
   padding: var(--space-2xl) var(--space-lg);
 }
+
+/* =====================================================
+   COLLECTION LAYOUT (Products page)
+   ===================================================== */
+.collection-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--space-2xl);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .collection-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Product Grid — 2 columns on mobile */
+.products-grid {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
+  /* Compact product cards on mobile */
+  .product-card {
+    font-size: 0.875rem;
+  }
+
+  .product-card .product-name {
+    font-size: 0.9375rem;
+  }
+
+  .product-card .product-price {
+    font-size: 1rem;
+  }
+
+  .product-card .product-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =====================================================
+   BUTTON TOUCH TARGETS (min 44px)
+   ===================================================== */
+@media (max-width: 1024px) {
+  .btn {
+    min-height: 44px;
+  }
+
+  .btn-sm {
+    min-height: 40px;
+  }
+}
+
+/* =====================================================
+   GRID RESPONSIVE — 2 cols on mobile instead of 1
+   ===================================================== */
+@media (max-width: 768px) {
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-4,
+  .grid-3,
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}

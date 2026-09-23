@@ -1,0 +1,256 @@
+/* =====================================================
+   DESKTOP SIDEBAR
+   ===================================================== */
+
+.desktopSidebar {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.filtersHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+}
+
+.filtersTitle {
+    font-size: 1.125rem;
+    margin: 0;
+    color: var(--color-text-primary);
+}
+
+.filterGroup {
+    margin-bottom: var(--space-lg);
+}
+
+.filterGroupLabel {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.filterGroupItems {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.filterItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: var(--space-xs) 0;
+    min-height: 36px;
+    transition: color var(--transition-fast);
+}
+
+.checkboxLabel:hover {
+    color: var(--color-accent-primary);
+}
+
+.checkboxLabel input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-accent-primary);
+    flex-shrink: 0;
+}
+
+.divider {
+    height: 1px;
+    background: var(--color-border-subtle);
+    margin: var(--space-lg) 0 0;
+}
+
+/* =====================================================
+   MOBILE FILTER TOGGLE BUTTON
+   ===================================================== */
+
+.mobileFilterToggle {
+    display: none;
+}
+
+.mobileFilterBtn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-height: 44px;
+    white-space: nowrap;
+}
+
+.mobileFilterBtn:hover {
+    color: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+    background: var(--color-accent-glow);
+}
+
+.filterBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* =====================================================
+   MOBILE OVERLAY
+   ===================================================== */
+
+.mobileOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 299;
+    animation: overlayIn 0.2s ease;
+}
+
+@keyframes overlayIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* =====================================================
+   MOBILE BOTTOM SHEET DRAWER
+   ===================================================== */
+
+.mobileDrawer {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-bg-secondary);
+    border-top: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    z-index: 300;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.mobileDrawerOpen {
+    transform: translateY(0);
+}
+
+.mobileDrawerHandle {
+    width: 40px;
+    height: 4px;
+    background: var(--color-border-medium);
+    border-radius: 2px;
+    margin: var(--space-md) auto var(--space-sm);
+    flex-shrink: 0;
+}
+
+.mobileDrawerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--space-xl) var(--space-md);
+    border-bottom: 1px solid var(--color-border-subtle);
+    flex-shrink: 0;
+}
+
+.mobileDrawerTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: var(--font-serif);
+}
+
+.mobileDrawerClose {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    transition: all var(--transition-fast);
+}
+
+.mobileDrawerClose:hover {
+    color: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+}
+
+.mobileDrawerContent {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-xl);
+}
+
+.mobileDrawerFooter {
+    padding: var(--space-lg) var(--space-xl);
+    border-top: 1px solid var(--color-border-subtle);
+    flex-shrink: 0;
+    background: var(--color-bg-secondary);
+    /* Safe area for iOS home indicator */
+    padding-bottom: max(var(--space-lg), env(safe-area-inset-bottom));
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1024px) {
+    /* Hide desktop sidebar */
+    .desktopSidebar {
+        display: none;
+    }
+
+    /* Show mobile toggle button */
+    .mobileFilterToggle {
+        display: flex;
+    }
+
+    /* Show mobile overlay (only when active) */
+    .mobileOverlay {
+        display: block;
+    }
+
+    /* Show mobile drawer (use flex to maintain layout) */
+    .mobileDrawer {
+        display: flex;
+    }
+}

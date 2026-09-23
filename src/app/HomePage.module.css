@@ -1,4 +1,4 @@
-.homePage {
+﻿.homePage {
     min-height: 100vh;
 }
 
@@ -239,19 +239,105 @@
 
 /* Customer Setups */
 .setupsGallery {
+    display: flex;
+    gap: var(--space-md);
+    align-items: stretch;
+}
+
+/* Featured card â€” left column */
+.setupCardFeatured {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+}
+
+.setupImageWrapFeatured {
+    position: relative;
+    flex: 1;
+    min-height: 340px;
+    overflow: hidden;
+}
+
+/* 2x2 grid â€” right column */
+.setupsGrid4 {
+    flex: 1 1 55%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-lg);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
 }
 
 .setupCard {
     border-radius: var(--radius-lg);
     overflow: hidden;
+    background: var(--color-bg-secondary);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
-.setupImage {
+.setupCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.setupImageWrap {
+    position: relative;
     width: 100%;
-    aspect-ratio: 16/9;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.setupImg {
+    transition: transform 0.5s ease !important;
+}
+
+.setupCard:hover .setupImg {
+    transform: scale(1.06) !important;
+}
+
+.setupOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 50%);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-md);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.setupCard:hover .setupOverlay {
+    opacity: 1;
+}
+
+.setupUser {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-accent-primary);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 2px 10px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+}
+
+.setupCaption {
+    padding: var(--space-sm) var(--space-md);
+    flex-shrink: 0;
+}
+
+.setupTitle {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.setupDesc {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
 }
 
 /* Guides */
@@ -289,3 +375,75 @@
     }
 }
 
+/* =====================================================
+   MOBILE ENHANCEMENTS
+   ===================================================== */
+@media (max-width: 640px) {
+    /* Hero */
+    .hero {
+        min-height: 65vh;
+    }
+
+    .heroTitle {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+        white-space: normal;
+    }
+
+    .heroSubtitle {
+        font-size: 0.9375rem;
+        margin-bottom: var(--space-xl);
+    }
+
+    .heroCta {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .heroCta :global(.btn) {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Sections */
+    .section {
+        padding: var(--space-2xl) 0;
+    }
+
+    /* Quick entry: 2 cols */
+    .quickEntryCard {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    /* Trust cards: 1 col on very small screens, 2 on normal mobile */
+    .trustCard {
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    /* Setups gallery: stack vertically on mobile */
+    .setupsGallery {
+        flex-direction: column;
+    }
+
+    .setupCardFeatured {
+        flex: unset;
+    }
+
+    .setupImageWrapFeatured {
+        min-height: 260px;
+    }
+
+    .setupsGrid4 {
+        flex: unset;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Matching form: single column */
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .matchingForm {
+        padding: var(--space-lg) var(--space-md);
+    }
+}

@@ -47,7 +47,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                     <h1 className="text-center">{t('allProductsTitle')}</h1>
                 </div>
 
-                <div className="collection-layout" style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 'var(--space-2xl)' }}>
+                <div className="collection-layout" style={{ display: 'grid', gridTemplateColumns: 'var(--sidebar-cols, 280px) 1fr', gap: 'var(--space-2xl)' }}>
                     {/* Filters Sidebar */}
                     <CollectionFilters
                         categories={filterOptions?.categories || []}
@@ -56,6 +56,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
 
                     {/* Products Section */}
                     <div className="products-section">
+                        {/* Mobile filter toggle (injected by CollectionFilters, shown in-flow here) */}
                         <div className="products-header flex justify-between items-center mb-8 flex-wrap gap-4">
                             <p className="results-count text-sm text-tertiary m-0">
                                 {t('results.showing', { count: result.total })}

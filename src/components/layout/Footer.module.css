@@ -141,3 +141,16 @@
     }
 }
 
+@media (max-width: 480px) {
+    .trustGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .trustItem {
+        font-size: 0.8125rem;
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+    }
+}
