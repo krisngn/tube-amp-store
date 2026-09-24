@@ -22,18 +22,20 @@
 }
 
 .logo {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--color-accent-primary);
+    display: flex;
+    align-items: center;
     text-decoration: none;
-    transition: color var(--transition-fast);
-    white-space: nowrap;
     flex-shrink: 0;
 }
 
-.logo:hover {
-    color: var(--color-accent-bright);
+.logo-image-wrapper {
+    width: 60px; /* Desktop size */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .nav-desktop {
@@ -84,12 +86,17 @@
 .search-btn,
 .cart-btn {
     position: relative;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cart-count {
     position: absolute;
-    top: -4px;
-    right: -4px;
+    top: 4px;
+    right: 4px;
     min-width: 18px;
     height: 18px;
     display: flex;
@@ -112,11 +119,15 @@
 .mobile-menu-toggle {
     display: none;
     flex-direction: column;
-    gap: 4px;
+    justify-content: center;
+    gap: 5px;
     background: none;
     border: none;
     cursor: pointer;
     padding: var(--space-sm);
+    min-width: 44px;
+    min-height: 44px;
+    z-index: 1002;
 }
 
 .mobile-menu-toggle span {
@@ -127,13 +138,64 @@
     transition: all var(--transition-fast);
 }
 
+.mobile-menu-toggle.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+}
+
+.mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
 .nav-mobile {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 320px;
+    background: var(--color-bg-primary);
+    box-shadow: var(--shadow-xl);
+    z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
-    padding: var(--space-lg) 0;
-    border-top: 1px solid var(--color-border-subtle);
-    margin-top: var(--space-lg);
+    padding: 5rem var(--space-xl) var(--space-xl);
+    gap: var(--space-md);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    overflow-y: auto;
+}
+
+.nav-mobile.active {
+    transform: translateX(0);
+}
+
+.nav-mobile .nav-link {
+    font-size: 1.125rem;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 
 @media (min-width: 1025px) {
@@ -151,11 +213,21 @@
         display: flex;
     }
 
-    .header-actions {
-        gap: var(--space-xs);
+    /* Hide everything in header actions except the toggle */
+    .header-actions > :not(.mobile-menu-toggle) {
+        display: none;
+    }
+}
+
+/* ── Mobile: shrink header to prevent overflow ── */
+@media (max-width: 480px) {
+    .header-content {
+        padding: var(--space-sm) 0;
+        gap: var(--space-sm);
     }
 
-    .btn-matching {
-        display: none;
+    .logo-image-wrapper {
+        width: 44px; /* Same as hamburger menu */
+        height: 44px;
     }
 }

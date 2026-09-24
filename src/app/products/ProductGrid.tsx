@@ -14,7 +14,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
     const tCommon = useTranslations('common');
 
     return (
-        <div className="products-grid grid gap-8" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))' }}>
+        <div className="products-grid grid gap-8">
             {products.map((product) => (
                 <div key={product.id} className="product-card card flex flex-col">
                     <div className="product-image w-full mb-4 rounded-md overflow-hidden bg-tertiary" style={{ aspectRatio: '4/3', position: 'relative' }}>

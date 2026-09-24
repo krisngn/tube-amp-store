@@ -4,6 +4,7 @@ import { listProducts } from '@/lib/repositories/products';
 import { listCategories } from '@/lib/repositories/categories';
 import ProductGrid from './products/ProductGrid';
 import MatchingForm from './MatchingForm';
+import CommunityCarousel from '@/components/ui/CommunityCarousel';
 import styles from './HomePage.module.css';
 
 export default async function HomePage() {
@@ -111,18 +112,12 @@ export default async function HomePage() {
                 </div>
             </section>
 
-            {/* Customer Setups */}
+            {/* Customer Setups — Carousel */}
             <section className={styles.section}>
                 <div className="container">
                     <h2 className={styles.sectionTitle}>{t('customerSetups.title')}</h2>
                     <p className={styles.sectionSubtitle}>{t('customerSetups.subtitle')}</p>
-                    <div className={styles.setupsGallery}>
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className={styles.setupCard}>
-                                <div className={`${styles.setupImage} skeleton`}></div>
-                            </div>
-                        ))}
-                    </div>
+                    <CommunityCarousel />
                 </div>
             </section>
 
