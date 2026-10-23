@@ -91,7 +91,14 @@ export default function ProductGrid({ products }: ProductGridProps) {
                             >
                                 {t('productCard.viewDetails')}
                             </Link>
-                            <button className="btn btn-ghost w-full">
+                            <button
+                                className="btn btn-ghost w-full"
+                                onClick={() => {
+                                    window.dispatchEvent(new CustomEvent('open-consultation-modal', {
+                                        detail: { productName: product.name }
+                                    }));
+                                }}
+                            >
                                 {t('productCard.chatForMatching')}
                             </button>
                         </div>

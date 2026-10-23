@@ -42,36 +42,146 @@
 
 .footerMain {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2.2fr 1fr 1fr 1fr;
     gap: var(--space-2xl);
     margin-bottom: var(--space-2xl);
+}
+
+.footerStoreSection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    padding-right: var(--space-lg);
+}
+
+.footerBrand {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    color: var(--color-accent-primary);
+    margin-bottom: var(--space-xs);
+}
+
+.footerDescription {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.footerContactList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    margin-top: var(--space-xs);
+}
+
+.contactItem {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    font-size: 0.875rem;
+}
+
+.contactIcon {
+    color: var(--color-accent-primary);
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.contactValue {
+    color: var(--color-text-primary);
+    display: block;
+    font-weight: 500;
+}
+
+.contactSub {
+    color: var(--color-text-tertiary);
+    font-size: 0.775rem;
+    display: block;
+    margin-top: 2px;
+}
+
+.contactLink {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.contactLink:hover {
+    color: var(--color-accent-primary);
+}
+
+/* Footer Chat / Consultation Badges */
+.footerCtaButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-sm);
+}
+
+.zaloBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius-md);
+    background: #0068ff;
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.zaloBadge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 104, 255, 0.4);
+}
+
+.fbBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #00B2FE, #006AFF);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.fbBadge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 106, 255, 0.4);
+}
+
+.consultBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: var(--radius-md);
+    background: var(--color-accent-glow);
+    border: 1px solid var(--color-accent-primary);
+    color: var(--color-accent-bright);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.consultBadge:hover {
+    background: var(--color-accent-primary);
+    color: #0a0a0a;
+    transform: translateY(-2px);
 }
 
 .footerSection {
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-}
-
-.footerBrand {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    color: var(--color-accent-primary);
-    margin-bottom: var(--space-sm);
-}
-
-.footerDescription {
-    font-size: 0.875rem;
-    line-height: 1.6;
-}
-
-.footerContact {
-    font-size: 0.875rem;
-    color: var(--color-text-tertiary);
-}
-
-.footerContact :global(p) {
-    margin-bottom: var(--space-xs);
 }
 
 .footerHeading {
@@ -103,10 +213,17 @@
 
 .footerBottom {
     text-align: center;
+    padding-top: var(--space-lg);
 }
 
 .copyright {
     font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.addressLine {
+    font-size: 0.8rem;
     color: var(--color-text-tertiary);
 }
 
@@ -118,6 +235,12 @@
 
     .footerMain {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .footerStoreSection {
+        grid-column: span 2;
+        padding-right: 0;
+        margin-bottom: var(--space-lg);
     }
 }
 
@@ -139,18 +262,8 @@
     .footerMain {
         grid-template-columns: 1fr;
     }
-}
 
-@media (max-width: 480px) {
-    .trustGrid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-sm);
-    }
-
-    .trustItem {
-        font-size: 0.8125rem;
-        flex-direction: column;
-        text-align: center;
-        justify-content: center;
+    .footerStoreSection {
+        grid-column: span 1;
     }
 }

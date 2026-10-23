@@ -131,7 +131,14 @@ export default function CartPage() {
 
                         <div className={styles.summaryNote}>
                             <p>{t('notes.matchingAdvice')}</p>
-                            <button className="btn btn-ghost">
+                            <button
+                                className="btn btn-ghost"
+                                onClick={() => {
+                                    window.dispatchEvent(new CustomEvent('open-consultation-modal', {
+                                        detail: { source: 'cart' }
+                                    }));
+                                }}
+                            >
                                 {t('notes.chatCta')}
                             </button>
                         </div>

@@ -3,6 +3,8 @@
 import { usePathname } from 'next/navigation';
 import Header from './Header';
 import Footer from './Footer';
+import ConsultationModal from '@/components/consultation/ConsultationModal';
+import FloatingContact from '@/components/consultation/FloatingContact';
 import type { CategoryDTO } from '@/lib/types/catalog';
 
 /**
@@ -28,7 +30,8 @@ export default function StorefrontWrapper({
             <Header categories={categories} />
             <main className="main-content">{children}</main>
             <Footer />
+            <FloatingContact />
+            <ConsultationModal />
         </div>
     );
 }
-

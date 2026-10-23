@@ -1,0 +1,282 @@
+.consultationSection {
+    background: var(--color-bg-secondary);
+    padding: var(--space-4xl) 0;
+    position: relative;
+    border-top: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto var(--space-3xl);
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: var(--color-accent-glow);
+    color: var(--color-accent-primary);
+    border: 1px solid var(--color-border-medium);
+    margin-bottom: var(--space-md);
+}
+
+.title {
+    font-size: 2.25rem;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+    font-family: var(--font-serif);
+}
+
+.subtitle {
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+/* Cards Grid */
+.channelsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-xl);
+    margin-bottom: var(--space-3xl);
+}
+
+.channelCard {
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: all var(--transition-base);
+}
+
+.channelCard:hover {
+    border-color: var(--color-accent-primary);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 20px var(--color-accent-glow);
+}
+
+.cardTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+}
+
+.cardIcon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.zaloIcon {
+    background: #0068ff;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0, 104, 255, 0.3);
+}
+
+.fbIcon {
+    background: linear-gradient(135deg, #00B2FE, #006AFF);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0, 106, 255, 0.3);
+}
+
+.phoneIcon {
+    background: linear-gradient(135deg, var(--color-accent-primary), #a87e50);
+    color: #0a0a0a;
+    box-shadow: 0 4px 16px var(--color-accent-glow);
+}
+
+.cardTag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-accent-primary);
+    background: var(--color-accent-glow);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+    color: var(--color-text-primary);
+}
+
+.cardDesc {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-xl);
+    flex-grow: 1;
+}
+
+.cardActionBtn {
+    margin-top: auto;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+/* Two Column Bottom: Location Banner + Request Form */
+.bottomGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2xl);
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2xl);
+}
+
+.showroomInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-md);
+}
+
+.showroomTitle {
+    font-size: 1.35rem;
+    font-family: var(--font-serif);
+    color: var(--color-accent-primary);
+}
+
+.showroomDetail {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.showroomDetail svg {
+    color: var(--color-accent-primary);
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.showroomDetail strong {
+    color: var(--color-text-primary);
+}
+
+/* Quick Form */
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.formTitle {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+}
+
+.formSubtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-md);
+}
+
+.formRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.input {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    width: 100%;
+}
+
+.input:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+}
+
+.textarea {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    width: 100%;
+    resize: none;
+    margin-bottom: var(--space-sm);
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+}
+
+.successBox {
+    background: rgba(107, 155, 110, 0.15);
+    border: 1px solid var(--color-success);
+    color: #9fe2a3;
+    padding: var(--space-lg);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 1.5;
+}
+
+@media (max-width: 1024px) {
+    .channelsGrid {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+
+    .bottomGrid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+        padding: var(--space-xl);
+    }
+}
+
+@media (max-width: 640px) {
+    .consultationSection {
+        padding: var(--space-2xl) 0;
+    }
+
+    .title {
+        font-size: 1.75rem;
+    }
+
+    .formRow {
+        grid-template-columns: 1fr;
+    }
+
+    .bottomGrid {
+        padding: var(--space-lg);
+    }
+}

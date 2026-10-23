@@ -4,7 +4,7 @@
         "subtitle": "Premium vintage audio accessories for true music lovers — tube amps, speakers, turntables and more.",
         "cta": {
             "browse": "Browse Products",
-            "matching": "Get Matching Advice"
+            "matching": "Product Consultation"
         }
     },
     "quickEntry": {
@@ -35,51 +35,49 @@
             "vintage": "Curated Vintage"
         }
     },
-    "matching": {
-        "title": "Matching Tool",
-        "subtitle": "Enter your speaker and room specs to get amp recommendations",
-        "form": {
-            "sensitivity": {
-                "label": "Speaker Sensitivity (dB)",
-                "placeholder": "e.g. 88"
+    "consultation": {
+        "badge": "1-on-1 Specialist Support",
+        "title": "Audio Product Consultation",
+        "subtitle": "Wondering about sound characteristics, speaker matching, or want to test equipment in person? Reach out directly to our admin team.",
+        "channels": {
+            "zalo": {
+                "tag": "Fastest Response",
+                "title": "Chat on Zalo",
+                "desc": "Send speaker specs, room dimensions, or product models for instant recommendations and test clips.",
+                "action": "Chat Zalo: 0931 772 150"
             },
-            "impedance": {
-                "label": "Impedance (Ω)",
-                "options": {
-                    "4": "4Ω",
-                    "6": "6Ω",
-                    "8": "8Ω",
-                    "16": "16Ω"
-                }
+            "facebook": {
+                "tag": "Advice & Video Demo",
+                "title": "Facebook Messenger",
+                "desc": "Chat directly on Messenger, view detailed photos, and watch real-life equipment demonstrations.",
+                "action": "Message on Facebook"
             },
-            "roomSize": {
-                "label": "Room Size",
-                "options": {
-                    "small": "Small (<15m²)",
-                    "medium": "Medium (15-30m²)",
-                    "large": "Large (>30m²)"
-                }
-            },
-            "listeningLevel": {
-                "label": "Listening Level",
-                "options": {
-                    "low": "Low (background)",
-                    "medium": "Medium",
-                    "loud": "Loud (party)"
-                }
-            },
-            "genres": {
-                "label": "Favorite Genres",
-                "placeholder": "e.g. Jazz, Vocal, Classical"
-            },
-            "submit": "Find Matching Amps"
+            "showroom": {
+                "tag": "Listen in Person",
+                "title": "Hotline & Listening Room",
+                "desc": "Experience authentic sound at Building S10.01, Vinhomes Grand Park, Thu Duc City, HCMC.",
+                "action": "Call Hotline: 0931 772 150"
+            }
         },
-        "results": {
-            "fit": "Great fit",
-            "consider": "Consider",
-            "notRecommended": "Not recommended",
-            "chatCta": "Chat with us for detailed advice"
+        "form": {
+            "title": "Or Leave a Quick Message",
+            "subtitle": "We will get back to you via Zalo or phone within 15 minutes.",
+            "name": "Full Name",
+            "namePlaceholder": "e.g. John Doe",
+            "phone": "Phone / Zalo",
+            "phonePlaceholder": "0931 772 150",
+            "message": "Consultation Inquiry",
+            "messagePlaceholder": "e.g. Looking for a tube amp for my Tannoy speakers...",
+            "submit": "Submit Consultation Request",
+            "sending": "Sending...",
+            "success": "Thank you! Your inquiry has been sent. We will get back to you shortly.",
+            "directChatPrompt": "Or chat with admin right now:"
         }
+    },
+    "matching": {
+        "title": "Product Consultation",
+        "subtitle": "Contact us directly to get the best advice for your setup",
+        "chatCta": "Chat with Admin"
     },
     "trust": {
         "title": "Why Choose Us",
@@ -90,7 +88,7 @@
             },
             "packaging": {
                 "title": "Safe Packaging",
-                "description": "Professional protection, worry-free shipping"
+                "description": "Professional protection, peace of mind delivery"
             },
             "warranty": {
                 "title": "Clear Warranty",
@@ -102,17 +100,17 @@
             },
             "setup": {
                 "title": "Setup Support",
-                "description": "Installation guide, safe usage tips"
+                "description": "Installation guide, safe operating advice"
             },
             "consultation": {
-                "title": "Expert Consultation",
-                "description": "Speaker matching, room optimization"
+                "title": "Dedicated Consultation",
+                "description": "Helping you choose gear matching your musical taste and room"
             }
         }
     },
     "customerSetups": {
         "title": "Customer Setups",
-        "subtitle": "Beautiful systems from our music-loving community"
+        "subtitle": "Beautiful setups from the music community"
     },
     "guidesPreview": {
         "title": "Beginner Guides",

@@ -24,7 +24,7 @@
             "amount": "Amount",
             "content": "Transfer Content"
         },
-        "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
+        "support": "If you have any questions, please contact us at hello@classictubeamps.vn or call 0931 772 150.",
         "footer": "If you did not place this order, please ignore this email.",
         "footerBrand": "Vintage Audio Accessories",
         "trackOrder": "Track Your Order",
@@ -53,7 +53,7 @@
             "delivered": "Your order has been delivered. Thank you for your purchase!",
             "cancelled": "Your order has been cancelled. If you have any questions, please contact us."
         },
-        "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
+        "support": "If you have any questions, please contact us at hello@classictubeamps.vn or call 0931 772 150.",
         "footerBrand": "Vintage Audio Accessories",
         "trackOrder": "Track Your Order",
         "trackButton": "Track Order",
@@ -66,7 +66,7 @@
         "refundAmount": "Refund Amount",
         "trackOrder": "Track Your Order",
         "trackButton": "Track Order",
-        "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
+        "support": "If you have any questions, please contact us at hello@classictubeamps.vn or call 0931 772 150.",
         "footerBrand": "Vintage Audio Accessories",
         "partialRefund": {
             "subject": "Partial Refund Processed - Order {orderCode}",
@@ -88,7 +88,7 @@
         "reason": "Cancellation Reason",
         "trackOrder": "View Order Details",
         "trackButton": "View Order",
-        "support": "If you have any questions, please contact us at support@restorethebasic.com or call +84 XXX XXX XXX.",
+        "support": "If you have any questions, please contact us at hello@classictubeamps.vn or call 0931 772 150.",
         "footerBrand": "Vintage Audio Accessories"
     },
     "changeRequest": {
@@ -107,7 +107,7 @@
         "amountLabel": "Deposit Amount",
         "nextSteps": "We will now process your order. You can track the status using the link below.",
         "trackButton": "Track Your Order",
-        "support": "If you have any questions, please contact us at support@restorethebasic.com",
+        "support": "If you have any questions, please contact us at hello@classictubeamps.vn or call 0931 772 150",
         "footerBrand": "Vintage Audio Accessories"
     },
     "depositRejected": {
@@ -118,7 +118,7 @@
         "noteLabel": "Note",
         "action": "Please upload a clearer image of your bank transfer proof using the link below.",
         "uploadButton": "Upload New Proof",
-        "support": "If you have any questions, please contact us at support@restorethebasic.com",
+        "support": "If you have any questions, please contact us at hello@classictubeamps.vn or call 0931 772 150",
         "footerBrand": "Vintage Audio Accessories"
     }
 }

@@ -1,39 +1,48 @@
 {
     "storeInfo": {
         "title": "Vintage Audio Accessories",
-        "description": "Chuyên phụ kiện audio vintage cao cấp - ampli đèn, loa, đầu đĩa và hơn thế nữa",
-        "address": "Hà Nội, Việt Nam",
-        "phone": "+84 xxx xxx xxx",
-        "email": "hello@classictubeamps.vn"
+        "description": "Chuyên thiết bị & phụ kiện audio vintage cao cấp — ampli đèn tuyển chọn, loa, đầu đĩa và phụ kiện âm thanh đỉnh cao.",
+        "address": "Tòa S10.01, Vinhomes Grand Park, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "0931 772 150",
+        "email": "hello@classictubeamps.vn",
+        "hours": "08:30 - 21:00 (Tất cả các ngày trong tuần)",
+        "showroomNote": "Có phòng nghe trải nghiệm thực tế tại Vinhomes Grand Park (Vui lòng liên hệ trước)"
     },
     "sections": {
         "shop": "Cửa Hàng",
-        "support": "Hỗ Trợ",
-        "policies": "Chính Sách",
-        "connect": "Kết Nối"
+        "support": "Hỗ Trợ & Trải Nghiệm",
+        "policies": "Chính Sách Bán Hàng",
+        "connect": "Tư Vấn Trực Tiếp"
     },
     "links": {
-        "tubeAmplifiers": "Ampli Đèn",
-        "vintage": "Vintage",
-        "newArrivals": "Hàng Mới",
-        "guides": "Hướng Dẫn",
-        "service": "Quy Trình Kiểm Tra",
-        "reviews": "Đánh Giá Khách Hàng",
-        "contact": "Liên Hệ",
-        "shipping": "Vận Chuyển",
-        "warranty": "Bảo Hành",
-        "returns": "Đổi Trả",
-        "payment": "Thanh Toán",
-        "privacy": "Bảo Mật",
-        "terms": "Điều Khoản",
-        "trackOrder": "Theo Dõi Đơn Hàng"
+        "allProducts": "Tất Cả Sản Phẩm",
+        "tubeAmplifiers": "Ampli Đèn Tuyển Chọn",
+        "vintage": "Hàng Vintage Độc Bản",
+        "newArrivals": "Hàng Mới Về",
+        "guides": "Cẩm Nang Audio",
+        "service": "Quy Trình Kiểm Tra Kỹ Thuật",
+        "reviews": "Đánh Giá & Setup Khách Hàng",
+        "contact": "Liên Hệ & Phòng Nghe",
+        "shipping": "Vận Chuyển Chống Sốc",
+        "warranty": "Chính Sách Bảo Hành",
+        "returns": "Chính Sách Đổi Trả",
+        "payment": "Thanh Toán & Đặt Cọc",
+        "privacy": "Bảo Mật Thông Tin",
+        "terms": "Điều Khoản Dịch Vụ",
+        "trackOrder": "Tra Cứu Đơn Hàng"
+    },
+    "contactActions": {
+        "callNow": "Gọi Hotline: 0931 772 150",
+        "chatZalo": "Chat Zalo: 0931 772 150",
+        "chatFacebook": "Nhắn Facebook Messenger",
+        "consultNow": "Nhận Tư Vấn Sản Phẩm"
     },
     "trust": {
-        "title": "Cam Kết Chất Lượng",
-        "tested": "Kiểm tra nhiễu/hum trước khi giao",
-        "packaging": "Đóng gói bảo vệ chuyên nghiệp",
-        "support": "Hỗ trợ setup và sử dụng",
-        "warranty": "Chính sách bảo hành rõ ràng"
+        "title": "Cam Kết Chất Lượng Vượt Trội",
+        "tested": "Kiểm tra đo nhiễu/hum và test tải trước khi giao",
+        "packaging": "Đóng gói bọc lót chống sốc chuyên dụng cho đèn",
+        "support": "Tư vấn tận tâm, hỗ trợ setup tại gia",
+        "warranty": "Bảo hành minh bạch, hỗ trợ kỹ thuật trọn đời"
     },
     "copyright": "© 2026 Vintage Audio Accessories. Tất cả quyền được bảo lưu."
 }

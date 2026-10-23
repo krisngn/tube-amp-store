@@ -1,39 +1,48 @@
 {
     "storeInfo": {
         "title": "Vintage Audio Accessories",
-        "description": "Premium vintage audio accessories - tube amps, speakers, turntables and more",
-        "address": "Hanoi, Vietnam",
-        "phone": "+84 xxx xxx xxx",
-        "email": "hello@classictubeamps.vn"
+        "description": "Premium vintage audio equipment & accessories — curated tube amplifiers, speakers, turntables and more.",
+        "address": "Building S10.01, Vinhomes Grand Park, Thu Duc City, Ho Chi Minh City, Vietnam",
+        "phone": "0931 772 150",
+        "email": "hello@classictubeamps.vn",
+        "hours": "08:30 - 21:00 (Everyday)",
+        "showroomNote": "Listening room available at Vinhomes Grand Park (Please contact before visiting)"
     },
     "sections": {
         "shop": "Shop",
-        "support": "Support",
-        "policies": "Policies",
-        "connect": "Connect"
+        "support": "Support & Experience",
+        "policies": "Store Policies",
+        "connect": "Direct Consultation"
     },
     "links": {
+        "allProducts": "All Products",
         "tubeAmplifiers": "Tube Amplifiers",
-        "vintage": "Vintage",
+        "vintage": "Curated Vintage",
         "newArrivals": "New Arrivals",
-        "guides": "Guides",
-        "service": "Testing Process",
-        "reviews": "Customer Reviews",
-        "contact": "Contact",
-        "shipping": "Shipping",
-        "warranty": "Warranty",
-        "returns": "Returns",
-        "payment": "Payment",
-        "privacy": "Privacy",
-        "terms": "Terms",
+        "guides": "Audio Guides",
+        "service": "Testing Process & Service",
+        "reviews": "Customer Reviews & Setups",
+        "contact": "Contact & Listening Room",
+        "shipping": "Safe Shockproof Shipping",
+        "warranty": "Warranty Policy",
+        "returns": "Return Policy",
+        "payment": "Payment & Deposits",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
         "trackOrder": "Track Order"
     },
+    "contactActions": {
+        "callNow": "Call Hotline: 0931 772 150",
+        "chatZalo": "Chat Zalo: 0931 772 150",
+        "chatFacebook": "Message on Facebook",
+        "consultNow": "Get Product Consultation"
+    },
     "trust": {
-        "title": "Quality Commitment",
-        "tested": "Noise/hum tested before shipping",
-        "packaging": "Professional protective packaging",
-        "support": "Setup and usage support",
-        "warranty": "Clear warranty policy"
+        "title": "Our Quality Commitment",
+        "tested": "Noise/hum tested and load tested before shipping",
+        "packaging": "Professional shockproof protective packaging",
+        "support": "Dedicated consultation & home setup support",
+        "warranty": "Transparent warranty & lifetime technical support"
     },
     "copyright": "© 2026 Vintage Audio Accessories. All rights reserved."
 }

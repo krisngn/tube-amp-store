@@ -8,18 +8,23 @@ export default function Footer() {
     const t = useTranslations('footer');
     const currentYear = new Date().getFullYear();
 
+    const openConsultation = () => {
+        window.dispatchEvent(new CustomEvent('open-consultation-modal'));
+    };
+
     const shopLinks = [
+        { href: '/products', label: t('links.allProducts') },
         { href: '/tube-amplifiers', label: t('links.tubeAmplifiers') },
-        { href: '/tube-amplifiers?filter=vintage', label: t('links.vintage') },
-        { href: '/tube-amplifiers?filter=new', label: t('links.newArrivals') },
+        { href: '/products?condition=vintage', label: t('links.vintage') },
+        { href: '/products?sort=newest', label: t('links.newArrivals') },
     ];
 
     const supportLinks = [
-        { href: '/guides', label: t('links.guides') },
-        { href: '/service', label: t('links.service') },
-        { href: '/reviews', label: t('links.reviews') },
         { href: '/contact', label: t('links.contact') },
+        { href: '/service', label: t('links.service') },
+        { href: '/guides', label: t('links.guides') },
         { href: '/order/track', label: t('links.trackOrder') },
+        { href: '/reviews', label: t('links.reviews') },
     ];
 
     const policyLinks = [
@@ -69,14 +74,82 @@ export default function Footer() {
 
                 {/* Main Footer Content */}
                 <div className={styles.footerMain}>
-                    {/* Store Info */}
-                    <div className={styles.footerSection}>
+                    {/* Store Info & Direct Contact */}
+                    <div className={styles.footerStoreSection}>
                         <h4 className={styles.footerBrand}>{t('storeInfo.title')}</h4>
                         <p className={styles.footerDescription}>{t('storeInfo.description')}</p>
-                        <div className={styles.footerContact}>
-                            <p>{t('storeInfo.address')}</p>
-                            <p>{t('storeInfo.phone')}</p>
-                            <p>{t('storeInfo.email')}</p>
+                        
+                        <div className={styles.footerContactList}>
+                            {/* Address */}
+                            <div className={styles.contactItem}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className={styles.contactIcon}>
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" fill="currentColor"/>
+                                </svg>
+                                <div>
+                                    <span className={styles.contactValue}>{t('storeInfo.address')}</span>
+                                    <span className={styles.contactSub}>{t('storeInfo.showroomNote')}</span>
+                                </div>
+                            </div>
+
+                            {/* Phone / Hotline */}
+                            <div className={styles.contactItem}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className={styles.contactIcon}>
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                </svg>
+                                <div>
+                                    <a href="tel:0931772150" className={styles.contactLink}>
+                                        <strong>{t('storeInfo.phone')}</strong>
+                                    </a>
+                                    <span className={styles.contactSub}>{t('storeInfo.hours')}</span>
+                                </div>
+                            </div>
+
+                            {/* Email */}
+                            <div className={styles.contactItem}>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className={styles.contactIcon}>
+                                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                <a href={`mailto:${t('storeInfo.email')}`} className={styles.contactLink}>
+                                    {t('storeInfo.email')}
+                                </a>
+                            </div>
+                        </div>
+
+                        {/* Direct Chat / Consultation Buttons in Footer */}
+                        <div className={styles.footerCtaButtons}>
+                            <a
+                                href="https://zalo.me/0931772150"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.zaloBadge}
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.03 2 11c0 2.87 1.5 5.43 3.84 7.08L5 22l4.13-1.65c.92.26 1.89.4 2.87.4 5.52 0 10-4.03 10-9s-4.48-9-10-9zm1 13.5h-2v-2h2v2zm0-4h-2V7h2v4.5z"/>
+                                </svg>
+                                <span>Chat Zalo</span>
+                            </a>
+
+                            <a
+                                href="https://m.me/vintageaudioaccessories"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.fbBadge}
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.54 3.12 7.42V22l3.41-1.87c1.07.3 2.21.47 3.47.47 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm1.05 13.13l-2.67-2.85-5.21 2.85 5.73-6.08 2.74 2.85 5.14-2.85-5.73 6.08z"/>
+                                </svg>
+                                <span>Messenger</span>
+                            </a>
+
+                            <button
+                                onClick={openConsultation}
+                                className={styles.consultBadge}
+                            >
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                <span>Tư Vấn Sản Phẩm</span>
+                            </button>
                         </div>
                     </div>
 
@@ -119,9 +192,10 @@ export default function Footer() {
 
                 <div className="divider"></div>
 
-                {/* Copyright */}
+                {/* Copyright & Disclaimer */}
                 <div className={styles.footerBottom}>
-                    <p className={styles.copyright}>© {currentYear} {t('storeInfo.title')}. {t('copyright').split('. ')[1]}</p>
+                    <p className={styles.copyright}>© {currentYear} {t('storeInfo.title')}. Tất cả quyền được bảo lưu.</p>
+                    <p className={styles.addressLine}>S10.01 Vinhomes Grand Park, Phường Long Bình, TP. Thủ Đức, TP. Hồ Chí Minh · Hotline: 0931 772 150</p>
                 </div>
             </div>
         </footer>

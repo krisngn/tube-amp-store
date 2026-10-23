@@ -1,27 +1,125 @@
 {
-    "title": "Policies",
+    "title": "Policies & Terms",
+    "subtitle": "Protecting customer interests and ensuring complete peace of mind for audiophiles",
+    "allPolicies": "All Policies",
+    "lastUpdated": "Last updated: 2026",
+    "contactSupport": "Questions about our policies? Contact Hotline / Zalo at 0931 772 150 for direct assistance.",
     "shipping": {
-        "title": "Shipping",
-        "content": "Shipping and packaging information"
+        "title": "Shockproof Shipping Policy",
+        "badge": "Safe Shipping",
+        "content": "Specialized multi-layer protective packaging designed specifically for tube amplifiers and fragile audio gear.",
+        "details": [
+            {
+                "heading": "1. Dedicated Packaging for Tube Amplifiers & Vacuum Tubes",
+                "text": "All vacuum tubes are removed and individually numbered, packed in bubble wrap, and stored in dedicated shock-resistant boxes. The amplifier chassis is cushioned with high-density foam on all 6 sides inside a heavy-duty 5-layer corrugated box reinforced with corner guards."
+            },
+            {
+                "heading": "2. Coverage & Couriers",
+                "text": "We ship nationwide via Viettel Post / VNPost with 100% full declared value insurance. Within Ho Chi Minh City (especially Thu Duc City area), we offer direct doorstep delivery with setup and testing upon request."
+            },
+            {
+                "heading": "3. Delivery Times",
+                "text": "HCMC: 2-4 hours express or same-day delivery. Other provinces: 2-4 business days. You will receive a tracking code to follow shipment status directly on our website."
+            },
+            {
+                "heading": "4. Inspection on Delivery",
+                "text": "Customers have the right to inspect exterior package condition, amplifier cosmetics, tubes, and included accessories before signing delivery acceptance."
+            }
+        ]
     },
     "warranty": {
-        "title": "Warranty",
-        "content": "Product warranty policy"
+        "title": "Warranty Policy",
+        "badge": "Transparent Warranty",
+        "content": "Clear warranty terms and lifelong technical support for both brand new and vintage equipment.",
+        "details": [
+            {
+                "heading": "1. Warranty Periods",
+                "text": "• Brand New: 12 months for chassis/circuitry, 3 months for vacuum tubes.\n• Like New / Vintage: 6 months for chassis/circuitry, 1 month for vacuum tubes.\n• After warranty: Lifetime bias adjustment, tube testing, and discounted repair services."
+            },
+            {
+                "heading": "2. Warranty Eligibility",
+                "text": "Products must retain intact store warranty seals and chassis screw seals with no unauthorized circuit tampering or external modifications."
+            },
+            {
+                "heading": "3. Exclusions",
+                "text": "Physical drops, liquid spills, overvoltage burns (e.g., plugging 100V-115V gear directly into 220V mains without a step-down transformer), lightning strikes, or output transformer (OPT) blowout from running without a speaker load."
+            }
+        ]
     },
     "returns": {
-        "title": "Returns",
-        "content": "Return conditions and process"
+        "title": "Return & Exchange Policy",
+        "badge": "7 - 14 Days Return",
+        "content": "A hassle-free return policy giving you peace of mind when testing gear at home.",
+        "details": [
+            {
+                "heading": "1. Return Period",
+                "text": "• First 7 days: 1-to-1 replacement or full refund if a technical defect arises that cannot be resolved on-site.\n• Upgrades: Upgrade to higher-tier models within the first 14 days by covering the difference at preferential terms."
+            },
+            {
+                "heading": "2. Condition for Returns",
+                "text": "Gear must remain in the same condition as received, with original packaging foam, documentation, and all accessories (power cable, tubes, tube cage)."
+            },
+            {
+                "heading": "3. Refund Processing",
+                "text": "Full refund will be wired to your bank account within 24-48 hours after our technicians inspect and verify the returned equipment."
+            }
+        ]
     },
     "payment": {
-        "title": "Payment",
-        "content": "Accepted payment methods"
+        "title": "Payment & Deposit Policy",
+        "badge": "Secure & Flexible",
+        "content": "Multiple payment methods and safe deposit reservations with automated verification.",
+        "details": [
+            {
+                "heading": "1. Bank Transfer 24/7",
+                "text": "Direct bank wire to the store's verified account with auto-generated order codes for immediate order processing."
+            },
+            {
+                "heading": "2. Cash on Delivery (COD)",
+                "text": "Available for accessories and orders under 10,000,000 VND. For high-value tube amplifiers, a 10-20% deposit is required before packaging and dispatch."
+            },
+            {
+                "heading": "3. Reservation Deposits",
+                "text": "For rare or unique vintage units, customers may place a reservation deposit to hold the item for 3-7 days. All deposit details are transparently logged and trackable."
+            }
+        ]
     },
     "privacy": {
-        "title": "Privacy",
-        "content": "Customer information privacy policy"
+        "title": "Privacy Policy",
+        "badge": "Data Security",
+        "content": "Protection of personal information and transaction records for all audio enthusiasts.",
+        "details": [
+            {
+                "heading": "1. Data Collection",
+                "text": "We only collect your name, phone number, shipping address, and email to fulfill orders, manage warranties, and provide status notifications."
+            },
+            {
+                "heading": "2. No Third-Party Sharing",
+                "text": "We strictly guarantee never to sell, trade, or share your data with third parties, except the courier handling your physical parcel."
+            },
+            {
+                "heading": "3. Data Rights",
+                "text": "You may request account data updates or deletions at any time by contacting our hotline or emailing hello@classictubeamps.vn."
+            }
+        ]
     },
     "terms": {
         "title": "Terms of Service",
-        "content": "Terms and conditions of service"
+        "badge": "Transparency",
+        "content": "Terms and conditions governing purchases and interactions at Vintage Audio Accessories.",
+        "details": [
+            {
+                "heading": "1. Product Authenticity",
+                "text": "All vintage product photos on our website are high-resolution captures of the exact units in stock. Internal component conditions (caps, tubes, transformers) are documented transparently."
+            },
+            {
+                "heading": "2. Order Confirmation",
+                "text": "Our staff will reach out via phone/Zalo to double-check AC voltage (100V vs 220V), speaker pairing specs, and address before shipping."
+            },
+            {
+                "heading": "3. Intellectual Property",
+                "text": "All articles, guides, photography, and demonstration videos are copyrighted property of Vintage Audio Accessories."
+            }
+        ]
     }
 }

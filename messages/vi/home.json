@@ -4,7 +4,7 @@
         "subtitle": "Phụ kiện audio vintage cao cấp cho người yêu nhạc chân chính — ampli đèn, loa, đầu đĩa và hơn thế nữa.",
         "cta": {
             "browse": "Khám Phá Sản Phẩm",
-            "matching": "Tư Vấn Phối Ghép"
+            "matching": "Tư Vấn Sản Phẩm"
         }
     },
     "quickEntry": {
@@ -35,51 +35,49 @@
             "vintage": "Vintage Tuyển Chọn"
         }
     },
-    "matching": {
-        "title": "Công Cụ Phối Ghép",
-        "subtitle": "Nhập thông số loa và phòng nghe để nhận gợi ý ampli phù hợp",
-        "form": {
-            "sensitivity": {
-                "label": "Độ nhạy loa (dB)",
-                "placeholder": "VD: 88"
+    "consultation": {
+        "badge": "Hỗ Trợ 1-1 Cùng Chuyên Viên",
+        "title": "Tư Vấn Sản Phẩm Âm Thanh",
+        "subtitle": "Bạn đang băn khoăn về chất âm, cách phối ghép loa hay muốn trải nghiệm thực tế? Hãy liên hệ trực tiếp với admin để được hỗ trợ chu đáo nhất.",
+        "channels": {
+            "zalo": {
+                "tag": "Phản hồi nhanh nhất",
+                "title": "Nhắn Tin Qua Zalo",
+                "desc": "Gửi thông tin loa, không gian phòng hoặc model cần tư vấn để nhận phản hồi và video test tức thì.",
+                "action": "Chat Zalo: 0931 772 150"
             },
-            "impedance": {
-                "label": "Trở kháng (Ω)",
-                "options": {
-                    "4": "4Ω",
-                    "6": "6Ω",
-                    "8": "8Ω",
-                    "16": "16Ω"
-                }
+            "facebook": {
+                "tag": "Tư vấn & Video demo",
+                "title": "Facebook Messenger",
+                "desc": "Trao đổi trực tiếp qua Messenger, xem hình ảnh chi tiết và các góc quay thực tế của thiết bị.",
+                "action": "Nhắn Tin Messenger"
             },
-            "roomSize": {
-                "label": "Kích thước phòng",
-                "options": {
-                    "small": "Nhỏ (<15m²)",
-                    "medium": "Trung bình (15-30m²)",
-                    "large": "Lớn (>30m²)"
-                }
-            },
-            "listeningLevel": {
-                "label": "Mức nghe",
-                "options": {
-                    "low": "Thấp (nền nhạc)",
-                    "medium": "Trung bình",
-                    "loud": "Lớn (tiệc tùng)"
-                }
-            },
-            "genres": {
-                "label": "Thể loại nhạc yêu thích",
-                "placeholder": "VD: Jazz, Vocal, Classical"
-            },
-            "submit": "Tìm Ampli Phù Hợp"
+            "showroom": {
+                "tag": "Nghe thử trực tiếp",
+                "title": "Hotline & Phòng Nghe",
+                "desc": "Trải nghiệm âm thanh thực tế tại Tòa S10.01, Vinhomes Grand Park, TP. Thủ Đức, TP.HCM.",
+                "action": "Gọi Hotline: 0931 772 150"
+            }
         },
-        "results": {
-            "fit": "Phù hợp tuyệt vời",
-            "consider": "Cân nhắc",
-            "notRecommended": "Không đề xuất",
-            "chatCta": "Chat với chúng tôi để được tư vấn chi tiết"
+        "form": {
+            "title": "Hoặc Để Lại Lời Nhắn Nhanh",
+            "subtitle": "Chúng tôi sẽ liên hệ lại qua Zalo hoặc điện thoại trong vòng 15 phút.",
+            "name": "Họ và tên",
+            "namePlaceholder": "VD: Anh Tuấn",
+            "phone": "Số điện thoại / Zalo",
+            "phonePlaceholder": "0931 772 150",
+            "message": "Nội dung cần tư vấn",
+            "messagePlaceholder": "VD: Tôi đang dùng loa Tannoy/JBL, muốn tìm ampli đèn nghe Vocal/Jazz...",
+            "submit": "Gửi Yêu Cầu Tư Vấn",
+            "sending": "Đang gửi...",
+            "success": "Cảm ơn bạn! Yêu cầu tư vấn đã được gửi thành công. Admin sẽ liên hệ lại ngay.",
+            "directChatPrompt": "Hoặc chat nhanh với admin ngay lúc này:"
         }
+    },
+    "matching": {
+        "title": "Tư Vấn Sản Phẩm",
+        "subtitle": "Liên hệ trực tiếp với chúng tôi để nhận tư vấn phù hợp nhất cho hệ thống của bạn",
+        "chatCta": "Nhắn tin tư vấn với Admin"
     },
     "trust": {
         "title": "Tại Sao Chọn Chúng Tôi",
@@ -105,8 +103,8 @@
                 "description": "Hướng dẫn lắp đặt, sử dụng an toàn"
             },
             "consultation": {
-                "title": "Tư Vấn Chuyên Sâu",
-                "description": "Phối ghép loa, phòng nghe tối ưu"
+                "title": "Tư Vấn Tận Tâm",
+                "description": "Hỗ trợ chọn thiết bị phù hợp gu nghe và không gian của bạn"
             }
         }
     },

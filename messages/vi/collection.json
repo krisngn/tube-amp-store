@@ -68,7 +68,7 @@
     },
     "productCard": {
         "viewDetails": "Xem Chi Tiết",
-        "chatForMatching": "Chat Tư Vấn",
+        "chatForMatching": "Tư Vấn Sản Phẩm",
         "power": "{watts}W",
         "minSensitivity": "Loa tối thiểu: {db}dB",
         "reserveWithDeposit": "Đặt Cọc"

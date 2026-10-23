@@ -156,7 +156,12 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
                 </svg>
                 <span className={styles['cart-count']}>0</span>
               </Link>
-              <button className={`btn btn-primary ${styles['btn-matching']}`}>
+              <button
+                className={`btn btn-primary ${styles['btn-matching']}`}
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-consultation-modal'));
+                }}
+              >
                 {t('matchingAdvice')}
               </button>
 
@@ -229,9 +234,16 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
 
         {/* CTA at bottom */}
         <div style={{ marginTop: 'auto', paddingTop: 'var(--space-xl)', borderTop: '1px solid var(--color-border-subtle)' }}>
-          <Link href="/products" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={closeMobileMenu}>
+          <button
+            className="btn btn-primary"
+            style={{ width: '100%', justifyContent: 'center' }}
+            onClick={() => {
+              closeMobileMenu();
+              window.dispatchEvent(new CustomEvent('open-consultation-modal'));
+            }}
+          >
             {t('matchingAdvice')}
-          </Link>
+          </button>
         </div>
       </nav>
     </>

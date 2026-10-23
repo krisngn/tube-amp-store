@@ -68,7 +68,7 @@
     },
     "productCard": {
         "viewDetails": "View Details",
-        "chatForMatching": "Chat for Advice",
+        "chatForMatching": "Product Consultation",
         "power": "{watts}W",
         "minSensitivity": "Min Speaker: {db}dB",
         "reserveWithDeposit": "Reserve with Deposit"

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { listProducts } from '@/lib/repositories/products';
 import { listCategories } from '@/lib/repositories/categories';
 import ProductGrid from './products/ProductGrid';
-import MatchingForm from './MatchingForm';
+import ProductConsultationSection from '@/components/consultation/ProductConsultationSection';
 import CommunityCarousel from '@/components/ui/CommunityCarousel';
 import styles from './HomePage.module.css';
 
@@ -40,7 +40,7 @@ export default async function HomePage() {
                             <Link href="/products" className="btn btn-primary">
                                 {t('hero.cta.browse')}
                             </Link>
-                            <Link href="#matching" className="btn btn-secondary">
+                            <Link href="#tu-van" className="btn btn-secondary">
                                 {t('hero.cta.matching')}
                             </Link>
                         </div>
@@ -86,10 +86,8 @@ export default async function HomePage() {
                 </section>
             )}
 
-            {/* Matching Advice Tool */}
-            <div id="matching">
-                <MatchingForm />
-            </div>
+            {/* Product Consultation Section */}
+            <ProductConsultationSection />
 
             {/* Trust Section */}
             <section className={styles.section}>

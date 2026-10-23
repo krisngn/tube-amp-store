@@ -149,7 +149,14 @@ export default function ProductActions({ product }: ProductActionsProps) {
                     </button>
                 )}
 
-                <button className="btn btn-ghost">
+                <button
+                    className="btn btn-ghost"
+                    onClick={() => {
+                        window.dispatchEvent(new CustomEvent('open-consultation-modal', {
+                            detail: { productName: product.name }
+                        }));
+                    }}
+                >
                     {t('cta.chatForMatching')}
                 </button>
             </div>
