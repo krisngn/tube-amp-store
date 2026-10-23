@@ -38,7 +38,7 @@
     "consultation": {
         "badge": "Hỗ Trợ 1-1 Cùng Chuyên Viên",
         "title": "Tư Vấn Sản Phẩm Âm Thanh",
-        "subtitle": "Bạn đang băn khoăn về chất âm, cách phối ghép loa hay muốn trải nghiệm thực tế? Hãy liên hệ trực tiếp với admin để được hỗ trợ chu đáo nhất.",
+        "subtitle": "Cửa hàng bán online. Nhắn tin để được hỗ trợ chọn sản phẩm, thông số và đơn hàng.",
         "channels": {
             "zalo": {
                 "tag": "Phản hồi nhanh nhất",
@@ -53,25 +53,30 @@
                 "action": "Nhắn Tin Messenger"
             },
             "showroom": {
-                "tag": "Nghe thử trực tiếp",
-                "title": "Hotline & Phòng Nghe",
-                "desc": "Trải nghiệm âm thanh thực tế tại Tòa S10.01, Vinhomes Grand Park, TP. Thủ Đức, TP.HCM.",
+                "tag": "Hỗ trợ mua online",
+                "title": "Hotline Tư Vấn",
+                "desc": "Trao đổi về sản phẩm, tình trạng hàng và đơn hàng qua điện thoại.",
                 "action": "Gọi Hotline: 0931 772 150"
             }
         },
         "form": {
-            "title": "Hoặc Để Lại Lời Nhắn Nhanh",
-            "subtitle": "Chúng tôi sẽ liên hệ lại qua Zalo hoặc điện thoại trong vòng 15 phút.",
+            "title": "Để Lại Lời Nhắn",
+            "subtitle": "Điền thông tin liên hệ và nội dung cần hỗ trợ.",
             "name": "Họ và tên",
             "namePlaceholder": "VD: Anh Tuấn",
             "phone": "Số điện thoại / Zalo",
             "phonePlaceholder": "0931 772 150",
             "message": "Nội dung cần tư vấn",
-            "messagePlaceholder": "VD: Tôi đang dùng loa Tannoy/JBL, muốn tìm ampli đèn nghe Vocal/Jazz...",
-            "submit": "Gửi Yêu Cầu Tư Vấn",
+            "messagePlaceholder": "Bạn muốn hỏi về sản phẩm hoặc đơn hàng nào?",
+            "submit": "Gửi Lời Nhắn",
             "sending": "Đang gửi...",
-            "success": "Cảm ơn bạn! Yêu cầu tư vấn đã được gửi thành công. Admin sẽ liên hệ lại ngay.",
+            "success": "Cảm ơn bạn! Chúng tôi đã nhận được lời nhắn.",
             "directChatPrompt": "Hoặc chat nhanh với admin ngay lúc này:"
+        },
+        "online": {
+            "title": "Liên Hệ Cửa Hàng Online",
+            "description": "Bạn cần hỏi về sản phẩm, phân loại hoặc đơn hàng? Hãy để lại lời nhắn, chúng tôi sẽ liên hệ lại qua số điện thoại hoặc Zalo bạn cung cấp.",
+            "note": "Mua sắm trực tuyến, hỗ trợ qua Zalo, Messenger và điện thoại."
         }
     },
     "matching": {

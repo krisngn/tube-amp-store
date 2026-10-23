@@ -62,7 +62,7 @@ export default function ServicePage() {
                     <div className={styles.badge}>Tiêu Chuẩn Audiophile Nghiêm Ngặt</div>
                     <h1 className={styles.heroTitle}>Quy Trình Kiểm Tra & Dịch Vụ Kỹ Thuật</h1>
                     <p className={styles.heroSubtitle}>
-                        Chơi ampli đèn đòi hỏi sự tinh tế và am hiểu kỹ thuật. Tại Vintage Audio Accessories, mỗi thiết bị đến tay bạn đều là một tác phẩm được kiểm âm, đo đạc và chăm sóc kỹ lưỡng như cho chính phòng nghe của chúng tôi.
+                        Chơi ampli đèn đòi hỏi sự tinh tế và am hiểu kỹ thuật. Tại Vintage Audio Accessories, mỗi thiết bị đến tay bạn đều là một tác phẩm được kiểm âm, đo đạc và chăm sóc kỹ lưỡng trước khi giao đến bạn.
                     </p>
                 </div>
 
@@ -80,12 +80,12 @@ export default function ServicePage() {
                 {/* Showroom & Experience CTA */}
                 <div className={styles.ctaBox}>
                     <div className={styles.ctaLeft}>
-                        <h3>Trải Nghiệm Trực Tiếp Tại Phòng Nghe</h3>
+                        <h3>Hỗ Trợ Mua Hàng Online</h3>
                         <p>
-                            Mời quý khách ghé thăm phòng nghe của chúng tôi tại <strong>Tòa S10.01, Vinhomes Grand Park, TP. Thủ Đức, TP. Hồ Chí Minh</strong> để tận mắt kiểm tra máy, đo bóng và thưởng thức âm thanh trên các cặp loa tham chiếu.
+                            Bạn cần thêm thông tin về tình trạng sản phẩm, thông số hoặc cách sử dụng? Hãy liên hệ qua Zalo hoặc để lại lời nhắn để được hỗ trợ từ xa.
                         </p>
                         <div className={styles.ctaContactRow}>
-                            <span>📍 S10.01 Vinhomes Grand Park, TP.HCM</span>
+                            <Link href="/contact">Để lại lời nhắn</Link>
                             <span>📞 Hotline: 0931 772 150</span>
                             <span>⏱ 08:30 - 21:00 hàng ngày</span>
                         </div>
@@ -97,7 +97,7 @@ export default function ServicePage() {
                             rel="noopener noreferrer"
                             className="btn btn-primary"
                         >
-                            Chat Zalo Đặt Hẹn Nghe Thử
+                            Nhắn Zalo Tư Vấn
                         </a>
                         <a href="tel:0931772150" className="btn btn-secondary">
                             Gọi Hotline: 0931 772 150

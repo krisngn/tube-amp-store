@@ -62,16 +62,23 @@ export default function ConsultationModal() {
         };
     }, [isOpen]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!phone) return;
-        setIsSubmitted(true);
-        // Clean up after 4s
-        setTimeout(() => {
-            setName('');
-            setPhone('');
-            setMessage('');
-        }, 1500);
+        if (loading) return;
+        setLoading(true);
+        setError('');
+        try {
+            const res = await fetch('/api/messages', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, message }),
+            });
+            if (!res.ok) throw new Error();
+            setIsSubmitted(true);
+        } catch {
+            setError('Chưa gửi được lời nhắn. Vui lòng thử lại hoặc liên hệ qua Zalo.');
+        } finally { setLoading(false); }
     };
 
     if (!isOpen) return null;
@@ -104,7 +111,7 @@ export default function ConsultationModal() {
                     <div className={styles.badge}>Hỗ Trợ Trực Tiếp 1-1</div>
                     <h3 className={styles.title}>Tư Vấn Sản Phẩm Âm Thanh</h3>
                     <p className={styles.subtitle}>
-                        Chọn kênh trao đổi thuận tiện nhất với bạn để được giải đáp thắc mắc, gửi clip test âm thanh hoặc đặt hẹn nghe thử.
+                        Chọn kênh trao đổi thuận tiện nhất với bạn để được giải đáp thắc mắc, tìm hiểu thông tin sản phẩm hoặc được hỗ trợ mua hàng online.
                     </p>
                 </div>
 
@@ -134,7 +141,7 @@ export default function ConsultationModal() {
                             </div>
                             <div className={styles.channelText}>
                                 <h4>Nhắn tin qua Zalo (Ưu tiên)</h4>
-                                <p>Số Zalo: 0931 772 150 · Phản hồi trong 5 phút</p>
+                                <p>Số Zalo: 0931 772 150</p>
                             </div>
                         </div>
                         <span className={styles.channelAction}>
@@ -203,9 +210,9 @@ export default function ConsultationModal() {
                     </svg>
                     <div>
                         <strong style={{ color: 'var(--color-text-primary)', display: 'block', marginBottom: 2 }}>
-                            Phòng nghe trải nghiệm thực tế:
+                            Cửa hàng bán online:
                         </strong>
-                        <span>Tòa S10.01, Vinhomes Grand Park, TP. Thủ Đức, TP. Hồ Chí Minh (Vui lòng gọi trước để chúng tôi chuẩn bị đón tiếp và làm ấm máy)</span>
+                        <span>Liên hệ qua Zalo, Messenger, điện thoại hoặc để lại lời nhắn bên dưới.</span>
                     </div>
                 </div>
 
@@ -216,7 +223,7 @@ export default function ConsultationModal() {
 
                     {isSubmitted ? (
                         <div className={styles.successToast}>
-                            ✓ Yêu cầu tư vấn đã được gửi thành công! Admin sẽ liên hệ lại với bạn qua số <strong>{phone}</strong> trong ít phút.
+                            ✓ Yêu cầu tư vấn đã được gửi thành công! Admin sẽ liên hệ lại với bạn qua số <strong>{phone}</strong> trong thời gian sớm nhất.
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit}>
@@ -238,14 +245,17 @@ export default function ConsultationModal() {
                                 />
                             </div>
                             <textarea
-                                rows={2}
+                                rows={3}
+                                required
+                                maxLength={5000}
                                 className={styles.formTextarea}
                                 placeholder="Nhu cầu tư vấn (VD: Chọn ampli đánh loa Tannoy, hoặc câu hỏi của bạn...)"
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                             />
-                            <button type="submit" className={`btn btn-primary ${styles.submitBtn}`}>
-                                Gửi Yêu Cầu Tư Vấn Ngay
+                            {error && <p role="alert" style={{ color: '#f87171' }}>{error}</p>}
+                            <button type="submit" disabled={loading} className={`btn btn-primary ${styles.submitBtn}`}>
+                                {loading ? 'Đang gửi...' : 'Gửi Lời Nhắn'}
                             </button>
                         </form>
                     )}

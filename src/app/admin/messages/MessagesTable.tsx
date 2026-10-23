@@ -21,6 +21,7 @@ export default function MessagesTable({ messages: initialMessages }: Props) {
     const [messages, setMessages] = useState(initialMessages);
     const [filter, setFilter] = useState<'all' | 'unread'>('all');
     const [search, setSearch] = useState('');
+    const [error, setError] = useState('');
 
     const filtered = messages.filter((m) => {
         const matchFilter = filter === 'all' || !m.is_read;
@@ -37,12 +38,14 @@ export default function MessagesTable({ messages: initialMessages }: Props) {
 
     const markRead = async (id: string) => {
         try {
-            await fetch(`/api/messages/${id}/read`, { method: 'PATCH' });
+            setError('');
+            const response = await fetch(`/api/messages/${id}/read`, { method: 'PATCH' });
+            if (!response.ok) throw new Error('Update failed');
             setMessages((prev) =>
                 prev.map((m) => (m.id === id ? { ...m, is_read: true } : m))
             );
         } catch {
-            console.error('Failed to mark as read');
+            setError('Chưa đánh dấu được lời nhắn. Vui lòng thử lại.');
         }
     };
 
@@ -95,6 +98,7 @@ export default function MessagesTable({ messages: initialMessages }: Props) {
                 />
             </div>
 
+            {error && <p role="alert">{error}</p>}
             {/* Table */}
             <div className={styles.tableWrap}>
                 <table className={styles.table}>

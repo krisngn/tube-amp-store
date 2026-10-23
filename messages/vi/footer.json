@@ -2,11 +2,10 @@
     "storeInfo": {
         "title": "Vintage Audio Accessories",
         "description": "Chuyên thiết bị & phụ kiện audio vintage cao cấp — ampli đèn tuyển chọn, loa, đầu đĩa và phụ kiện âm thanh đỉnh cao.",
-        "address": "Tòa S10.01, Vinhomes Grand Park, TP. Thủ Đức, TP. Hồ Chí Minh",
         "phone": "0931 772 150",
         "email": "thientan.3003.01@gmail.com",
         "hours": "08:30 - 21:00 (Tất cả các ngày trong tuần)",
-        "showroomNote": "Có phòng nghe trải nghiệm thực tế tại Vinhomes Grand Park (Vui lòng liên hệ trước)"
+        "onlineNote": "Cửa hàng bán online · Liên hệ để được hỗ trợ mua hàng"
     },
     "sections": {
         "shop": "Cửa Hàng",
@@ -22,7 +21,7 @@
         "guides": "Cẩm Nang Audio",
         "service": "Quy Trình Kiểm Tra Kỹ Thuật",
         "reviews": "Đánh Giá & Setup Khách Hàng",
-        "contact": "Liên Hệ & Phòng Nghe",
+        "contact": "Liên Hệ & Lời Nhắn",
         "shipping": "Vận Chuyển Chống Sốc",
         "warranty": "Chính Sách Bảo Hành",
         "returns": "Chính Sách Đổi Trả",
@@ -41,7 +40,7 @@
         "title": "Cam Kết Chất Lượng Vượt Trội",
         "tested": "Kiểm tra đo nhiễu/hum và test tải trước khi giao",
         "packaging": "Đóng gói bọc lót chống sốc chuyên dụng cho đèn",
-        "support": "Tư vấn tận tâm, hỗ trợ setup tại gia",
+        "support": "Tư vấn tận tâm, hướng dẫn setup từ xa",
         "warranty": "Bảo hành minh bạch, hỗ trợ kỹ thuật trọn đời"
     },
     "copyright": "© 2026 Vintage Audio Accessories. Tất cả quyền được bảo lưu."

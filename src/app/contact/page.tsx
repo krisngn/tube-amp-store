@@ -12,10 +12,23 @@ export default function ContactPage() {
     const [message, setMessage] = useState('');
     const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!phone) return;
-        setIsSubmitted(true);
+        if (loading) return;
+        setLoading(true);
+        setError('');
+        try {
+            const res = await fetch('/api/messages', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, email, topic, message }),
+            });
+            if (!res.ok) throw new Error();
+            setIsSubmitted(true);
+        } catch {
+            setError('Chưa gửi được lời nhắn. Vui lòng thử lại hoặc liên hệ qua Zalo.');
+        } finally { setLoading(false); }
     };
 
     return (
@@ -25,15 +38,15 @@ export default function ContactPage() {
                 <nav className={styles.breadcrumb}>
                     <Link href="/">Trang chủ</Link>
                     <span>/</span>
-                    <span>Liên hệ & Phòng nghe</span>
+                    <span>Liên hệ</span>
                 </nav>
 
                 {/* Hero Header */}
                 <div className={styles.heroHeader}>
                     <div className={styles.badge}>Kết Nối Cùng Đam Mê Audio</div>
-                    <h1 className={styles.title}>Liên Hệ & Trải Nghiệm Thực Tế</h1>
+                    <h1 className={styles.title}>Liên Hệ Cửa Hàng Online</h1>
                     <p className={styles.subtitle}>
-                        Chúng tôi luôn sẵn sàng đón tiếp quý khách đến nghe thử trực tiếp tại phòng nghe hoặc tư vấn chu đáo 1-1 qua các kênh Zalo, Facebook Messenger và Hotline.
+                        Cửa hàng bán online. Bạn có thể để lại lời nhắn hoặc liên hệ qua Zalo, Facebook Messenger và Hotline để được hỗ trợ sản phẩm và đơn hàng.
                     </p>
                 </div>
 
@@ -50,11 +63,11 @@ export default function ContactPage() {
                                     </svg>
                                 </div>
                                 <div className={styles.itemContent}>
-                                    <h4>Phòng Nghe Trải Nghiệm & Showroom</h4>
-                                    <p><strong>Tòa S10.01, Vinhomes Grand Park</strong></p>
-                                    <p>Phường Long Bình, TP. Thủ Đức, TP. Hồ Chí Minh</p>
+                                    <h4>Mua Sắm Trực Tuyến</h4>
+                                    <p><strong>Tư vấn và đặt hàng online</strong></p>
+                                    <p>Hỗ trợ qua Zalo, Messenger và điện thoại</p>
                                     <p style={{ marginTop: 4, color: 'var(--color-accent-bright)', fontSize: '0.825rem' }}>
-                                        ✓ Bãi đỗ xe ô tô & xe máy rộng rãi ngay sảnh, an ninh 24/7. Vui lòng liên hệ trước để chúng tôi chuẩn bị phòng nghe chu đáo.
+                                        Để lại thông tin bên cạnh để chúng tôi liên hệ lại với bạn.
                                     </p>
                                 </div>
                             </div>
@@ -81,7 +94,7 @@ export default function ContactPage() {
                                     </svg>
                                 </div>
                                 <div className={styles.itemContent}>
-                                    <h4>Thời Gian Đón Tiếp</h4>
+                                    <h4>Thời Gian Hỗ Trợ Online</h4>
                                     <p><strong>08:30 - 21:00</strong> tất cả các ngày trong tuần</p>
                                     <p>Kể cả Thứ 7, Chủ Nhật và ngày lễ</p>
                                 </div>
@@ -146,7 +159,7 @@ export default function ContactPage() {
                     <div className={styles.formCard}>
                         <h3 className={styles.formCardTitle}>Gửi Lời Nhắn Cho Chúng Tôi</h3>
                         <p className={styles.formCardSubtitle}>
-                            Để lại thông tin và yêu cầu của bạn, chuyên viên sẽ phản hồi qua Zalo hoặc gọi lại trong vòng 15 phút.
+                            Để lại thông tin và nội dung cần hỗ trợ. Chúng tôi sẽ phản hồi qua Zalo hoặc điện thoại trong thời gian sớm nhất.
                         </p>
 
                         {isSubmitted ? (
@@ -154,7 +167,7 @@ export default function ContactPage() {
                                 <h4 style={{ color: '#9fe2a3', marginBottom: 8, fontSize: '1.2rem' }}>
                                     ✓ Đã Gửi Thành Công!
                                 </h4>
-                                <p>Cảm ơn <strong>{name || 'quý khách'}</strong>! Chúng tôi đã nhận được thông tin và sẽ liên hệ lại qua số điện thoại <strong>{phone}</strong> trong ít phút.</p>
+                                <p>Cảm ơn <strong>{name || 'quý khách'}</strong>! Chúng tôi đã nhận được thông tin và sẽ liên hệ lại qua số điện thoại <strong>{phone}</strong> trong thời gian sớm nhất.</p>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit}>
@@ -162,6 +175,8 @@ export default function ContactPage() {
                                     <label className={styles.label}>Họ và tên *</label>
                                     <input
                                         type="text"
+                                        maxLength={100}
+                                        aria-label="Họ và tên"
                                         required
                                         className={styles.input}
                                         placeholder="VD: Nguyễn Văn A"
@@ -174,6 +189,8 @@ export default function ContactPage() {
                                     <label className={styles.label}>Số điện thoại / Zalo *</label>
                                     <input
                                         type="tel"
+                                        maxLength={30}
+                                        aria-label="Số điện thoại / Zalo"
                                         required
                                         className={styles.input}
                                         placeholder="VD: 0931 772 150"
@@ -186,6 +203,8 @@ export default function ContactPage() {
                                     <label className={styles.label}>Email (không bắt buộc)</label>
                                     <input
                                         type="email"
+                                        maxLength={254}
+                                        aria-label="Email"
                                         className={styles.input}
                                         placeholder="email@example.com"
                                         value={email}
@@ -195,13 +214,13 @@ export default function ContactPage() {
 
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>Nội dung cần hỗ trợ</label>
-                                    <select
+                                    <select aria-label="Nội dung cần hỗ trợ"
                                         className={styles.select}
                                         value={topic}
                                         onChange={(e) => setTopic(e.target.value)}
                                     >
                                         <option value="tu-van">Tư vấn chọn mua ampli đèn & phụ kiện</option>
-                                        <option value="hen-nghe-thu">Đặt hẹn nghe thử tại Vinhomes Grand Park</option>
+                                        <option value="don-hang">Hỗ trợ đơn hàng / Giao hàng</option>
                                         <option value="ky-thuat">Hỗ trợ kỹ thuật / Bảo hành / Cân chỉnh bias</option>
                                         <option value="khac">Khác</option>
                                     </select>
@@ -209,8 +228,10 @@ export default function ContactPage() {
 
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>Tin nhắn chi tiết</label>
-                                    <textarea
+                                    <textarea aria-label="Tin nhắn chi tiết"
                                         rows={4}
+                                        required
+                                        maxLength={5000}
                                         className={styles.textarea}
                                         placeholder="VD: Tôi đang chơi loa JBL L100, muốn tìm ampli đèn nghe Vocal/Jazz, phòng khoảng 25m2..."
                                         value={message}
@@ -218,8 +239,9 @@ export default function ContactPage() {
                                     />
                                 </div>
 
-                                <button type="submit" className={`btn btn-primary ${styles.submitBtn}`}>
-                                    Gửi Yêu Cầu Tư Vấn
+                                {error && <p role="alert" style={{ color: '#f87171', marginBottom: 12 }}>{error}</p>}
+                                <button type="submit" disabled={loading} className={`btn btn-primary ${styles.submitBtn}`}>
+                                    {loading ? 'Đang gửi...' : 'Gửi Lời Nhắn'}
                                 </button>
                             </form>
                         )}

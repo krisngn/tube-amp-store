@@ -95,7 +95,7 @@ export default function ProductConsultationSection() {
                         </a>
                     </div>
 
-                    {/* Hotline & Showroom Card */}
+                    {/* Hotline Card */}
                     <div className={styles.channelCard}>
                         <div className={styles.cardTop}>
                             <div className={`${styles.cardIcon} ${styles.phoneIcon}`}>
@@ -119,31 +119,13 @@ export default function ProductConsultationSection() {
                     </div>
                 </div>
 
-                {/* Bottom Section: Showroom info + Quick Callback form */}
+                {/* Online contact and message form */}
                 <div className={styles.bottomGrid}>
-                    <div className={styles.showroomInfo}>
-                        <h3 className={styles.showroomTitle}>Phòng Nghe & Trải Nghiệm Thực Tế</h3>
-                        <div className={styles.showroomDetail}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
-                            </svg>
-                            <div>
-                                <strong>Địa chỉ:</strong>
-                                <div>Tòa S10.01, Vinhomes Grand Park, Phường Long Bình, TP. Thủ Đức, TP. Hồ Chí Minh</div>
-                            </div>
-                        </div>
-
-                        <div className={styles.showroomDetail}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
-                            </svg>
-                            <div>
-                                <strong>Giờ đón tiếp:</strong>
-                                <div>08:30 - 21:00 (Tất cả các ngày trong tuần, kể cả Thứ Bảy & Chủ Nhật)</div>
-                            </div>
-                        </div>
-
-
+                    <div className={styles.contactInfo}>
+                        <h3 className={styles.contactTitle}>{t('consultation.online.title')}</h3>
+                        <p className={styles.contactDetail}>{t('consultation.online.description')}</p>
+                        <p className={styles.contactDetail}>{t('consultation.online.note')}</p>
+                        <a href="/contact" className="btn btn-secondary">{t('consultation.form.title')}</a>
                     </div>
 
                     <div className={styles.formWrapper}>
@@ -163,6 +145,9 @@ export default function ProductConsultationSection() {
                                     <input
                                         type="text"
                                         className={styles.input}
+                                        aria-label={t('consultation.form.name')}
+                                        autoComplete="name"
+                                        maxLength={100}
                                         placeholder={t('consultation.form.namePlaceholder')}
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
@@ -171,13 +156,19 @@ export default function ProductConsultationSection() {
                                         type="tel"
                                         required
                                         className={styles.input}
+                                        aria-label={t('consultation.form.phone')}
+                                        autoComplete="tel"
+                                        maxLength={30}
                                         placeholder={t('consultation.form.phonePlaceholder')}
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value)}
                                     />
                                 </div>
                                 <textarea
-                                    rows={2}
+                                    rows={4}
+                                    maxLength={5000}
+                                    required
+                                    aria-label={t('consultation.form.message')}
                                     className={styles.textarea}
                                     placeholder={t('consultation.form.messagePlaceholder')}
                                     value={message}
@@ -194,7 +185,7 @@ export default function ProductConsultationSection() {
                                     style={{ width: '100%', justifyContent: 'center' }}
                                     disabled={loading}
                                 >
-                                    {loading ? 'Đang gửi...' : t('consultation.form.submit')}
+                                    {loading ? t('consultation.form.sending') : t('consultation.form.submit')}
                                 </button>
                             </form>
                         )}

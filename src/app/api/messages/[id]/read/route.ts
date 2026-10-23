@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
+import { isAdmin } from '@/lib/admin/auth';
 
 export async function PATCH(
     _request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        if (!(await isAdmin())) {
+            return NextResponse.json({ error: 'Không có quyền truy cập' }, { status: 403 });
+        }
         const { id } = await params;
-        const supabase = await createClient();
+        const supabase = createServiceClient();
 
         const { error } = await supabase
             .from('consultation_messages')

@@ -2,11 +2,10 @@
     "storeInfo": {
         "title": "Vintage Audio Accessories",
         "description": "Premium vintage audio equipment & accessories — curated tube amplifiers, speakers, turntables and more.",
-        "address": "Building S10.01, Vinhomes Grand Park, Thu Duc City, Ho Chi Minh City, Vietnam",
         "phone": "0931 772 150",
         "email": "thientan.3003.01@gmail.com",
         "hours": "08:30 - 21:00 (Everyday)",
-        "showroomNote": "Listening room available at Vinhomes Grand Park (Please contact before visiting)"
+        "onlineNote": "Online store · Contact us for shopping support"
     },
     "sections": {
         "shop": "Shop",
@@ -22,7 +21,7 @@
         "guides": "Audio Guides",
         "service": "Testing Process & Service",
         "reviews": "Customer Reviews & Setups",
-        "contact": "Contact & Listening Room",
+        "contact": "Contact & Messages",
         "shipping": "Safe Shockproof Shipping",
         "warranty": "Warranty Policy",
         "returns": "Return Policy",
@@ -41,7 +40,7 @@
         "title": "Our Quality Commitment",
         "tested": "Noise/hum tested and load tested before shipping",
         "packaging": "Professional shockproof protective packaging",
-        "support": "Dedicated consultation & home setup support",
+        "support": "Dedicated consultation & remote setup guidance",
         "warranty": "Transparent warranty & lifetime technical support"
     },
     "copyright": "© 2026 Vintage Audio Accessories. All rights reserved."

@@ -86,8 +86,7 @@ export default function Footer() {
                                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" fill="currentColor"/>
                                 </svg>
                                 <div>
-                                    <span className={styles.contactValue}>{t('storeInfo.address')}</span>
-                                    <span className={styles.contactSub}>{t('storeInfo.showroomNote')}</span>
+                                    <span className={styles.contactValue}>{t('storeInfo.onlineNote')}</span>
                                 </div>
                             </div>
 
@@ -195,7 +194,7 @@ export default function Footer() {
                 {/* Copyright & Disclaimer */}
                 <div className={styles.footerBottom}>
                     <p className={styles.copyright}>© {currentYear} {t('storeInfo.title')}. Tất cả quyền được bảo lưu.</p>
-                    <p className={styles.addressLine}>S10.01 Vinhomes Grand Park, Phường Long Bình, TP. Thủ Đức, TP. Hồ Chí Minh · Hotline: 0931 772 150</p>
+                    <p className={styles.addressLine}>{t('storeInfo.onlineNote')} · Hotline: 0931 772 150</p>
                 </div>
             </div>
         </footer>

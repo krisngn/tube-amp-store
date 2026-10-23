@@ -137,7 +137,7 @@
     text-decoration: none;
 }
 
-/* Two Column Bottom: Location Banner + Request Form */
+/* Two Column Bottom: Online Contact + Request Form */
 .bottomGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -148,20 +148,20 @@
     padding: var(--space-2xl);
 }
 
-.showroomInfo {
+.contactInfo {
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: var(--space-md);
 }
 
-.showroomTitle {
+.contactTitle {
     font-size: 1.35rem;
     font-family: var(--font-serif);
     color: var(--color-accent-primary);
 }
 
-.showroomDetail {
+.contactDetail {
     display: flex;
     align-items: flex-start;
     gap: var(--space-sm);
@@ -170,13 +170,13 @@
     line-height: 1.5;
 }
 
-.showroomDetail svg {
+.contactDetail svg {
     color: var(--color-accent-primary);
     flex-shrink: 0;
     margin-top: 3px;
 }
 
-.showroomDetail strong {
+.contactDetail strong {
     color: var(--color-text-primary);
 }
 
