@@ -3,6 +3,8 @@
  * These DTOs match the UI requirements and are mapped from database records
  */
 
+import type { ProductVariant } from '@/lib/products/variants';
+
 export type Topology = 'se' | 'pp';
 export type Condition = 'new' | 'like_new' | 'vintage';
 export type TubeType = '300B' | '2A3' | 'EL34' | 'KT88' | 'KT66' | '6L6' | 'EL84' | '6V6' | 'Other';
@@ -15,6 +17,7 @@ export interface ProductCardDTO {
     slug: string;
     name: string;
     priceVnd: number;
+    priceMaxVnd?: number;
     compareAtPriceVnd?: number;
     imageUrl: string;
     // Amp-specific attributes (optional — not every product is an amplifier)
@@ -82,6 +85,8 @@ export interface ProductDetailDTO extends ProductCardDTO {
     // Specifications
     specs: ProductSpecs;
     taps: string[]; // e.g., ['4Ω', '8Ω', '16Ω']
+
+    variants?: ProductVariant[];
 
     // Availability
     stockQuantity: number;

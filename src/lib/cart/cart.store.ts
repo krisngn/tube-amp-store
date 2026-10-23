@@ -18,7 +18,7 @@ export const useCartStore = create<CartState>()(
             addItem: (item) => {
                 const currentItems = get().items;
                 const existingIndex = currentItems.findIndex(
-                    (i) => i.productId === item.productId
+                    (i) => i.productId === item.productId && i.variantId === item.variantId
                 );
 
                 if (existingIndex >= 0) {
@@ -27,6 +27,7 @@ export const useCartStore = create<CartState>()(
                     const existingItem = updatedItems[existingIndex];
                     updatedItems[existingIndex] = {
                         ...existingItem,
+                        ...item,
                         quantity: existingItem.quantity + (item.quantity || 1),
                     };
                     set({ items: updatedItems });
@@ -40,21 +41,21 @@ export const useCartStore = create<CartState>()(
                 }
             },
 
-            removeItem: (productId) => {
+            removeItem: (productId, variantId) => {
                 set({
-                    items: get().items.filter((item) => item.productId !== productId),
+                    items: get().items.filter((item) => item.productId !== productId || item.variantId !== variantId),
                 });
             },
 
-            updateQuantity: (productId, quantity) => {
+            updateQuantity: (productId, quantity, variantId) => {
                 if (quantity <= 0) {
-                    get().removeItem(productId);
+                    get().removeItem(productId, variantId);
                     return;
                 }
 
                 const currentItems = get().items;
                 const updatedItems = currentItems.map((item) =>
-                    item.productId === productId
+                    item.productId === productId && item.variantId === variantId
                         ? { ...item, quantity: Math.max(1, quantity) }
                         : item
                 );
@@ -73,8 +74,8 @@ export const useCartStore = create<CartState>()(
                 return calculateItemCount(get().items);
             },
 
-            hasItem: (productId) => {
-                return get().items.some((item) => item.productId === productId);
+            hasItem: (productId, variantId) => {
+                return get().items.some((item) => item.productId === productId && item.variantId === variantId);
             },
         }),
         {

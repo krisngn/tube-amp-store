@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import type { ProductDetailDTO } from '@/lib/types/catalog';
 import { formatStockStatus } from '@/lib/utils/formatters';
@@ -13,6 +13,7 @@ interface ProductActionsProps {
 }
 
 export default function ProductActions({ product }: ProductActionsProps) {
+    const locale = useLocale();
     const t = useTranslations('product');
     const tCart = useTranslations('cart');
     const router = useRouter();
@@ -20,7 +21,14 @@ export default function ProductActions({ product }: ProductActionsProps) {
     const [isAdding, setIsAdding] = useState(false);
     const addItem = useCartStore((state) => state.addItem);
 
-    const stockStatus = formatStockStatus(product.stockQuantity, product.lowStockThreshold);
+    const variants = product.variants ?? [];
+    const [variantId, setVariantId] = useState('');
+    const selectedVariant = variants.find((v) => v.id === variantId);
+    const needsSelection = variants.length > 0 && !selectedVariant;
+    const stockQuantity = selectedVariant?.stockQuantity ?? product.stockQuantity;
+    const priceVnd = selectedVariant?.price ?? product.priceVnd;
+    const displayName = product.name;
+    const stockStatus = formatStockStatus(stockQuantity, product.lowStockThreshold);
     const isOutOfStock = stockStatus === 'out_of_stock';
 
     const handleDecrease = () => {
@@ -28,13 +36,13 @@ export default function ProductActions({ product }: ProductActionsProps) {
     };
 
     const handleIncrease = () => {
-        if (quantity < product.stockQuantity) {
+        if (quantity < stockQuantity) {
             setQuantity(quantity + 1);
         }
     };
 
     const handleAddToCart = () => {
-        if (isOutOfStock || isAdding) {
+        if (isOutOfStock || isAdding || needsSelection) {
             return;
         }
 
@@ -46,11 +54,14 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
         addItem({
             productId: product.id,
+            variantId: selectedVariant?.id,
+            variantName: selectedVariant?.name,
+            sku: selectedVariant?.sku,
             slug: product.slug,
-            name: product.name,
-            priceVnd: product.priceVnd,
+            name: displayName,
+            priceVnd,
             quantity,
-            primaryImageUrl: imageUrl,
+            primaryImageUrl: selectedVariant?.imageUrl || imageUrl,
         });
 
         // Reset quantity and show feedback
@@ -63,6 +74,20 @@ export default function ProductActions({ product }: ProductActionsProps) {
 
     return (
         <div className={styles.productActions}>
+            {variants.length > 0 && <div className={styles.variantPicker}>
+                <label htmlFor="product-variant">{locale === 'vi' ? 'Phân loại' : 'Option'}</label>
+                <select id="product-variant" className="input" value={variantId} onChange={(e) => { setVariantId(e.target.value); setQuantity(1); }}>
+                    <option value="">{locale === 'vi' ? 'Chọn phân loại' : 'Select an option'}</option>
+                    {variants.map((v) => <option key={v.id} value={v.id} disabled={v.stockQuantity === 0}>
+                        {v.name} — {new Intl.NumberFormat(locale, { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(v.price)}{v.stockQuantity === 0 ? (locale === 'vi' ? ' (Hết hàng)' : ' (Sold out)') : ''}
+                    </option>)}
+                </select>
+                {selectedVariant && <div aria-live="polite">
+                    <p className={styles.variantPrice}>{new Intl.NumberFormat(locale, { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(priceVnd)}</p>
+                    {selectedVariant.sku && <p>SKU: {selectedVariant.sku}</p>}
+                    {selectedVariant.imageUrl && <img src={selectedVariant.imageUrl} alt={selectedVariant.name} width={120} height={120} style={{ objectFit: 'contain' }} />}
+                </div>}
+            </div>}
             {/* Stock Status */}
             <div className={styles.stockStatus}>
                 {stockStatus === 'out_of_stock' && (
@@ -70,7 +95,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                 )}
                 {stockStatus === 'limited' && (
                     <span className="badge badge-warning">
-                        {t('availability.limitedStock', { count: product.stockQuantity })}
+                        {t('availability.limitedStock', { count: stockQuantity })}
                     </span>
                 )}
                 {stockStatus === 'in_stock' && (
@@ -79,7 +104,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
             </div>
 
             {/* Quantity Selector */}
-            {!isOutOfStock && (
+            {!isOutOfStock && !needsSelection && (
                 <div className={styles.quantitySelector}>
                     <label className="text-sm text-secondary">{t('actions.quantity')}</label>
                     <div className={styles.quantityControls}>
@@ -93,7 +118,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                         <span className={styles.quantityValue}>{quantity}</span>
                         <button
                             onClick={handleIncrease}
-                            disabled={quantity >= product.stockQuantity}
+                            disabled={quantity >= stockQuantity}
                             aria-label={t('actions.increase')}
                         >
                             +
@@ -106,7 +131,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
             <div className={styles.actionButtons}>
                 <button
                     className="btn btn-primary btn-large"
-                    disabled={isOutOfStock || isAdding}
+                    disabled={isOutOfStock || isAdding || needsSelection}
                     onClick={handleAddToCart}
                     title={isOutOfStock ? t('cta.outOfStock') : undefined}
                 >
@@ -117,7 +142,7 @@ export default function ProductActions({ product }: ProductActionsProps) {
                         : t('cta.addToCart')}
                 </button>
 
-                {product.allowDeposit && !isOutOfStock && (
+                {product.allowDeposit && !isOutOfStock && !needsSelection && (
                     <button 
                         className="btn btn-secondary btn-large"
                         onClick={() => {
@@ -128,15 +153,18 @@ export default function ProductActions({ product }: ProductActionsProps) {
                             
                             addItem({
                                 productId: product.id,
+            variantId: selectedVariant?.id,
+            variantName: selectedVariant?.name,
+            sku: selectedVariant?.sku,
                                 slug: product.slug,
-                                name: product.name,
-                                priceVnd: product.priceVnd,
+                                name: displayName,
+                                priceVnd,
                                 quantity: 1,
-                                primaryImageUrl: imageUrl,
+                                primaryImageUrl: selectedVariant?.imageUrl || imageUrl,
                                 // Store deposit config for checkout UI (eligibility check only)
                                 // But do NOT set requiresDeposit - paymentMode at checkout is the source of truth
                                 depositAmount: product.depositType === 'percent' && product.depositPercentage
-                                    ? Math.round((product.priceVnd * product.depositPercentage) / 100)
+                                    ? Math.round((priceVnd * product.depositPercentage) / 100)
                                     : product.depositAmount || 0,
                                 depositType: product.depositType,
                                 depositPercentage: product.depositPercentage,

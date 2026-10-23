@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import { cartItemKey } from '@/lib/cart/cart.utils';
 import { useCartStore } from '@/lib/cart/cart.store';
 import styles from './page.module.css';
 
@@ -13,13 +14,13 @@ export default function CartPage() {
     const isEmpty = items.length === 0;
     const subtotal = getTotal();
 
-    const handleQuantityChange = (productId: string, newQuantity: number) => {
-        updateQuantity(productId, newQuantity);
+    const handleQuantityChange = (productId: string, newQuantity: number, variantId?: string) => {
+        updateQuantity(productId, newQuantity, variantId);
     };
 
-    const handleRemove = (productId: string) => {
+    const handleRemove = (productId: string, variantId?: string) => {
         if (confirm(t('items.confirmRemove') || 'Remove this item?')) {
-            removeItem(productId);
+            removeItem(productId, variantId);
         }
     };
 
@@ -51,7 +52,7 @@ export default function CartPage() {
                     {/* Cart Items */}
                     <div className={styles.cartItems}>
                         {items.map((item) => (
-                            <div key={item.productId} className={`${styles.cartItem} card`}>
+                            <div key={cartItemKey(item)} className={`${styles.cartItem} card`}>
                                 {item.primaryImageUrl ? (
                                     <img
                                         src={item.primaryImageUrl}
@@ -64,6 +65,7 @@ export default function CartPage() {
                                 <div className={styles.itemDetails}>
                                     <Link href={`/product/${item.slug}`}>
                                         <h3>{item.name}</h3>
+                                        {item.variantName && <p>{item.variantName}</p>}
                                     </Link>
                                     <p className={styles.itemPrice}>
                                         {item.priceVnd.toLocaleString('vi-VN')} {tCommon('currency')}
@@ -73,14 +75,14 @@ export default function CartPage() {
                                     <label className="label">{t('items.quantity')}</label>
                                     <div className={styles.quantitySelector}>
                                         <button
-                                            onClick={() => handleQuantityChange(item.productId, item.quantity - 1)}
+                                            onClick={() => handleQuantityChange(item.productId, item.quantity - 1, item.variantId)}
                                             aria-label={t('items.decrease')}
                                         >
                                             −
                                         </button>
                                         <span>{item.quantity}</span>
                                         <button
-                                            onClick={() => handleQuantityChange(item.productId, item.quantity + 1)}
+                                            onClick={() => handleQuantityChange(item.productId, item.quantity + 1, item.variantId)}
                                             aria-label={t('items.increase')}
                                         >
                                             +
@@ -95,7 +97,7 @@ export default function CartPage() {
                                 </div>
                                 <button
                                     className={`btn btn-ghost ${styles.itemRemove}`}
-                                    onClick={() => handleRemove(item.productId)}
+                                    onClick={() => handleRemove(item.productId, item.variantId)}
                                 >
                                     {t('items.remove')}
                                 </button>

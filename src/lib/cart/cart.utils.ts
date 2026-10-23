@@ -5,6 +5,10 @@
 
 import type { CartItem } from './cart.types';
 
+export function cartItemKey(item: Pick<CartItem, 'productId' | 'variantId'>): string {
+    return JSON.stringify([item.productId, item.variantId ?? null]);
+}
+
 const CART_STORAGE_KEY = 'rtb_cart';
 
 /**

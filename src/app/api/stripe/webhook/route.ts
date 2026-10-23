@@ -1,3 +1,4 @@
+import { restoreOrderInventory } from '@/lib/repositories/admin/orders';
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripeWebhookEvent, getStripe, parseStripeMetadata } from '@/lib/stripe/server';
 import {
@@ -211,43 +212,8 @@ async function handlePaymentIntentFailed(
         reason: paymentIntent.last_payment_error?.message || 'Payment failed',
     });
 
-    // Restore inventory when payment fails
-    try {
-        const supabase = createServiceClient();
-        const { data: orderItems } = await supabase
-            .from('order_items')
-            .select('product_id, quantity')
-            .eq('order_id', orderId);
-
-        if (orderItems && orderItems.length > 0) {
-            for (const item of orderItems) {
-                const rpcResult = await supabase.rpc('increment_stock', {
-                    product_id: item.product_id,
-                    quantity: item.quantity,
-                });
-
-                if (rpcResult.error) {
-                    // Fallback: direct update
-                    const { data: product } = await supabase
-                        .from('products')
-                        .select('stock_quantity')
-                        .eq('id', item.product_id)
-                        .single();
-
-                    if (product) {
-                        await supabase
-                            .from('products')
-                            .update({ stock_quantity: product.stock_quantity + item.quantity })
-                            .eq('id', item.product_id);
-                    }
-                }
-            }
-            console.log(`Inventory restored for order ${orderId} after payment failure`);
-        }
-    } catch (inventoryError) {
-        console.error('Error restoring inventory after payment failure:', inventoryError);
-        // Don't throw - inventory restoration failure shouldn't break webhook processing
-    }
+    // Propagate restoration errors so Stripe retries instead of marking the event done.
+    await restoreOrderInventory(orderId);
 
     // Mark event as processed
     await markStripeEventAsProcessed(orderId, eventId);

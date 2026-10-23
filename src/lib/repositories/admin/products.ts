@@ -1,3 +1,4 @@
+import { validateVariants, variantSummary, type ProductVariant } from '@/lib/products/variants';
 import { createServiceClient } from '@/lib/supabase/service';
 import type { ProductCardDTO, ProductDetailDTO } from '@/lib/types/catalog';
 
@@ -51,6 +52,7 @@ export interface AdminProductListResponse {
 }
 
 export interface CreateProductPayload {
+    variants?: ProductVariant[];
     slug: string;
     price: number;
     compareAtPrice?: number;
@@ -283,6 +285,7 @@ export async function adminGetProductById(id: string): Promise<ProductDetailDTO 
         })),
         specs: data.specifications || {},
         taps: data.taps || [],
+        variants: data.variants ?? [],
         stockQuantity: data.stock_quantity,
         lowStockThreshold: data.low_stock_threshold || 0,
         allowDeposit: data.allow_deposit,
@@ -302,6 +305,9 @@ export async function adminGetProductById(id: string): Promise<ProductDetailDTO 
 export async function adminCreateProduct(payload: CreateProductPayload): Promise<string> {
     const supabase = createServiceClient();
 
+    const variants = validateVariants(payload.variants ?? []);
+    const summary = variants.length ? variantSummary(variants) : payload;
+
     // Validate slug uniqueness
     const { data: existing } = await supabase.from('products').select('id').eq('slug', payload.slug).single();
     if (existing) {
@@ -313,9 +319,10 @@ export async function adminCreateProduct(payload: CreateProductPayload): Promise
         .from('products')
         .insert({
             slug: payload.slug.toLowerCase().replace(/\s+/g, '-'),
-            price: payload.price,
+            variants,
+            price: summary.price,
             compare_at_price: payload.compareAtPrice,
-            stock_quantity: payload.stockQuantity,
+            stock_quantity: summary.stockQuantity,
             low_stock_threshold: payload.lowStockThreshold || 5,
             condition: payload.condition,
             topology: payload.topology,
@@ -431,12 +438,21 @@ export async function adminUpdateProduct(payload: UpdateProductPayload): Promise
     if (payload.widthCm !== undefined) updateData.width_cm = payload.widthCm ?? null;
     if (payload.heightCm !== undefined) updateData.height_cm = payload.heightCm ?? null;
 
+    if (payload.variants !== undefined) {
+        updateData.variants = validateVariants(payload.variants);
+        if (updateData.variants.length) {
+            const summary = variantSummary(updateData.variants);
+            updateData.price = summary.price;
+            updateData.stock_quantity = summary.stockQuantity;
+        }
+    }
+
     // Update product
     const { error: productError } = await supabase.from('products').update(updateData).eq('id', payload.id);
 
     if (productError) {
         console.error('Error updating product:', productError);
-        throw new Error('Failed to update product');
+        throw new Error(productError.message || 'Failed to update product');
     }
 
     // Update translations if provided

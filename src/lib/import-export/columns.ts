@@ -29,6 +29,7 @@ export const CATEGORY_COLUMNS = [
 export const PRODUCT_COLUMNS = [
     'slug',
     'sku',
+    'variants',
     'price',
     'compare_at_price',
     'stock_quantity',

@@ -64,7 +64,7 @@ export default async function ProductPage({ params }: PageProps) {
 
   // Determine price to display
   const displayPrice = product.compareAtPriceVnd || product.priceVnd;
-  const hasDiscount = !!product.compareAtPriceVnd;
+  const hasDiscount = !product.variants?.length && !!product.compareAtPriceVnd;
 
   return (
     <div className={`${styles.productPage} py - 16`}>
@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: PageProps) {
                 </p>
               )}
               <p className={styles.currentPrice}>
-                {formatPrice(displayPrice, locale)}
+                {product.variants?.length ? `${formatPrice(Math.min(...product.variants.map((v) => v.price)), locale)} – ${formatPrice(Math.max(...product.variants.map((v) => v.price)), locale)}` : formatPrice(displayPrice, locale)}
               </p>
               {hasDiscount && (
                 <p className={`${styles.savings} text - success text - sm mt - 1`}>
@@ -144,7 +144,7 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
 
             {/* Deposit Reservation Info */}
-            {product.allowDeposit && (
+            {product.allowDeposit && !product.variants?.length && (
               <div className="card p-6 mb-6 border-accent">
                 <div className="flex items-start gap-4">
                   <div className="badge badge-accent">{t('deposit.badge')}</div>

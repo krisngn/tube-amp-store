@@ -1,3 +1,4 @@
+import { restoreOrderInventory } from '@/lib/repositories/admin/orders';
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/service';
 
@@ -43,39 +44,7 @@ export async function POST(
             );
         }
 
-        // Restore inventory for each item
-        const orderItems = order.order_items as Array<{ product_id: string; quantity: number }>;
-        for (const item of orderItems) {
-            // Try RPC function first (if it exists)
-            const rpcResult = await supabase.rpc('increment_stock', {
-                product_id: item.product_id,
-                quantity: item.quantity,
-            });
-
-            if (rpcResult.error) {
-                // Fallback: direct update if RPC doesn't exist
-                const { data: product, error: productError } = await supabase
-                    .from('products')
-                    .select('stock_quantity')
-                    .eq('id', item.product_id)
-                    .single();
-
-                if (productError || !product) {
-                    console.error(`Error fetching product ${item.product_id} for inventory restoration:`, productError);
-                    continue; // Skip this item but continue with others
-                }
-
-                const { error: updateError } = await supabase
-                    .from('products')
-                    .update({ stock_quantity: product.stock_quantity + item.quantity })
-                    .eq('id', item.product_id);
-
-                if (updateError) {
-                    console.error(`Error restoring inventory for product ${item.product_id}:`, updateError);
-                    // Continue with other items
-                }
-            }
-        }
+        await restoreOrderInventory(order.id);
 
         // Update order status to cancelled
         const { error: updateError } = await supabase

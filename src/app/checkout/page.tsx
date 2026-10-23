@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { cartItemKey } from '@/lib/cart/cart.utils';
 import { useCartStore } from '@/lib/cart/cart.store';
 import styles from './page.module.css';
 
@@ -162,6 +163,7 @@ export default function CheckoutPage() {
                 body: JSON.stringify({
                     items: items.map((item) => ({
                         productId: item.productId,
+                        variantId: item.variantId,
                         quantity: item.quantity,
                         // Remove item-level deposit flags - paymentMode is the source of truth
                     })),
@@ -518,9 +520,9 @@ export default function CheckoutPage() {
                         <h3>{t('orderSummary.title')}</h3>
                         <div className={styles.summaryItems}>
                             {items.map((item) => (
-                                <div key={item.productId} className={styles.summaryItem}>
+                                <div key={cartItemKey(item)} className={styles.summaryItem}>
                                     <span>
-                                        {item.name} × {item.quantity}
+                                        {item.name}{item.variantName ? ` — ${item.variantName}` : ""} × {item.quantity}
                                     </span>
                                     <span>
                                         {(item.priceVnd * item.quantity).toLocaleString('vi-VN')} {tCommon('currency')}

@@ -596,30 +596,7 @@ export async function adminExpireReservation(
         throw new Error('Failed to expire reservation');
     }
 
-    // Restore inventory (increment stock for each item)
-    const orderItems = currentOrder.order_items as Array<{ product_id: string; quantity: number }>;
-    for (const item of orderItems) {
-        const rpcResult = await supabase.rpc('increment_stock', {
-            product_id: item.product_id,
-            quantity: item.quantity,
-        });
-        
-        if (rpcResult.error) {
-            // Fallback: direct update if RPC doesn't exist
-            const { data: product } = await supabase
-                .from('products')
-                .select('stock_quantity')
-                .eq('id', item.product_id)
-                .single();
-            
-            if (product) {
-                await supabase
-                    .from('products')
-                    .update({ stock_quantity: product.stock_quantity + item.quantity })
-                    .eq('id', item.product_id);
-            }
-        }
-    }
+    await restoreOrderInventory(currentOrder.id);
 
     // Insert status history
     await supabase
@@ -675,30 +652,7 @@ export async function adminCancelReservation(
         throw new Error('Failed to cancel reservation');
     }
 
-    // Restore inventory (increment stock for each item)
-    const orderItems = currentOrder.order_items as Array<{ product_id: string; quantity: number }>;
-    for (const item of orderItems) {
-        const rpcResult = await supabase.rpc('increment_stock', {
-            product_id: item.product_id,
-            quantity: item.quantity,
-        });
-        
-        if (rpcResult.error) {
-            // Fallback: direct update if RPC doesn't exist
-            const { data: product } = await supabase
-                .from('products')
-                .select('stock_quantity')
-                .eq('id', item.product_id)
-                .single();
-            
-            if (product) {
-                await supabase
-                    .from('products')
-                    .update({ stock_quantity: product.stock_quantity + item.quantity })
-                    .eq('id', item.product_id);
-            }
-        }
-    }
+    await restoreOrderInventory(currentOrder.id);
 
     // Insert status history
     await supabase
@@ -718,57 +672,8 @@ export async function adminCancelReservation(
  */
 export async function restoreOrderInventory(orderId: string): Promise<void> {
     const supabase = createServiceClient();
-
-    // Get order items
-    const { data: orderItems, error: itemsError } = await supabase
-        .from('order_items')
-        .select('product_id, quantity')
-        .eq('order_id', orderId);
-
-    if (itemsError) {
-        console.error('Error fetching order items for inventory restoration:', itemsError);
-        throw new Error('Failed to fetch order items');
-    }
-
-    if (!orderItems || orderItems.length === 0) {
-        console.log(`No order items found for order ${orderId}, nothing to restore`);
-        return;
-    }
-
-    // Restore inventory for each item
-    for (const item of orderItems) {
-        // Try RPC function first (if it exists)
-        const rpcResult = await supabase.rpc('increment_stock', {
-            product_id: item.product_id,
-            quantity: item.quantity,
-        });
-
-        if (rpcResult.error) {
-            // Fallback: direct update if RPC doesn't exist
-            const { data: product, error: productError } = await supabase
-                .from('products')
-                .select('stock_quantity')
-                .eq('id', item.product_id)
-                .single();
-
-            if (productError || !product) {
-                console.error(`Error fetching product ${item.product_id} for inventory restoration:`, productError);
-                continue; // Skip this item but continue with others
-            }
-
-            const { error: updateError } = await supabase
-                .from('products')
-                .update({ stock_quantity: product.stock_quantity + item.quantity })
-                .eq('id', item.product_id);
-
-            if (updateError) {
-                console.error(`Error restoring inventory for product ${item.product_id}:`, updateError);
-                // Continue with other items
-            }
-        }
-    }
-
-    console.log(`Inventory restored for order ${orderId}`);
+    const { error } = await supabase.rpc('restore_order_inventory', { p_order_id: orderId });
+    if (error) throw new Error(`Failed to restore order inventory: ${error.message}`);
 }
 
 /**

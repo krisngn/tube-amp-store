@@ -50,6 +50,7 @@ interface ProductRow {
     id: string;
     slug: string;
     price: number;
+    variants?: import('@/lib/products/variants').ProductVariant[];
     compare_at_price?: number;
     stock_quantity: number;
     low_stock_threshold?: number;
@@ -67,6 +68,7 @@ interface ProductRow {
 }
 
 interface ProductDetailRow extends ProductRow {
+    variants?: import('@/lib/products/variants').ProductVariant[];
     sku?: string;
     taps?: string[];
     specifications?: ProductSpecs;
@@ -102,6 +104,7 @@ const CARD_SELECT = `
     id,
     slug,
     price,
+    variants,
     compare_at_price,
     stock_quantity,
     low_stock_threshold,
@@ -178,6 +181,7 @@ function mapCardRow(product: ProductRow, locale: string): ProductCardDTO {
         slug: product.slug,
         name: translation?.name || 'Untitled Product',
         priceVnd: product.price,
+        priceMaxVnd: product.variants?.length ? Math.max(...product.variants.map((v) => v.price)) : undefined,
         compareAtPriceVnd: product.compare_at_price || undefined,
         imageUrl: resolveCardImageUrl(product.product_images),
         topology: (product.topology as ProductCardDTO['topology']) ?? undefined,
@@ -409,6 +413,7 @@ export async function getProductBySlug(
         id,
         slug,
         sku,
+        variants,
         price,
         compare_at_price,
         stock_quantity,
@@ -580,6 +585,7 @@ export async function getProductBySlug(
             specs,
             taps: productData.taps || [],
 
+            variants: productData.variants ?? [],
             stockQuantity: productData.stock_quantity,
             lowStockThreshold: productData.low_stock_threshold ?? 0,
 

@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { validateVariants, variantSummary } from '@/lib/products/variants';
 import type { ProductDetailDTO } from '@/lib/types/catalog';
 import { flattenTree } from '@/lib/utils/categoryTree';
+import ProductVariantsEditor from './ProductVariantsEditor';
 import ProductImageManager from './ProductImageManager';
 import styles from './ProductForm.module.css';
 
@@ -82,6 +84,8 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
         shortDescriptionEn: '',
     });
 
+    const [variants, setVariants] = useState<import('@/lib/products/variants').ProductVariant[]>(product?.variants ?? []);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -135,11 +139,14 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
         setLoading(true);
 
         try {
+            const checkedVariants = validateVariants(variants);
+            const summary = variants.length ? variantSummary(checkedVariants) : formData;
             const payload = {
+                variants: checkedVariants,
                 slug: formData.slug.toLowerCase().replace(/\s+/g, '-'),
-                price: formData.price,
+                price: summary.price,
                 compareAtPrice: formData.compareAtPrice || undefined,
-                stockQuantity: formData.stockQuantity,
+                stockQuantity: summary.stockQuantity,
                 condition: formData.condition,
                 topology: formData.topology || undefined,
                 tubeType: formData.tubeType || undefined,
@@ -183,8 +190,8 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
 
             let response: Response;
             
-            // If creating new product and has images, use FormData
-            if (!isEdit && selectedImages.length > 0) {
+            // Creation API accepts multipart even when no images are selected.
+            if (!isEdit) {
                 const formDataToSend = new FormData();
                 formDataToSend.append('productData', JSON.stringify(payload));
                 
@@ -283,7 +290,8 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
                         <input
                             type="number"
                             className="input"
-                            value={formData.price}
+                            readOnly={variants.length > 0}
+                            value={variants.length ? Math.min(...variants.map((v) => v.price)) : formData.price}
                             onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
                             required
                             min="0"
@@ -304,7 +312,8 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
                         <input
                             type="number"
                             className="input"
-                            value={formData.stockQuantity}
+                            readOnly={variants.length > 0}
+                            value={variants.length ? variants.reduce((sum, v) => sum + v.stockQuantity, 0) : formData.stockQuantity}
                             onChange={(e) => setFormData({ ...formData, stockQuantity: Number(e.target.value) })}
                             required
                             min="0"
@@ -648,6 +657,8 @@ export default function ProductForm({ product, categories = [], brands = [] }: P
                     </div>
                 </div>
             </div>
+
+            <ProductVariantsEditor variants={variants} onChange={setVariants} />
 
             <div id="product-images-section" className={styles.formSection}>
                 <h2>{t('products.images.title')}</h2>

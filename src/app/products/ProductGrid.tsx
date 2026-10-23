@@ -63,6 +63,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
                         {/* Price */}
                         <p className="product-price text-xl font-semibold text-accent mb-2">
                             {product.priceVnd.toLocaleString()}{tCommon('currency')}
+                            {product.priceMaxVnd != null && product.priceMaxVnd > product.priceVnd && ` – ${product.priceMaxVnd.toLocaleString()}${tCommon('currency')}`}
                             {product.compareAtPriceVnd && (
                                 <span className="text-sm text-tertiary line-through ml-2">
                                     {product.compareAtPriceVnd.toLocaleString()}{tCommon('currency')}

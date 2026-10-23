@@ -71,3 +71,16 @@
     }
 }
 
+.variantPicker {
+    display: grid;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.variantPrice {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-block: var(--space-sm);
+}
+

@@ -1,3 +1,4 @@
+import { selectPurchaseOption } from '@/lib/products/variants';
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/service';
 import { sendOrderConfirmationEmail } from '@/lib/emails/service';
@@ -5,6 +6,7 @@ import { defaultLocale, type Locale } from '@/config/locales';
 import { generateTransferMemo } from '@/lib/vietqr/generator';
 
 interface OrderItemRequest {
+    variantId?: string;
     productId: string;
     quantity: number;
     requiresDeposit?: boolean;
@@ -60,6 +62,10 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (body.items.some((item) => !Number.isSafeInteger(item.quantity) || item.quantity <= 0)) {
+            return NextResponse.json({ error: 'Số lượng phải là số nguyên lớn hơn 0.' }, { status: 400 });
+        }
+
         // Use service client to bypass RLS for order creation
         // This is safe because we validate everything server-side
         const supabase = createServiceClient();
@@ -104,7 +110,7 @@ export async function POST(request: NextRequest) {
         const productIds = body.items.map((item) => item.productId);
         const { data: products, error: productsError } = await supabase
             .from('products')
-            .select('id, price, stock_quantity, allow_deposit, deposit_type, deposit_amount, deposit_percentage, deposit_due_hours, sku')
+            .select('id, is_published, variants, price, stock_quantity, allow_deposit, deposit_type, deposit_amount, deposit_percentage, deposit_due_hours, sku')
             .in('id', productIds);
 
         if (productsError || !products) {
@@ -121,6 +127,8 @@ export async function POST(request: NextRequest) {
         // Validate stock availability and build order items
         const orderItems: Array<{
             productId: string;
+            variantId?: string;
+            variantName?: string;
             productName: string;
             productSlug: string;
             productSku?: string;
@@ -152,6 +160,8 @@ export async function POST(request: NextRequest) {
         let depositDueHours = 24; // Default
         let hasDepositEligibleProducts = false; // Track if any products support deposits
 
+        const requestedQuantities = new Map<string, number>();
+
         // Fetch products to check deposit eligibility and calculate deposit (only if paymentMode === 'deposit')
         for (const item of body.items) {
             const product = products.find((p) => p.id === item.productId);
@@ -163,8 +173,16 @@ export async function POST(request: NextRequest) {
                 );
             }
 
-            // Validate stock
-            if (product.stock_quantity < item.quantity) {
+            if (!product.is_published) return NextResponse.json({ error: 'Sản phẩm chưa được xuất bản.' }, { status: 400 });
+            let option;
+            try { option = selectPurchaseOption(product, item.variantId); } catch (error) {
+                return NextResponse.json({ error: (error as Error).message }, { status: 400 });
+            }
+            const key = JSON.stringify([product.id, item.variantId ?? null]);
+            const requested = (requestedQuantities.get(key) ?? 0) + item.quantity;
+            requestedQuantities.set(key, requested);
+            // Aggregate duplicate cart lines before checking available stock.
+            if (option.stockQuantity < requested) {
                 return NextResponse.json(
                     { error: `Insufficient stock for product ${product.id}` },
                     { status: 400 }
@@ -231,11 +249,17 @@ export async function POST(request: NextRequest) {
                 }
             }
 
-            const unitPrice = Number(product.price);
+            const unitPrice = option.price;
+            const variantName = "name" in option ? option.name : undefined;
+            if (variantName) productName = `${productName} — ${variantName}`;
+            productSku = option.sku;
+            if ("imageUrl" in option && option.imageUrl) productImageUrl = option.imageUrl;
             const itemSubtotal = unitPrice * item.quantity;
 
             orderItems.push({
                 productId: product.id,
+                variantId: item.variantId,
+                variantName,
                 productName,
                 productSlug,
                 productSku,
@@ -268,7 +292,7 @@ export async function POST(request: NextRequest) {
                 if (product.deposit_type === 'percent' && product.deposit_percentage) {
                     itemDepositAmount = Math.round((unitPrice * product.deposit_percentage) / 100);
                 } else if (product.deposit_type === 'fixed' && product.deposit_amount) {
-                    itemDepositAmount = Number(product.deposit_amount);
+                    itemDepositAmount = Math.min(Number(product.deposit_amount), unitPrice);
                 } else {
                     return NextResponse.json(
                         { error: `Product ${product.id} has invalid deposit configuration` },
@@ -382,6 +406,8 @@ export async function POST(request: NextRequest) {
         const orderItemsData = orderItems.map((item) => ({
             order_id: order.id,
             product_id: item.productId,
+            variant_id: item.variantId ?? null,
+            variant_name: item.variantName ?? null,
             product_name: item.productName,
             product_slug: item.productSlug,
             product_sku: item.productSku,
@@ -399,13 +425,16 @@ export async function POST(request: NextRequest) {
             console.error('Error creating order items:', itemsError);
             // Try to clean up the order (best effort)
             await supabase.from('orders').delete().eq('id', order.id);
+            const availabilityChanged = /Insufficient|price changed|valid product variant|Product unavailable|Variant no longer exists/i.test(itemsError.message);
             return NextResponse.json(
                 {
-                    error: 'Failed to create order items',
+                    error: availabilityChanged
+                        ? 'Giá hoặc tồn kho đã thay đổi. Vui lòng tải lại sản phẩm và thử lại.'
+                        : 'Failed to create order items',
                     details: itemsError.message || 'Unknown error',
                     code: itemsError.code,
                 },
-                { status: 500 }
+                { status: availabilityChanged ? 409 : 500 }
             );
         }
 

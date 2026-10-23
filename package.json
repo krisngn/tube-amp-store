@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:variants": "node --test tests/product-variants.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
@@ -23,6 +24,7 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

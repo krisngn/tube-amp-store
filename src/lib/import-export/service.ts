@@ -1,3 +1,4 @@
+import { validateVariants, variantSummary } from '@/lib/products/variants';
 import { createServiceClient } from '@/lib/supabase/service';
 import { toCsv, csvToObjects, encodeSpecs, decodeSpecs } from './csv';
 import { COLUMNS, PRODUCT_COLUMNS, CATEGORY_COLUMNS, BRAND_COLUMNS, type Entity } from './columns';
@@ -128,6 +129,7 @@ async function exportCategories(): Promise<string> {
 }
 
 interface ProductExportRow {
+    variants?: import('@/lib/products/variants').ProductVariant[];
     slug: string;
     sku: string | null;
     price: number;
@@ -157,7 +159,7 @@ async function exportProducts(): Promise<string> {
     const { data } = await sb
         .from('products')
         .select(
-            `slug, sku, price, compare_at_price, stock_quantity, condition, topology, tube_type,
+            `slug, sku, variants, price, compare_at_price, stock_quantity, condition, topology, tube_type,
              power_watts, taps, min_speaker_sensitivity, weight_grams, length_cm, width_cm, height_cm,
              specifications, is_published, is_featured, is_vintage,
              category:categories(slug), brand:brands(slug),
@@ -171,6 +173,7 @@ async function exportProducts(): Promise<string> {
         return {
             slug: p.slug,
             sku: p.sku ?? '',
+            variants: JSON.stringify(p.variants ?? []),
             price: p.price,
             compare_at_price: p.compare_at_price ?? '',
             stock_quantity: p.stock_quantity,
@@ -374,6 +377,15 @@ async function importProducts(csvText: string): Promise<ImportResult> {
                 payload.condition = 'new';
             }
 
+            if (has('variants')) {
+                const variants = validateVariants(o.variants ? JSON.parse(o.variants) : []);
+                payload.variants = variants;
+                if (variants.length) {
+                    const summary = variantSummary(variants);
+                    payload.price = summary.price;
+                    payload.stock_quantity = summary.stockQuantity;
+                }
+            }
             if (has('sku')) payload.sku = o.sku || null;
             if (has('compare_at_price')) payload.compare_at_price = o.compare_at_price ? toMoney(o.compare_at_price) : null;
             if (has('stock_quantity')) payload.stock_quantity = toInt(o.stock_quantity, 0);
@@ -397,6 +409,12 @@ async function importProducts(csvText: string): Promise<ImportResult> {
             if (has('is_published')) payload.is_published = parseBool(o.is_published, false);
             if (has('is_featured')) payload.is_featured = parseBool(o.is_featured, false);
             if (has('is_vintage')) payload.is_vintage = parseBool(o.is_vintage, false);
+
+            if (Array.isArray(payload.variants) && payload.variants.length) {
+                const summary = variantSummary(validateVariants(payload.variants));
+                payload.price = summary.price;
+                payload.stock_quantity = summary.stockQuantity;
+            }
 
             const { data: prod, error } = await sb
                 .from('products')
