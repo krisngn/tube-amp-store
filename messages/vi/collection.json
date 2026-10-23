@@ -9,7 +9,8 @@
             "label": "Danh Mục"
         },
         "brand": {
-            "label": "Thương Hiệu"
+            "label": "Thương Hiệu",
+            "all": "Tất cả thương hiệu"
         },
         "topology": {
             "label": "Topology",

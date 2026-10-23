@@ -11,9 +11,10 @@ import styles from './CollectionFilters.module.css';
 interface CollectionFiltersProps {
     categories: CategoryDTO[];
     brands: BrandDTO[];
+    topologies: string[];
 }
 
-export default function CollectionFilters({ categories, brands }: CollectionFiltersProps) {
+export default function CollectionFilters({ categories, brands, topologies }: CollectionFiltersProps) {
     const t = useTranslations('collection');
     const router = useRouter();
     const pathname = usePathname();
@@ -67,7 +68,7 @@ export default function CollectionFilters({ categories, brands }: CollectionFilt
         </div>
     );
 
-    const FilterContent = () => (
+    const renderFilterContent = () => (
         <>
             {/* Header */}
             <div className={styles.filtersHeader}>
@@ -94,24 +95,17 @@ export default function CollectionFilters({ categories, brands }: CollectionFilt
             {brands.length > 0 && (
                 <div className={styles.filterGroup}>
                     <h4 className={styles.filterGroupLabel}>{t('filters.brand.label')}</h4>
-                    <div className={styles.filterGroupItems}>
-                        {brands.map((brand) => (
-                            <label key={brand.id} className={styles.checkboxLabel}>
-                                <input
-                                    type="checkbox"
-                                    checked={activeBrand === brand.slug}
-                                    onChange={(e) => updateFilters('brand', e.target.checked ? brand.slug : null)}
-                                />
-                                <span>{brand.name}</span>
-                            </label>
-                        ))}
-                    </div>
+                    <select className="input" aria-label={t('filters.brand.label')}
+                        value={activeBrand || ''} onChange={(e) => updateFilters('brand', e.target.value || null)}>
+                        <option value="">{t('filters.brand.all')}</option>
+                        {brands.map((brand) => <option key={brand.id} value={brand.slug}>{brand.name}</option>)}
+                    </select>
                     <div className={styles.divider}></div>
                 </div>
             )}
 
-            {/* Topology Filter */}
-            <div className={styles.filterGroup}>
+            {/* Topology only applies when published amplifiers provide this attribute. */}
+            {topologies.length > 0 && <div className={styles.filterGroup}>
                 <h4 className={styles.filterGroupLabel}>{t('filters.topology.label')}</h4>
                 <div className={styles.filterGroupItems}>
                     <label className={styles.checkboxLabel}>
@@ -132,7 +126,7 @@ export default function CollectionFilters({ categories, brands }: CollectionFilt
                     </label>
                 </div>
                 <div className={styles.divider}></div>
-            </div>
+            </div>}
 
             {/* Condition Filter */}
             <div className={styles.filterGroup}>
@@ -199,7 +193,7 @@ export default function CollectionFilters({ categories, brands }: CollectionFilt
 
             {/* ─── Desktop Sidebar ─── */}
             <aside className={styles.desktopSidebar}>
-                <FilterContent />
+                {renderFilterContent()}
             </aside>
 
             {/* ─── Mobile Overlay ─── */}
@@ -225,7 +219,7 @@ export default function CollectionFilters({ categories, brands }: CollectionFilt
                     </button>
                 </div>
                 <div className={styles.mobileDrawerContent}>
-                    <FilterContent />
+                    {renderFilterContent()}
                 </div>
                 <div className={styles.mobileDrawerFooter}>
                     <button

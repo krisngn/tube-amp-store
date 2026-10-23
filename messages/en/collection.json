@@ -9,7 +9,8 @@
             "label": "Category"
         },
         "brand": {
-            "label": "Brand"
+            "label": "Brand",
+            "all": "All brands"
         },
         "topology": {
             "label": "Topology",

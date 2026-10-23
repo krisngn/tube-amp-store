@@ -52,6 +52,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                     <CollectionFilters
                         categories={filterOptions?.categories || []}
                         brands={filterOptions?.brands || []}
+                        topologies={filterOptions?.topologies || []}
                     />
 
                     {/* Products Section */}
