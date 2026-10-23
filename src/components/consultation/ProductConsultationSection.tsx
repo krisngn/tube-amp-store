@@ -10,11 +10,27 @@ export default function ProductConsultationSection() {
     const [phone, setPhone] = useState('');
     const [message, setMessage] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!phone) return;
-        setSubmitted(true);
+        setLoading(true);
+        setError('');
+        try {
+            const res = await fetch('/api/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, message }),
+            });
+            if (!res.ok) throw new Error('Lỗi gửi tin nhắn');
+            setSubmitted(true);
+        } catch {
+            setError('Có lỗi xảy ra, vui lòng thử lại hoặc liên hệ qua Zalo.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -67,7 +83,7 @@ export default function ProductConsultationSection() {
                         <h3 className={styles.cardTitle}>{t('consultation.channels.facebook.title')}</h3>
                         <p className={styles.cardDesc}>{t('consultation.channels.facebook.desc')}</p>
                         <a
-                            href="https://m.me/vintageaudioaccessories"
+                            href="https://www.facebook.com/vintageaudioaccessories"
                             target="_blank"
                             rel="noopener noreferrer"
                             className={`btn btn-secondary ${styles.cardActionBtn}`}
@@ -127,15 +143,7 @@ export default function ProductConsultationSection() {
                             </div>
                         </div>
 
-                        <div className={styles.showroomDetail}>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                            </svg>
-                            <div>
-                                <strong>Dịch vụ tại chỗ:</strong>
-                                <div>Được đo kiểm bóng, test máy trên hệ thống loa tham chiếu, thưởng thức cà phê và giao lưu audio.</div>
-                            </div>
-                        </div>
+
                     </div>
 
                     <div className={styles.formWrapper}>
@@ -146,7 +154,7 @@ export default function ProductConsultationSection() {
                             <div className={styles.successBox}>
                                 ✓ {t('consultation.form.success')}
                                 <div style={{ marginTop: '8px', fontSize: '0.875rem' }}>
-                                    Số điện thoại đã nhận: <strong>{phone}</strong>
+                                    Chúng tôi sẽ liên hệ lại số <strong>{phone}</strong> trong thời gian sớm nhất.
                                 </div>
                             </div>
                         ) : (
@@ -175,8 +183,18 @@ export default function ProductConsultationSection() {
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                 />
-                                <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                                    {t('consultation.form.submit')}
+                                {error && (
+                                    <div style={{ color: 'var(--color-error, #f87171)', fontSize: '0.85rem', marginBottom: '8px' }}>
+                                        {error}
+                                    </div>
+                                )}
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary"
+                                    style={{ width: '100%', justifyContent: 'center' }}
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Đang gửi...' : t('consultation.form.submit')}
                                 </button>
                             </form>
                         )}

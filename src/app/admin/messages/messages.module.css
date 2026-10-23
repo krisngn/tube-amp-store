@@ -1,0 +1,99 @@
+.unreadBadge {
+    display: inline-block;
+    margin-top: 4px;
+    background: var(--color-accent-primary);
+    color: #0a0a0a;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.filterGroup {
+    display: flex;
+    gap: 4px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 4px;
+}
+
+.filterBtn {
+    background: none;
+    border: none;
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+}
+
+.filterBtn.active {
+    background: var(--color-accent-glow);
+    color: var(--color-accent-primary);
+    font-weight: 600;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 200px;
+    max-width: 360px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: 8px 14px;
+    color: var(--color-text-primary);
+    font-size: 0.875rem;
+    transition: border-color var(--transition-fast);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+}
+
+.unreadRow {
+    background: rgba(var(--color-accent-rgb, 200, 160, 100), 0.04);
+}
+
+.boldText {
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.phoneLink {
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.phoneLink:hover {
+    text-decoration: underline;
+}
+
+.messageCell {
+    max-width: 320px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.badgeUnread {
+    background: rgba(var(--color-accent-rgb, 200, 160, 100), 0.2);
+    color: var(--color-accent-primary);
+}

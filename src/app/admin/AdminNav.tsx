@@ -81,6 +81,12 @@ export default function AdminNav() {
                     >
                         {t('importExport.title')}
                     </Link>
+                    <Link
+                        href="/admin/messages"
+                        className={pathname?.includes('/admin/messages') ? styles.active : ''}
+                    >
+                        Lời Nhắn
+                    </Link>
                 </div>
 
                 <div className={styles.navActions}>
