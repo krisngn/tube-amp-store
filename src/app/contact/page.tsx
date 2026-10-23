@@ -96,8 +96,8 @@ export default function ContactPage() {
                                 </div>
                                 <div className={styles.itemContent}>
                                     <h4>Hòm Thư Điện Tử</h4>
-                                    <a href="mailto:hello@classictubeamps.vn" className={styles.itemLink}>
-                                        hello@classictubeamps.vn
+                                    <a href="mailto:thientan.3003.01@gmail.com" className={styles.itemLink}>
+                                        thientan.3003.01@gmail.com
                                     </a>
                                     <p>Tiếp nhận yêu cầu hợp tác, bảo hành và phản hồi dịch vụ</p>
                                 </div>
