@@ -20,14 +20,14 @@
     "nextSteps": {
         "title": "Next Steps",
         "cod": {
-            "step1": "We'll contact you to confirm within 24h",
-            "step2": "Pack and ship (2-3 days)",
+            "step1": "The store confirms availability, shipping fees and timing",
+            "step2": "Items are packed and dispatched as agreed",
             "step3": "Pay when you receive"
         },
         "bankTransfer": {
             "step1": "Transfer to the account below",
             "step2": "We confirm and pack (after receiving payment)",
-            "step3": "Ship to your address (2-3 days)",
+            "step3": "Delivery follows the confirmed address and schedule",
             "bankInfo": {
                 "title": "Bank Transfer Information",
                 "bank": "Bank",
@@ -47,7 +47,8 @@
         "total": "Total",
         "depositAmount": "Deposit Amount Due Now",
         "remainingBalance": "Remaining Balance",
-        "depositDue": "Deposit Due Now"
+        "depositDue": "Deposit Due Now",
+        "shippingNote": "Amounts shown cover items only. Contact the store to confirm delivery fees and timing."
     },
     "paymentMethods": {
         "cod": "Cash on Delivery (COD)",

@@ -1,7 +1,7 @@
 {
     "breadcrumb": {
         "home": "Trang chủ",
-        "collection": "Ampli Đèn"
+        "collection": "Sản Phẩm"
     },
     "availability": {
         "inStock": "Còn hàng",
@@ -33,9 +33,9 @@
         "outOfStock": "Hết Hàng"
     },
     "trust": {
-        "tested": "Đã kiểm tra nhiễu/hum",
-        "safeShipping": "Đóng gói bảo vệ chuyên nghiệp",
-        "warranty": "Bảo hành rõ ràng",
+        "tested": "Hỏi thông số & tình trạng",
+        "safeShipping": "Phí ship xác nhận theo địa chỉ",
+        "warranty": "Bảo hành theo từng sản phẩm",
         "setupSupport": "Hỗ trợ setup"
     },
     "matching": {
@@ -98,14 +98,17 @@
         "deadlineHours": "{hours} giờ",
         "reservationWindow": "Thời gian giữ: {days} ngày",
         "remainingPayment": "Thanh toán còn lại khi nhận hàng",
-        "cancellationPolicy": "Chính sách hủy: Hoàn cọc 100% nếu hủy trong 24h"
+        "cancellationPolicy": "Liên hệ cửa hàng để xác nhận điều kiện hủy và hoàn cọc trước khi đặt cọc."
     },
     "shipping": {
         "title": "Vận Chuyển & Bảo Hành",
         "warranty": "Bảo hành {months}",
         "returns": "Đổi trả trong {days}",
-        "freeShipping": "Miễn phí vận chuyển toàn quốc",
-        "packaging": "Đóng gói chuyên nghiệp, bảo vệ tối đa"
+        "packaging": "Trao đổi cách đóng gói phù hợp trước khi gửi hàng.",
+        "warrantyPending": "Liên hệ để xác nhận bảo hành cho sản phẩm này.",
+        "returnsPending": "Điều kiện và thời hạn đổi trả cần được xác nhận trước khi mua.",
+        "quote": "Phí vận chuyển và thời gian giao được báo theo địa chỉ nhận, chưa bao gồm trong giá sản phẩm.",
+        "policies": "Xem thông tin giao hàng, thanh toán & đổi trả"
     },
     "related": {
         "title": "Sản Phẩm Liên Quan",

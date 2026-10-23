@@ -138,7 +138,8 @@ export default function OrderTrackingResult({
                         <span>{t('order.subtotal')}</span>
                         <span>{formatCurrency(order.subtotal)} {tCommon('currency')}</span>
                     </div>
-                    {order.shippingFee > 0 && (
+                    {order.shippingFee === 0 && <p className="text-sm text-secondary">{t('order.shippingNote')}</p>}
+                            {order.shippingFee > 0 && (
                         <div className={styles.totalRow}>
                             <span>{t('order.shipping')}</span>
                             <span>{formatCurrency(order.shippingFee)} {tCommon('currency')}</span>

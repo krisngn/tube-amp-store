@@ -31,7 +31,8 @@
         "trackButton": "Theo Dõi Đơn Hàng",
         "trackNote": "Sử dụng liên kết này để theo dõi trạng thái đơn hàng bất cứ lúc nào.",
         "signInPrompt": "Đăng nhập để xem tất cả đơn hàng và theo dõi chúng dễ dàng.",
-        "signInButton": "Đăng Nhập"
+        "signInButton": "Đăng Nhập",
+        "shippingNote": "Tiền hàng chưa gồm phí vận chuyển; cửa hàng sẽ xác nhận phí ship và lịch giao với bạn trước khi gửi."
     },
     "statusUpdate": {
         "subject": "Đơn Hàng {orderCode} - Cập Nhật Trạng Thái: {status}",
@@ -124,4 +125,3 @@
         "footerBrand": "Vintage Audio Accessories"
     }
 }
-

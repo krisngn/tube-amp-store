@@ -187,6 +187,7 @@ export default async function TrackOrderDetailPage({ params, searchParams }: Tra
                                 <span>{t('order.subtotal')}</span>
                                 <span>{formatCurrency(order.subtotal)} {tCommon('currency')}</span>
                             </div>
+                            {order.shippingFee === 0 && <p className="text-sm text-secondary">{t('order.shippingNote')}</p>}
                             {order.shippingFee > 0 && (
                                 <div className={styles.totalRow}>
                                     <span>{t('order.shipping')}</span>

@@ -70,7 +70,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                             <>
                                 <ProductGrid products={result.items} />
                                 {result.totalPages > 1 && (
-                                    <Pagination currentPage={result.page} totalPages={result.totalPages} t={t} />
+                                    <Pagination currentPage={result.page} totalPages={result.totalPages} t={t} search={search} />
                                 )}
                             </>
                         )}
@@ -111,11 +111,20 @@ function EmptyState({ t }: { t: Awaited<ReturnType<typeof getTranslations<'colle
 }
 
 // Pagination Component
-function Pagination({ currentPage, totalPages, t }: { currentPage: number; totalPages: number; t: Awaited<ReturnType<typeof getTranslations<'collection'>>> }) {
+function Pagination({ currentPage, totalPages, t, search }: { currentPage: number; totalPages: number; t: Awaited<ReturnType<typeof getTranslations<'collection'>>>; search: Record<string, string | string[] | undefined> }) {
+    const pageHref = (page: number) => {
+        const params = new URLSearchParams();
+        for (const [key, value] of Object.entries(search)) {
+            if (key === 'page' || value === undefined) continue;
+            for (const entry of Array.isArray(value) ? value : [value]) params.append(key, entry);
+        }
+        params.set('page', String(page));
+        return `?${params.toString()}`;
+    };
     return (
         <div className="pagination flex justify-center items-center gap-2 mt-12">
             {currentPage > 1 && (
-                <Link href={`?page=${currentPage - 1}`} className="btn btn-ghost">
+                <Link href={pageHref(currentPage - 1)} className="btn btn-ghost">
                     {t('pagination.previous')}
                 </Link>
             )}
@@ -125,7 +134,7 @@ function Pagination({ currentPage, totalPages, t }: { currentPage: number; total
             </span>
 
             {currentPage < totalPages && (
-                <Link href={`?page=${currentPage + 1}`} className="btn btn-ghost">
+                <Link href={pageHref(currentPage + 1)} className="btn btn-ghost">
                     {t('pagination.next')}
                 </Link>
             )}

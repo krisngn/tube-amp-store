@@ -1,7 +1,7 @@
 {
     "storeInfo": {
         "title": "Vintage Audio Accessories",
-        "description": "Chuyên thiết bị & phụ kiện audio vintage cao cấp — ampli đèn tuyển chọn, loa, đầu đĩa và phụ kiện âm thanh đỉnh cao.",
+        "description": "Cửa hàng online chuyên bóng đèn điện tử, tụ điện và linh kiện audio. Hỗ trợ chọn sản phẩm theo nhu cầu và thông số thiết bị.",
         "phone": "0931 772 150",
         "email": "thientan.3003.01@gmail.com",
         "hours": "08:30 - 21:00 (Tất cả các ngày trong tuần)",
@@ -15,14 +15,14 @@
     },
     "links": {
         "allProducts": "Tất Cả Sản Phẩm",
-        "tubeAmplifiers": "Ampli Đèn Tuyển Chọn",
+        "tubeAmplifiers": "Bóng Đèn Điện Tử",
         "vintage": "Hàng Vintage Độc Bản",
         "newArrivals": "Hàng Mới Về",
         "guides": "Cẩm Nang Audio",
-        "service": "Quy Trình Kiểm Tra Kỹ Thuật",
+        "service": "Hướng Dẫn Mua Hàng",
         "reviews": "Đánh Giá & Setup Khách Hàng",
         "contact": "Liên Hệ & Lời Nhắn",
-        "shipping": "Vận Chuyển Chống Sốc",
+        "shipping": "Phí Ship & Giao Hàng",
         "warranty": "Chính Sách Bảo Hành",
         "returns": "Chính Sách Đổi Trả",
         "payment": "Thanh Toán & Đặt Cọc",
@@ -37,11 +37,11 @@
         "consultNow": "Nhận Tư Vấn Sản Phẩm"
     },
     "trust": {
-        "title": "Cam Kết Chất Lượng Vượt Trội",
-        "tested": "Kiểm tra đo nhiễu/hum và test tải trước khi giao",
-        "packaging": "Đóng gói bọc lót chống sốc chuyên dụng cho đèn",
-        "support": "Tư vấn tận tâm, hướng dẫn setup từ xa",
-        "warranty": "Bảo hành minh bạch, hỗ trợ kỹ thuật trọn đời"
+        "title": "Thông Tin Mua Hàng Online",
+        "tested": "Xem thông số và tình trạng theo từng sản phẩm",
+        "packaging": "Xác nhận phí ship và lịch giao trước khi gửi",
+        "support": "Hỗ trợ qua Zalo, Messenger và điện thoại",
+        "warranty": "Bảo hành và đổi trả theo điều kiện được xác nhận"
     },
     "copyright": "© 2026 Vintage Audio Accessories. Tất cả quyền được bảo lưu."
 }

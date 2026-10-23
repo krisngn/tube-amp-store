@@ -16,7 +16,7 @@ export const metadata: Metadata = {
         template: '%s | Vintage Audio Accessories',
     },
     description:
-        'Phụ kiện audio vintage cao cấp — ampli đèn, loa, đầu đĩa và hơn thế nữa. Premium vintage audio accessories.',
+        'Bóng đèn điện tử, tụ điện và linh kiện audio. Mua hàng online, chọn đúng thông số và phân loại. Vacuum tubes and audio components.',
     openGraph: {
         siteName: 'Vintage Audio Accessories',
         type: 'website',

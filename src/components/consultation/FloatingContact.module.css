@@ -1,102 +1,28 @@
 .floatingContainer {
     position: fixed;
     right: 20px;
-    bottom: 24px;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 40;
 }
-
-.floatingButton {
+.contactButton {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 10px 16px;
+    min-height: 48px;
+    padding: 12px 20px;
     border-radius: 999px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-decoration: none;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-    transition: all var(--transition-base);
-    border: none;
-    cursor: pointer;
-}
-
-.floatingButton:hover {
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-}
-
-.zaloBtn {
-    background: #0068ff;
-    color: #ffffff;
-    box-shadow: 0 4px 16px rgba(0, 104, 255, 0.4);
-}
-
-.phoneBtn {
-    background: linear-gradient(135deg, var(--color-accent-primary), #9a7245);
-    color: #0a0a0a;
-    box-shadow: 0 4px 16px var(--color-accent-glow);
-}
-
-.consultBtn {
+    border: 1px solid var(--color-accent-primary);
     background: var(--color-bg-secondary);
     color: var(--color-accent-primary);
-    border: 1px solid var(--color-accent-primary);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
 }
-
-.btnText {
-    white-space: nowrap;
-}
-
-.pulseRing {
-    position: relative;
-}
-
-.pulseRing::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 999px;
-    border: 2px solid var(--color-accent-primary);
-    animation: pulse 2s infinite;
-    opacity: 0.8;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(0.95);
-        opacity: 0.8;
-    }
-    70% {
-        transform: scale(1.15);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1.15);
-        opacity: 0;
-    }
-}
-
+.contactButton:hover { background: var(--color-bg-tertiary); }
+.contactButton:focus-visible { outline: 2px solid var(--color-accent-bright); outline-offset: 4px; }
 @media (max-width: 640px) {
-    .floatingContainer {
-        right: 12px;
-        bottom: 16px;
-        gap: 8px;
-    }
-
-    .btnText {
-        display: none;
-    }
-
-    .floatingButton {
-        width: 46px;
-        height: 46px;
-        padding: 0;
-        justify-content: center;
-        border-radius: 50%;
-    }
+    .floatingContainer { right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); }
+    .contactButton { min-height: 44px; padding: 10px 14px; }
 }

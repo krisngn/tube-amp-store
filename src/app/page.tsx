@@ -23,7 +23,7 @@ export default async function HomePage() {
         featuredItems = newest.items;
     }
 
-    const topCategories = categories.slice(0, 4);
+    const topCategories = categories.filter((category) => !category.parentId).slice(0, 4);
 
     return (
         <div className={styles.homePage}>
@@ -53,7 +53,7 @@ export default async function HomePage() {
                 <section className={styles.section}>
                     <div className="container">
                         <h2 className={styles.sectionTitle}>{t('quickEntry.title')}</h2>
-                        <div className="grid grid-4">
+                        <div className={styles.categoryGrid}>
                             {topCategories.map((cat) => (
                                 <Link
                                     key={cat.id}
@@ -86,6 +86,20 @@ export default async function HomePage() {
                 </section>
             )}
 
+            <section className={styles.section}>
+                <div className="container">
+                    <h2 className={styles.sectionTitle}>{t('buying.title')}</h2>
+                    <div className="grid grid-3">
+                        {(t.raw('buying.steps') as Array<{ title: string; text: string }>).map((step) => (
+                            <div key={step.title} className="card p-6"><h3>{step.title}</h3><p className="text-secondary">{step.text}</p></div>
+                        ))}
+                    </div>
+                    <div className={styles.heroCta} style={{ marginTop: 'var(--space-xl)' }}>
+                        <Link href="/policies/shipping" className="btn btn-secondary">{t('buying.policies')}</Link>
+                        <Link href="/contact" className="btn btn-secondary">{t('buying.contact')}</Link>
+                    </div>
+                </div>
+            </section>
             {/* Product Consultation Section */}
             <ProductConsultationSection />
 

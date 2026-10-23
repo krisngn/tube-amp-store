@@ -79,7 +79,10 @@
         "depositAmount": "Deposit Amount Due Now",
         "remainingBalance": "Remaining Balance",
         "depositDueNow": "(deposit due now)",
-        "payOnDelivery": "Pay on Delivery"
+        "payOnDelivery": "Pay on Delivery",
+        "shippingNote": "Quoted before dispatch",
+        "buyingNote": "Amounts shown cover items only, excluding delivery. Confirm shipping fees, timing and warranty/returns with the store before payment.",
+        "policies": "Buying information"
     },
     "deposit": {
         "title": "Deposit Reservation",

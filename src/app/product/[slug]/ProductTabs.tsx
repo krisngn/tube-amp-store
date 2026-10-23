@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { ProductDetailDTO } from '@/lib/types/catalog';
-import { formatWarranty, formatReturnPeriod } from '@/lib/utils/formatters';
+import Link from 'next/link';
 import styles from './ProductTabs.module.css';
 
 interface ProductTabsProps {
@@ -11,7 +11,7 @@ interface ProductTabsProps {
     locale: string;
 }
 
-export default function ProductTabs({ product, locale }: ProductTabsProps) {
+export default function ProductTabs({ product }: ProductTabsProps) {
     const t = useTranslations('product');
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -47,7 +47,7 @@ export default function ProductTabs({ product, locale }: ProductTabsProps) {
                 {activeTab === 'sound' && <SoundTab product={product} />}
                 {activeTab === 'matching' && <MatchingTab product={product} />}
                 {activeTab === 'condition' && <ConditionTab product={product} />}
-                {activeTab === 'shipping' && <ShippingTab product={product} locale={locale} />}
+                {activeTab === 'shipping' && <ShippingTab />}
                 {activeTab === 'reviews' && <ReviewsTab />}
             </div>
         </div>
@@ -221,37 +221,34 @@ function ConditionTab({ product }: { product: ProductDetailDTO }) {
 }
 
 // Shipping Tab
-function ShippingTab({ product, locale }: { product: ProductDetailDTO; locale: string }) {
+function ShippingTab() {
     const t = useTranslations('product');
 
-    // Default warranty and return periods (since they're not in the database)
-    const defaultWarrantyMonths = product.condition === 'new' ? 12 : product.condition === 'like_new' ? 6 : 0;
-    const defaultReturnDays = product.condition === 'vintage' ? 7 : 14;
 
     return (
         <div>
-            <h3 className="mb-4">{t('shipping.title')}</h3>
+            <h3 className="mb-4">{t('shipping.title')}</h3><Link href="/policies/shipping" className="btn btn-secondary mb-4">{t('shipping.policies')}</Link>
 
             <div className={styles.shippingInfo}>
                 <div className={styles.infoItem}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" />
                     </svg>
-                    <span>{t('shipping.warranty', { months: formatWarranty(product.warrantyMonths || defaultWarrantyMonths, locale) })}</span>
+                    <span>{t('shipping.warrantyPending')}</span>
                 </div>
 
                 <div className={styles.infoItem}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" strokeWidth="2" />
                     </svg>
-                    <span>{t('shipping.returns', { days: formatReturnPeriod(product.returnDays || defaultReturnDays, locale) })}</span>
+                    <span>{t('shipping.returnsPending')}</span>
                 </div>
 
                 <div className={styles.infoItem}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke="currentColor" strokeWidth="2" />
                     </svg>
-                    <span>{t('shipping.freeShipping')}</span>
+                    <span>{t('shipping.quote')}</span>
                 </div>
 
                 <div className={styles.infoItem}>

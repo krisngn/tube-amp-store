@@ -21,8 +21,8 @@
         "title": "Order Summary",
         "subtotal": "Subtotal",
         "shipping": "Shipping",
-        "shippingNote": "Calculated at checkout",
-        "total": "Total",
+        "shippingNote": "Quoted by the store for your address",
+        "total": "Items total (shipping excluded)",
         "checkout": "Checkout"
     },
     "notes": {

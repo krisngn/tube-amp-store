@@ -491,6 +491,7 @@ export default function CheckoutPage() {
                             </div>
                         </div>
 
+                        <p className="text-sm text-secondary">{t('orderSummary.buyingNote')} <Link href="/policies/shipping">{t('orderSummary.policies')}</Link></p>
                         {cancelledMessage && (
                             <div className={`${styles.errorBanner} card`} style={{ backgroundColor: '#fff8f0', borderLeft: '4px solid #d4a574' }}>
                                 <p>{cancelledMessage}</p>
@@ -535,6 +536,7 @@ export default function CheckoutPage() {
                             <span>{t('orderSummary.subtotal')}</span>
                             <span>{subtotal.toLocaleString('vi-VN')} {tCommon('currency')}</span>
                         </div>
+                        <div className={styles.summaryRow}><span>{t('orderSummary.shipping')}</span><span>{t('orderSummary.shippingNote')}</span></div>
                         {formData.paymentMode === 'deposit' && (
                             <>
                                 <div className={styles.summaryRow}>

@@ -54,7 +54,8 @@
         "paymentStatus": "Payment Status",
         "paymentMethod": "Payment Method",
         "paymentCod": "Cash on Delivery (COD)",
-        "paymentBank": "Bank Transfer"
+        "paymentBank": "Bank Transfer",
+        "shippingNote": "Contact the store to confirm delivery fees and timing; displayed amounts exclude shipping."
     },
     "status": {
         "pending": "Pending",
@@ -148,4 +149,3 @@
         "error": "Failed to save order. Please try again."
     }
 }
-

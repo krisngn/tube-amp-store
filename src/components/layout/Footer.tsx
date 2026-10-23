@@ -14,7 +14,7 @@ export default function Footer() {
 
     const shopLinks = [
         { href: '/products', label: t('links.allProducts') },
-        { href: '/tube-amplifiers', label: t('links.tubeAmplifiers') },
+        { href: '/products?category=bong-den-dien-tu', label: t('links.tubeAmplifiers') },
         { href: '/products?condition=vintage', label: t('links.vintage') },
         { href: '/products?sort=newest', label: t('links.newArrivals') },
     ];

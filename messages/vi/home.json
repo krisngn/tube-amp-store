@@ -1,7 +1,7 @@
 {
     "hero": {
-        "title": "Âm Thanh Vintage Đích Thực",
-        "subtitle": "Phụ kiện audio vintage cao cấp cho người yêu nhạc chân chính — ampli đèn, loa, đầu đĩa và hơn thế nữa.",
+        "title": "Bóng Đèn & Linh Kiện Audio",
+        "subtitle": "Khám phá bóng đèn điện tử, tụ điện và phụ kiện cho hệ thống âm thanh của bạn. Chọn đúng thông số, phân loại và số lượng — đặt hàng online, liên hệ khi cần hỗ trợ.",
         "cta": {
             "browse": "Khám Phá Sản Phẩm",
             "matching": "Tư Vấn Sản Phẩm"
@@ -36,20 +36,20 @@
         }
     },
     "consultation": {
-        "badge": "Hỗ Trợ 1-1 Cùng Chuyên Viên",
+        "badge": "Hỗ trợ mua hàng online",
         "title": "Tư Vấn Sản Phẩm Âm Thanh",
         "subtitle": "Cửa hàng bán online. Nhắn tin để được hỗ trợ chọn sản phẩm, thông số và đơn hàng.",
         "channels": {
             "zalo": {
-                "tag": "Phản hồi nhanh nhất",
+                "tag": "Trao đổi qua Zalo",
                 "title": "Nhắn Tin Qua Zalo",
-                "desc": "Gửi thông tin loa, không gian phòng hoặc model cần tư vấn để nhận phản hồi và video test tức thì.",
+                "desc": "Gửi mã linh kiện, thông số hoặc sản phẩm bạn quan tâm để trao đổi với cửa hàng.",
                 "action": "Chat Zalo: 0931 772 150"
             },
             "facebook": {
-                "tag": "Tư vấn & Video demo",
+                "tag": "Thông tin sản phẩm",
                 "title": "Facebook Messenger",
-                "desc": "Trao đổi trực tiếp qua Messenger, xem hình ảnh chi tiết và các góc quay thực tế của thiết bị.",
+                "desc": "Hỏi thêm về thông số, phân loại, hình ảnh và tình trạng sản phẩm qua Messenger.",
                 "action": "Nhắn Tin Messenger"
             },
             "showroom": {
@@ -88,37 +88,56 @@
         "title": "Tại Sao Chọn Chúng Tôi",
         "badges": {
             "tested": {
-                "title": "Kiểm Tra Kỹ Lưỡng",
-                "description": "Đo nhiễu/hum, kiểm tra toàn bộ chức năng"
+                "title": "Thông Tin Từng Sản Phẩm",
+                "description": "Xem mô tả, hình ảnh và thông số trước khi chọn mua."
             },
             "packaging": {
-                "title": "Đóng Gói An Toàn",
-                "description": "Bảo vệ chuyên nghiệp, vận chuyển an tâm"
+                "title": "Hỗ Trợ Giao Hàng",
+                "description": "Liên hệ để xác nhận cách đóng gói, phí ship và lịch giao."
             },
             "warranty": {
-                "title": "Bảo Hành Rõ Ràng",
-                "description": "Chính sách minh bạch, hỗ trợ tận tâm"
+                "title": "Điều Kiện Rõ Ràng",
+                "description": "Xác nhận bảo hành và đổi trả cho từng sản phẩm trước khi thanh toán."
             },
             "vintage": {
-                "title": "Vintage Kiểm Định",
-                "description": "Checklist chi tiết, nguồn gốc rõ ràng"
+                "title": "Bóng Đèn & Linh Kiện",
+                "description": "Lựa chọn theo mã bóng, trị số và yêu cầu mạch của bạn."
             },
             "setup": {
-                "title": "Hỗ Trợ Setup",
-                "description": "Hướng dẫn lắp đặt, sử dụng an toàn"
+                "title": "Tư Vấn Từ Xa",
+                "description": "Gửi mã linh kiện và thông tin thiết bị để được hỗ trợ."
             },
             "consultation": {
-                "title": "Tư Vấn Tận Tâm",
-                "description": "Hỗ trợ chọn thiết bị phù hợp gu nghe và không gian của bạn"
+                "title": "Chọn Đúng Phân Loại",
+                "description": "Kiểm tra giá và số lượng của từng lựa chọn trước khi thêm giỏ."
             }
         }
     },
     "customerSetups": {
-        "title": "Hệ Thống Khách Hàng",
-        "subtitle": "Những setup đẹp từ cộng đồng yêu nhạc"
+        "title": "Góc Audio",
+        "subtitle": "Một số hình ảnh thiết bị và linh kiện audio để tham khảo."
     },
     "guidesPreview": {
         "title": "Hướng Dẫn Cho Người Mới",
         "viewAll": "Xem Tất Cả Hướng Dẫn"
+    },
+    "buying": {
+        "title": "Mua Hàng Online Như Thế Nào?",
+        "steps": [
+            {
+                "title": "1. Chọn sản phẩm",
+                "text": "Kiểm tra mã linh kiện, trị số, tình trạng và phân loại. Giá hiển thị theo lựa chọn của bạn."
+            },
+            {
+                "title": "2. Xác nhận đơn & phí ship",
+                "text": "Cửa hàng liên hệ để xác nhận hàng, phí vận chuyển và lịch giao theo địa chỉ nhận."
+            },
+            {
+                "title": "3. Thanh toán & nhận hàng",
+                "text": "Chọn phương thức có trên trang thanh toán. Xác nhận điều kiện bảo hành, đổi trả trước khi trả tiền."
+            }
+        ],
+        "policies": "Xem thông tin mua hàng",
+        "contact": "Hỏi cửa hàng"
     }
 }

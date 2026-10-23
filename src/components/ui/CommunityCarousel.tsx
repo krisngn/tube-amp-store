@@ -19,22 +19,22 @@ const slides: SlideItem[] = [
     {
         src: '/images/community/setup-tubes-6p3s.jpg',
         caption: 'Bộ 4 đèn 6P3S NOS',
-        desc: 'Quartet matched 6P3S vintage Soviet, niên đại 1956 — âm bass căng, trung ấm',
+        desc: 'Hình ảnh tham khảo một bộ bóng đèn 6P3S',
     },
     {
         src: '/images/community/setup-jbl-sa600.jpg',
         caption: 'JBL SA600 Solid State',
-        desc: 'Ampli James B. Lansing SA600 phục hồi hoàn hảo, vỏ gỗ óc chó nguyên bản',
+        desc: 'Hình ảnh tham khảo ampli JBL SA600',
     },
     {
         src: '/images/community/setup-western-electric-300b.jpg',
         caption: 'Western Electric 300B Pair',
-        desc: 'Cặp đèn 300B Western Electric Made in USA — hàng thánh của giới audiophile',
+        desc: 'Hình ảnh tham khảo cặp bóng đèn 300B Western Electric',
     },
     {
         src: '/images/community/setup-lansing-drivers.jpg',
         caption: 'Lansing Driver Collection',
-        desc: 'Bộ sưu tập driver Altec Lansing Model 17, hiếm có tại Việt Nam',
+        desc: 'Hình ảnh tham khảo bộ sưu tập driver Lansing',
     },
 ];
 

@@ -1,7 +1,7 @@
 {
     "breadcrumb": {
         "home": "Home",
-        "collection": "Tube Amplifiers"
+        "collection": "Products"
     },
     "availability": {
         "inStock": "In Stock",
@@ -33,9 +33,9 @@
         "outOfStock": "Out of Stock"
     },
     "trust": {
-        "tested": "Noise/hum tested",
-        "safeShipping": "Professional protective packaging",
-        "warranty": "Clear warranty",
+        "tested": "Ask about specs & condition",
+        "safeShipping": "Shipping quoted for your address",
+        "warranty": "Warranty varies by product",
         "setupSupport": "Setup support"
     },
     "matching": {
@@ -98,14 +98,17 @@
         "deadlineHours": "{hours} hours",
         "reservationWindow": "Reservation period: {days} days",
         "remainingPayment": "Pay remaining on delivery",
-        "cancellationPolicy": "Cancellation: 100% refund if cancelled within 24h"
+        "cancellationPolicy": "Confirm cancellation and deposit refund terms with the store before reserving."
     },
     "shipping": {
         "title": "Shipping & Warranty",
         "warranty": "Warranty {months}",
         "returns": "Returns within {days}",
-        "freeShipping": "Free nationwide shipping",
-        "packaging": "Professional packaging, maximum protection"
+        "packaging": "Discuss suitable packaging before dispatch.",
+        "warrantyPending": "Contact us to confirm warranty terms for this item.",
+        "returnsPending": "Confirm return conditions and time limits before buying.",
+        "quote": "Shipping fees and delivery timing are quoted for your address and are not included in the product price.",
+        "policies": "Read shipping, payment & return information"
     },
     "related": {
         "title": "Related Products",

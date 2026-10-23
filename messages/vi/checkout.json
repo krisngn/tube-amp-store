@@ -79,7 +79,10 @@
         "depositAmount": "Số Tiền Cọc Phải Trả",
         "remainingBalance": "Số Tiền Còn Lại",
         "depositDueNow": "(cọc phải trả ngay)",
-        "payOnDelivery": "Thanh toán khi nhận hàng"
+        "payOnDelivery": "Thanh toán khi nhận hàng",
+        "shippingNote": "Báo phí trước khi gửi hàng",
+        "buyingNote": "Giá trên là tiền hàng, chưa gồm vận chuyển. Vui lòng xác nhận phí ship, lịch giao và điều kiện bảo hành/đổi trả với cửa hàng trước khi thanh toán.",
+        "policies": "Thông tin mua hàng"
     },
     "deposit": {
         "title": "Đặt Cọc Giữ Hàng",

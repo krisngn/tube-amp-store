@@ -29,7 +29,8 @@
         "footerBrand": "Vintage Audio Accessories",
         "trackOrder": "Track Your Order",
         "trackButton": "Track Order",
-        "trackNote": "Use this link to track your order status anytime."
+        "trackNote": "Use this link to track your order status anytime.",
+        "shippingNote": "Item amounts exclude shipping; the store will confirm delivery fees and timing before dispatch."
     },
     "statusUpdate": {
         "subject": "Order {orderCode} - Status Update: {status}",
@@ -122,4 +123,3 @@
         "footerBrand": "Vintage Audio Accessories"
     }
 }
-

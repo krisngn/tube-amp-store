@@ -5,89 +5,85 @@
     "lastUpdated": "Cập nhật lần cuối: 2026",
     "contactSupport": "Bạn có thắc mắc về chính sách? Liên hệ Hotline / Zalo 0931 772 150 để được giải đáp trực tiếp.",
     "shipping": {
-        "title": "Chính Sách Vận Chuyển Chống Sốc",
-        "badge": "Vận chuyển an toàn",
-        "content": "Quy trình đóng gói gia cố đa lớp chuyên dụng cho ampli đèn và thiết bị âm thanh giá trị cao.",
+        "title": "Phí Vận Chuyển & Giao Hàng",
+        "badge": "Xác nhận theo đơn hàng",
+        "content": "Cửa hàng bán online. Phí vận chuyển và lịch giao được xác nhận theo sản phẩm và địa chỉ nhận.",
         "details": [
             {
-                "heading": "1. Đóng gói chuyên dụng cho ampli đèn & bóng đèn",
-                "text": "Tất cả ampli đèn đều được tháo rời bóng (đánh số thứ tự vị trí cắm), bọc xốp bóng khí (bubble wrap) riêng từng bóng và xếp vào hộp chống sốc chuyên dụng. Thân máy được chèn xốp foam mật độ cao 6 mặt và đóng thùng carton 5 lớp gia cố nẹp góc cứng cáp."
+                "heading": "1. Phí vận chuyển",
+                "text": "Giá sản phẩm trên website chưa bao gồm phí vận chuyển. Hãy gửi địa chỉ nhận hàng để cửa hàng báo phí; phí được xác nhận với bạn trước khi gửi hàng."
             },
             {
-                "heading": "2. Phạm vi giao hàng & Đơn vị vận chuyển",
-                "text": "Chúng tôi giao hàng toàn quốc qua Viettel Post / VNPost có bảo hiểm 100% giá trị hàng hóa. Tại TP.HCM (đặc biệt khu vực TP. Thủ Đức, Quận 9 cũ), chúng tôi hỗ trợ giao trực tiếp và hỗ trợ cắm rút, kiểm tra tại nhà nếu khách hàng có yêu cầu."
+                "heading": "2. Thời gian giao hàng",
+                "text": "Lịch gửi và thời gian nhận dự kiến phụ thuộc địa chỉ, hàng có sẵn và đơn vị vận chuyển. Cửa hàng sẽ trao đổi khi xác nhận đơn; website không cam kết một thời gian giao cố định."
             },
             {
-                "heading": "3. Thời gian nhận hàng",
-                "text": "Nội thành TP.HCM: Giao nhanh trong 2 - 4 giờ hoặc trong ngày. Các tỉnh thành khác: Từ 2 - 4 ngày làm việc. Quý khách nhận được mã vận đơn (tracking code) để tra cứu hành trình trực tiếp trên website."
-            },
-            {
-                "heading": "4. Kiểm tra hàng trước khi nhận (Đồng kiểm)",
-                "text": "Quý khách được quyền mở kiện hàng kiểm tra ngoại quan máy và số lượng bóng đèn cùng phụ kiện đi kèm trước khi ký nhận với shipper."
+                "heading": "3. Đóng gói và nhận hàng",
+                "text": "Trao đổi với cửa hàng về cách đóng gói và việc kiểm tra kiện hàng trước khi gửi. Khi nhận, kiểm tra tình trạng bao bì, lưu ảnh/video nếu có bất thường và liên hệ kèm mã đơn để được hỗ trợ."
             }
         ]
     },
     "warranty": {
-        "title": "Chính Sách Bảo Hành",
-        "badge": "Bảo hành minh bạch",
-        "content": "Chế độ bảo hành rõ ràng, hỗ trợ kỹ thuật lâu dài cho cả máy mới và vintage.",
+        "title": "Thông Tin Bảo Hành",
+        "badge": "Theo từng sản phẩm",
+        "content": "Không áp dụng một thời hạn bảo hành mặc định cho mọi bóng đèn và linh kiện.",
         "details": [
             {
-                "heading": "1. Thời gian bảo hành",
-                "text": "• Sản phẩm mới: Bảo hành 12 tháng thân máy, 03 tháng đối với bóng đèn đi kèm.\n• Sản phẩm Like New / Vintage: Bảo hành 06 tháng thân máy, 01 tháng đối với bóng đèn đi kèm.\n• Sau thời hạn bảo hành: Hỗ trợ cân chỉnh bias, kiểm tra đo bóng và sửa chữa tính phí ưu đãi trọn đời."
+                "heading": "1. Xác nhận trước khi mua",
+                "text": "Hãy hỏi cửa hàng về thời hạn, phạm vi và điều kiện bảo hành cho đúng sản phẩm, phân loại và tình trạng hàng. Chỉ áp dụng các điều kiện được xác nhận trong thông tin sản phẩm hoặc khi chốt đơn."
             },
             {
-                "heading": "2. Điều kiện bảo hành",
-                "text": "Sản phẩm còn nguyên tem bảo hành của cửa hàng, tem niêm phong ốc máy không bị rách rời, không có dấu hiệu can thiệp mạch điện từ bên thứ ba chưa được sự đồng ý của kỹ thuật viên chúng tôi."
+                "heading": "2. Khi cần hỗ trợ",
+                "text": "Gửi mã đơn hàng, tên sản phẩm, mô tả vấn đề và ảnh/video liên quan qua Zalo hoặc form liên hệ. Cửa hàng sẽ xem thông tin và trao đổi phương án xử lý phù hợp."
             },
             {
-                "heading": "3. Trường hợp không được bảo hành miễn phí",
-                "text": "Rơi vỡ, nứt mẻ, vào nước, chập cháy do cắm nhầm điện áp (VD: cắm điện 220V vào máy nội địa Nhật/Mỹ 100V-115V mà không qua biến áp), thiên tai, sét đánh hoặc sử dụng sai trở kháng loa trong thời gian dài gây đứt biến áp xuất âm (OPT)."
+                "heading": "3. Trước khi gửi lại hàng",
+                "text": "Liên hệ để xác nhận địa chỉ, cách đóng gói và chi phí gửi/nhận nếu có. Không tự gửi đến địa chỉ chưa được cửa hàng xác nhận."
             }
         ]
     },
     "returns": {
-        "title": "Chính Sách Đổi Trả",
-        "badge": "7 - 14 Ngày đổi trả",
-        "content": "Quy trình đổi trả rõ ràng giúp bạn an tâm tuyệt đối khi phối ghép tại nhà.",
+        "title": "Thông Tin Đổi Trả",
+        "badge": "Trao đổi trước khi mua",
+        "content": "Điều kiện đổi trả phụ thuộc từng sản phẩm và thỏa thuận được xác nhận với cửa hàng.",
         "details": [
             {
-                "heading": "1. Thời hạn đổi trả",
-                "text": "• 07 ngày đầu: Đổi trả miễn phí 1-1 nếu sản phẩm phát sinh lỗi kỹ thuật (nhiễu hum bất thường, mất kênh, sụt áp) mà kỹ thuật viên không thể khắc phục tại chỗ.\n• Khách hàng có nhu cầu nâng cấp lên model cao hơn: Hỗ trợ bù chênh lệch trong 14 ngày đầu với mức phí ưu đãi tối đa."
+                "heading": "1. Điều kiện và thời hạn",
+                "text": "Xác nhận với cửa hàng trước khi mua về các trường hợp được đổi trả, thời hạn thông báo, tình trạng hàng khi gửi lại và phí vận chuyển liên quan. Website không tự áp dụng mặc định 7 hoặc 14 ngày cho mọi sản phẩm."
             },
             {
-                "heading": "2. Điều kiện sản phẩm đổi trả",
-                "text": "Thiết bị giữ nguyên hiện trạng như khi bàn giao, đầy đủ thùng xốp, tài liệu và các phụ kiện đi kèm (dây nguồn, bóng đèn, nắp chụp nếu có)."
+                "heading": "2. Báo vấn đề của đơn hàng",
+                "text": "Nếu nhận sai hàng, thiếu hàng hoặc nghi ngờ hư hỏng, hãy giữ bao bì và liên hệ kèm mã đơn, ảnh/video để cửa hàng kiểm tra. Trao đổi phương án xử lý trước khi gửi lại."
             },
             {
-                "heading": "3. Quy trình hoàn tiền",
-                "text": "Ngay sau khi nhận lại sản phẩm và kiểm tra kỹ thuật hoàn tất (trong vòng 24 - 48h), chúng tôi sẽ hoàn trả 100% số tiền qua số tài khoản ngân hàng của quý khách."
+                "heading": "3. Hoàn tiền nếu được xác nhận",
+                "text": "Sau khi hai bên thống nhất phương án đổi trả, cửa hàng sẽ xác nhận số tiền, phương thức và thời gian xử lý cụ thể. Không có cam kết hoàn tiền tự động trong một thời gian cố định."
             }
         ]
     },
     "payment": {
-        "title": "Phương Thức Thanh Toán & Đặt Cọc",
-        "badge": "An toàn & Linh hoạt",
-        "content": "Đa dạng hình thức thanh toán, hỗ trợ cọc giữ hàng có biên nhận tự động.",
+        "title": "Thanh Toán & Xác Nhận Đơn",
+        "badge": "Kiểm tra trước khi trả tiền",
+        "content": "Chọn phương thức được hiển thị tại trang thanh toán và xác nhận thông tin đơn với cửa hàng.",
         "details": [
             {
-                "heading": "1. Chuyển khoản ngân hàng 24/7",
-                "text": "Quý khách có thể chuyển khoản trực tiếp qua tài khoản ngân hàng chính thức của cửa hàng với mã đơn hàng tự động để hệ thống xác nhận tức thì."
+                "heading": "1. Giá sản phẩm và phí ship",
+                "text": "Tiền hàng được tính theo sản phẩm, phân loại và số lượng đã chọn. Phí vận chuyển chưa bao gồm trong giá hiển thị và cần xác nhận riêng theo địa chỉ nhận."
             },
             {
-                "heading": "2. Thanh toán khi nhận hàng (COD)",
-                "text": "Áp dụng cho các phụ kiện và đơn hàng dưới 10.000.000 VNĐ. Đối với ampli đèn nguyên chiếc giá trị cao, quý khách vui lòng cọc tối thiểu 10 - 20% giá trị để cửa hàng lên thùng chống sốc và gửi hàng bảo đảm."
+                "heading": "2. Phương thức thanh toán",
+                "text": "Website hiển thị phương thức áp dụng cho đơn hàng, gồm COD hoặc chuyển khoản khi có sẵn. Với chuyển khoản, kiểm tra đúng thông tin tài khoản và mã đơn trên hướng dẫn; cửa hàng cần xác minh khoản thanh toán."
             },
             {
-                "heading": "3. Đặt cọc giữ hàng (Reservation)",
-                "text": "Đối với các sản phẩm độc bản hoặc vintage hiếm, quý khách có thể đặt cọc giữ hàng trong 3 - 7 ngày. Toàn bộ thông tin cọc được hệ thống lưu trữ minh bạch, gửi email xác nhận và có thể tra cứu theo mã đơn hàng."
+                "heading": "3. Đặt cọc nếu có",
+                "text": "Chỉ đặt cọc khi sản phẩm và đơn hàng có hỗ trợ. Kiểm tra số tiền, hạn thanh toán, thời gian giữ hàng và trao đổi điều kiện hủy/hoàn cọc trước khi trả tiền. Không áp dụng mặc định một mức cọc hoặc thời gian giữ cho mọi sản phẩm."
             }
         ]
     },
     "privacy": {
         "title": "Chính Sách Bảo Mật",
-        "badge": "Bảo mật tuyệt đối",
-        "content": "Bảo vệ thông tin cá nhân và dữ liệu thanh toán của người chơi âm thanh.",
+        "badge": "Thông tin khách hàng",
+        "content": "Thông tin liên hệ được dùng để hỗ trợ yêu cầu và xử lý đơn hàng.",
         "details": [
             {
                 "heading": "1. Thu thập thông tin",
@@ -110,11 +106,11 @@
         "details": [
             {
                 "heading": "1. Thông tin sản phẩm",
-                "text": "Mọi hình ảnh sản phẩm vintage trên website đều là ảnh chụp thực tế máy tại shop. Mô tả tình trạng linh kiện (tụ, bóng, biến áp) được nhân viên kỹ thuật ghi nhận trung thực và minh bạch."
+                "text": "Thông tin và hình ảnh được cung cấp theo từng sản phẩm. Hãy xem đúng phân loại, đơn vị bán và mô tả tình trạng; liên hệ cửa hàng nếu cần xác nhận thêm trước khi mua."
             },
             {
                 "heading": "2. Xác nhận đơn hàng",
-                "text": "Sau khi đặt hàng trên website, nhân viên sẽ liên hệ lại qua điện thoại/Zalo để xác nhận lần cuối về thông số nguồn điện (100V hay 220V), loại loa đang dùng và địa chỉ giao hàng trước khi gửi đi."
+                "text": "Sau khi nhận đơn, cửa hàng trao đổi để xác nhận hàng có sẵn, thông tin người nhận, phí vận chuyển và lịch giao trước khi gửi."
             },
             {
                 "heading": "3. Quyền sở hữu trí tuệ",

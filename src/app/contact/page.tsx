@@ -82,7 +82,7 @@ export default function ContactPage() {
                                 <div className={styles.itemContent}>
                                     <h4>Hotline & Zalo Kỹ Thuật</h4>
                                     <a href="tel:0931772150" className={styles.itemLink}>0931 772 150</a>
-                                    <p>Hỗ trợ tư vấn thông số, video test âm thanh thực tế & ghép loa</p>
+                                    <p>Hỏi thông số, phân loại, tình trạng sản phẩm và đơn hàng</p>
                                 </div>
                             </div>
 
@@ -221,7 +221,7 @@ export default function ContactPage() {
                                     >
                                         <option value="tu-van">Tư vấn chọn mua ampli đèn & phụ kiện</option>
                                         <option value="don-hang">Hỗ trợ đơn hàng / Giao hàng</option>
-                                        <option value="ky-thuat">Hỗ trợ kỹ thuật / Bảo hành / Cân chỉnh bias</option>
+                                        <option value="ky-thuat">Hỗ trợ sản phẩm / Bảo hành</option>
                                         <option value="khac">Khác</option>
                                     </select>
                                 </div>

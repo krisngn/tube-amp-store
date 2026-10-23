@@ -299,6 +299,7 @@ async function generateOrderConfirmationEmail(
                                         ${formatCurrency(payload.subtotal)} VND
                                     </td>
                                 </tr>
+                                ${payload.shippingFee === 0 ? `<tr><td colspan="2" style="padding:12px;color:#555;">${t.orderConfirmation.shippingNote || 'Shipping fees and timing will be confirmed by the store.'}</td></tr>` : ''}
                                 ${payload.shippingFee > 0 ? `
                                 <tr>
                                     <td style="padding: 12px;">${t.orderConfirmation.shipping}</td>
@@ -442,6 +443,7 @@ ${payload.items.map((item) => `- ${item.productName} × ${item.quantity}: ${form
 
 ${t.orderConfirmation.subtotal}: ${formatCurrency(payload.subtotal)} VND
 ${t.orderConfirmation.total}: ${formatCurrency(payload.total)} VND
+${payload.shippingFee === 0 ? (t.orderConfirmation.shippingNote || 'Shipping fees and timing will be confirmed by the store.') : ''}
 
 ${t.orderConfirmation.shippingAddress}:
 ${payload.shippingAddress}

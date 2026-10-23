@@ -108,7 +108,7 @@ export default function ConsultationModal() {
                 </button>
 
                 <div className={styles.header}>
-                    <div className={styles.badge}>Hỗ Trợ Trực Tiếp 1-1</div>
+                    <div className={styles.badge}>Hỗ Trợ Mua Hàng Online</div>
                     <h3 className={styles.title}>Tư Vấn Sản Phẩm Âm Thanh</h3>
                     <p className={styles.subtitle}>
                         Chọn kênh trao đổi thuận tiện nhất với bạn để được giải đáp thắc mắc, tìm hiểu thông tin sản phẩm hoặc được hỗ trợ mua hàng online.
@@ -167,7 +167,7 @@ export default function ConsultationModal() {
                             </div>
                             <div className={styles.channelText}>
                                 <h4>Nhắn tin qua Facebook</h4>
-                                <p>Xem video test, ảnh chi tiết & trao đổi với admin</p>
+                                <p>Hỏi thông số, tình trạng sản phẩm và đơn hàng</p>
                             </div>
                         </div>
                         <span className={styles.channelAction}>

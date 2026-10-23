@@ -21,8 +21,8 @@
         "title": "Tổng Đơn Hàng",
         "subtotal": "Tạm tính",
         "shipping": "Vận chuyển",
-        "shippingNote": "Tính khi thanh toán",
-        "total": "Tổng cộng",
+        "shippingNote": "Cửa hàng báo phí theo địa chỉ",
+        "total": "Tiền hàng (chưa gồm ship)",
         "checkout": "Thanh Toán"
     },
     "notes": {

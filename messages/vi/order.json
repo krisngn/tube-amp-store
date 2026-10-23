@@ -20,14 +20,14 @@
     "nextSteps": {
         "title": "Bước Tiếp Theo",
         "cod": {
-            "step1": "Chúng tôi sẽ liên hệ xác nhận đơn hàng trong 24h",
-            "step2": "Đóng gói và vận chuyển (2-3 ngày)",
+            "step1": "Cửa hàng liên hệ xác nhận hàng, phí ship và lịch giao",
+            "step2": "Đóng gói và gửi theo thỏa thuận đã xác nhận",
             "step3": "Thanh toán khi nhận hàng"
         },
         "bankTransfer": {
             "step1": "Chuyển khoản theo thông tin bên dưới",
             "step2": "Chúng tôi xác nhận và đóng gói (sau khi nhận tiền)",
-            "step3": "Vận chuyển đến địa chỉ của bạn (2-3 ngày)",
+            "step3": "Gửi theo địa chỉ và lịch giao đã xác nhận",
             "bankInfo": {
                 "title": "Thông Tin Chuyển Khoản",
                 "bank": "Ngân hàng",
@@ -47,7 +47,8 @@
         "total": "Tổng cộng",
         "depositAmount": "Số Tiền Cọc Phải Trả",
         "remainingBalance": "Số Tiền Còn Lại",
-        "depositDue": "Cọc Phải Trả Ngay"
+        "depositDue": "Cọc Phải Trả Ngay",
+        "shippingNote": "Tiền hàng hiển thị chưa gồm phí vận chuyển. Liên hệ cửa hàng để xác nhận phí ship và lịch giao."
     },
     "paymentMethods": {
         "cod": "Thanh toán khi nhận hàng (COD)",

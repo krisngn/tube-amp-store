@@ -54,7 +54,8 @@
         "paymentStatus": "Trạng Thái Thanh Toán",
         "paymentMethod": "Phương Thức Thanh Toán",
         "paymentCod": "Thanh Toán Khi Nhận Hàng (COD)",
-        "paymentBank": "Chuyển Khoản Ngân Hàng"
+        "paymentBank": "Chuyển Khoản Ngân Hàng",
+        "shippingNote": "Liên hệ cửa hàng để xác nhận phí vận chuyển và lịch giao; số tiền hiển thị chưa gồm phí ship."
     },
     "status": {
         "pending": "Chờ Xử Lý",
@@ -148,4 +149,3 @@
         "error": "Không thể lưu đơn hàng. Vui lòng thử lại."
     }
 }
-

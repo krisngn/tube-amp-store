@@ -46,30 +46,30 @@ export function generateSummaryBullets(product: ProductDetailDTO, locale: string
         const topologyLabel = product.topology === 'se' ? 'Single-Ended' : 'Push-Pull';
         bullets.push(
             locale === 'vi'
-                ? `Topology ${topologyLabel} ${product.tubeType} cho âm thanh tinh khiết`
-                : `${topologyLabel} ${product.tubeType} topology for pure sound`
+                ? `Topology ${topologyLabel} ${product.tubeType}`
+                : `${topologyLabel} ${product.tubeType} topology`
         );
     }
 
     if (product.powerWatts) {
         bullets.push(
             locale === 'vi'
-                ? `Công suất ${product.powerWatts}W, phù hợp với loa độ nhạy cao`
-                : `${product.powerWatts}W output power, perfect for high-sensitivity speakers`
+                ? `Công suất ${product.powerWatts}W`
+                : `${product.powerWatts}W output power`
         );
     }
 
     if (product.condition === 'vintage') {
         bullets.push(
             locale === 'vi'
-                ? 'Vintage chính hãng, đã kiểm tra kỹ lưỡng'
-                : 'Authentic vintage, thoroughly tested'
+                ? 'Hàng vintage: xem mô tả tình trạng từng sản phẩm'
+                : 'Vintage: review the condition described for this item'
         );
     } else if (product.condition === 'new') {
         bullets.push(
             locale === 'vi'
-                ? 'Sản phẩm mới 100%, chưa qua sử dụng'
-                : 'Brand new, never used'
+                ? 'Tình trạng: mới — xem chi tiết trong mô tả'
+                : 'Condition: new — review the product description'
         );
     }
 

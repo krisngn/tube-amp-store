@@ -1,7 +1,7 @@
 {
     "storeInfo": {
         "title": "Vintage Audio Accessories",
-        "description": "Premium vintage audio equipment & accessories — curated tube amplifiers, speakers, turntables and more.",
+        "description": "Online store for vacuum tubes, capacitors and audio components. Contact us for help choosing parts for your equipment.",
         "phone": "0931 772 150",
         "email": "thientan.3003.01@gmail.com",
         "hours": "08:30 - 21:00 (Everyday)",
@@ -15,14 +15,14 @@
     },
     "links": {
         "allProducts": "All Products",
-        "tubeAmplifiers": "Tube Amplifiers",
+        "tubeAmplifiers": "Vacuum Tubes",
         "vintage": "Curated Vintage",
         "newArrivals": "New Arrivals",
         "guides": "Audio Guides",
-        "service": "Testing Process & Service",
+        "service": "Buying Guide",
         "reviews": "Customer Reviews & Setups",
         "contact": "Contact & Messages",
-        "shipping": "Safe Shockproof Shipping",
+        "shipping": "Shipping & Delivery",
         "warranty": "Warranty Policy",
         "returns": "Return Policy",
         "payment": "Payment & Deposits",
@@ -37,11 +37,11 @@
         "consultNow": "Get Product Consultation"
     },
     "trust": {
-        "title": "Our Quality Commitment",
-        "tested": "Noise/hum tested and load tested before shipping",
-        "packaging": "Professional shockproof protective packaging",
-        "support": "Dedicated consultation & remote setup guidance",
-        "warranty": "Transparent warranty & lifetime technical support"
+        "title": "Online Shopping Information",
+        "tested": "Review specifications and condition for each product",
+        "packaging": "Confirm shipping fees and timing before dispatch",
+        "support": "Support via Zalo, Messenger and phone",
+        "warranty": "Warranty and returns follow confirmed item conditions"
     },
     "copyright": "© 2026 Vintage Audio Accessories. All rights reserved."
 }

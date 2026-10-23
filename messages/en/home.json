@@ -1,7 +1,7 @@
 {
     "hero": {
-        "title": "Authentic Vintage Audio",
-        "subtitle": "Premium vintage audio accessories for true music lovers — tube amps, speakers, turntables and more.",
+        "title": "Vacuum Tubes & Audio Components",
+        "subtitle": "Explore vacuum tubes, capacitors and accessories for your audio system. Select specifications, options and quantities, shop online and contact us for help.",
         "cta": {
             "browse": "Browse Products",
             "matching": "Product Consultation"
@@ -36,20 +36,20 @@
         }
     },
     "consultation": {
-        "badge": "1-on-1 Specialist Support",
+        "badge": "Online shopping support",
         "title": "Audio Product Consultation",
         "subtitle": "Shop online. Contact us for help with products, specifications and orders.",
         "channels": {
             "zalo": {
-                "tag": "Fastest Response",
+                "tag": "Chat on Zalo",
                 "title": "Chat on Zalo",
-                "desc": "Send speaker specs, room dimensions, or product models for instant recommendations and test clips.",
+                "desc": "Send the part number, specifications or product you are interested in to discuss with the store.",
                 "action": "Chat Zalo: 0931 772 150"
             },
             "facebook": {
-                "tag": "Advice & Video Demo",
+                "tag": "Product information",
                 "title": "Facebook Messenger",
-                "desc": "Chat directly on Messenger, view detailed photos, and watch real-life equipment demonstrations.",
+                "desc": "Ask about specifications, options, images and product condition via Messenger.",
                 "action": "Message on Facebook"
             },
             "showroom": {
@@ -88,37 +88,56 @@
         "title": "Why Choose Us",
         "badges": {
             "tested": {
-                "title": "Thoroughly Tested",
-                "description": "Noise/hum measured, all functions checked"
+                "title": "Product Information",
+                "description": "Review descriptions, photos and specifications before buying."
             },
             "packaging": {
-                "title": "Safe Packaging",
-                "description": "Professional protection, peace of mind delivery"
+                "title": "Shipping Support",
+                "description": "Contact us to confirm packaging, delivery fees and schedules."
             },
             "warranty": {
-                "title": "Clear Warranty",
-                "description": "Transparent policy, dedicated support"
+                "title": "Clear Conditions",
+                "description": "Confirm warranty and returns for your item before payment."
             },
             "vintage": {
-                "title": "Verified Vintage",
-                "description": "Detailed checklist, clear provenance"
+                "title": "Tubes & Components",
+                "description": "Choose by part number, component value and circuit requirements."
             },
             "setup": {
-                "title": "Setup Support",
-                "description": "Installation guide, safe operating advice"
+                "title": "Remote Support",
+                "description": "Send part numbers and device information for assistance."
             },
             "consultation": {
-                "title": "Dedicated Consultation",
-                "description": "Helping you choose gear matching your musical taste and room"
+                "title": "Choose Your Option",
+                "description": "Check the price and stock of each option before adding to cart."
             }
         }
     },
     "customerSetups": {
-        "title": "Customer Setups",
-        "subtitle": "Beautiful setups from the music community"
+        "title": "Audio Corner",
+        "subtitle": "A selection of audio equipment and component images for reference."
     },
     "guidesPreview": {
         "title": "Beginner Guides",
         "viewAll": "View All Guides"
+    },
+    "buying": {
+        "title": "How to Shop Online",
+        "steps": [
+            {
+                "title": "1. Choose a product",
+                "text": "Check the part number, value, condition and option. Pricing follows your selection."
+            },
+            {
+                "title": "2. Confirm your order & delivery",
+                "text": "The store contacts you to confirm availability, shipping fees and the delivery estimate for your address."
+            },
+            {
+                "title": "3. Pay & receive",
+                "text": "Choose an available payment method. Confirm warranty and return conditions before paying."
+            }
+        ],
+        "policies": "Read buying information",
+        "contact": "Contact the store"
     }
 }

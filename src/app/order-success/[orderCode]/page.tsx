@@ -315,6 +315,7 @@ export default async function OrderSuccessPage({ params, searchParams }: OrderSu
                                 {order.subtotal.toLocaleString('vi-VN')} {tCommon('currency')}
                             </span>
                         </div>
+                        {order.shipping_fee === 0 && <p className="text-sm text-secondary">{t('orderDetails.shippingNote')}</p>}
                         {order.shipping_fee > 0 && (
                             <div className={styles.totalRow}>
                                 <span>{t('orderDetails.shipping')}</span>
