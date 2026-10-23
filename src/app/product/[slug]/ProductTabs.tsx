@@ -61,10 +61,10 @@ function OverviewTab({ product }: { product: ProductDetailDTO }) {
     return (
         <div className="overview-content">
             {product.description ? (
-                <div
+                /<\/?[a-z][^>]*>/i.test(product.description) ? <div
                     className="prose"
                     dangerouslySetInnerHTML={{ __html: product.description }}
-                />
+                /> : <div className="prose" style={{ whiteSpace: 'pre-wrap' }}>{product.description}</div>
             ) : (
                 <p className="text-secondary">{t('empty.noDescription')}</p>
             )}
