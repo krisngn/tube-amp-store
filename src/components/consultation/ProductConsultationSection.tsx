@@ -125,7 +125,6 @@ export default function ProductConsultationSection() {
                         <h3 className={styles.contactTitle}>{t('consultation.online.title')}</h3>
                         <p className={styles.contactDetail}>{t('consultation.online.description')}</p>
                         <p className={styles.contactDetail}>{t('consultation.online.note')}</p>
-                        <a href="/contact" className="btn btn-secondary">{t('consultation.form.title')}</a>
                     </div>
 
                     <div className={styles.formWrapper}>
