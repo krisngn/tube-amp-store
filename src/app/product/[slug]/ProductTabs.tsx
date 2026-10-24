@@ -40,7 +40,7 @@ export default function ProductTabs({ product }: ProductTabsProps) {
             </div>
 
             {/* Tab Content */}
-            <div className={`${styles.tabContent} card p-8`}>
+            <div className={styles.tabContent}>
                 {activeTab === 'overview' && <OverviewTab product={product} />}
                 {activeTab === 'specifications' && <SpecificationsTab product={product} />}
                 {activeTab === 'sound' && <SoundTab product={product} />}

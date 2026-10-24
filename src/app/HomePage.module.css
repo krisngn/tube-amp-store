@@ -88,7 +88,18 @@
     text-align: center;
     padding: var(--space-xl);
     cursor: pointer;
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition: background var(--transition-fast);
 }
+
+.quickEntryCard:hover { background: var(--color-bg-tertiary); }
+.quickEntryCard:focus-visible { outline: 2px solid var(--color-accent-primary); outline-offset: 4px; }
+
+.buyingStep { padding: var(--space-lg); }
+.buyingStep h3 { margin-bottom: var(--space-md); }
+.buyingStep p { margin: 0; }
 
 .quickEntryCard :global(h3) {
     font-size: 1.125rem;

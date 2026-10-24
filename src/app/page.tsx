@@ -58,7 +58,7 @@ export default async function HomePage() {
                                 <Link
                                     key={cat.id}
                                     href={`/products?category=${cat.slug}`}
-                                    className={`${styles.quickEntryCard} card`}
+                                    className={styles.quickEntryCard}
                                 >
                                     <h3>{cat.name}</h3>
                                     {cat.children && cat.children.length > 0 && (
@@ -91,7 +91,7 @@ export default async function HomePage() {
                     <h2 className={styles.sectionTitle}>{t('buying.title')}</h2>
                     <div className="grid grid-3">
                         {(t.raw('buying.steps') as Array<{ title: string; text: string }>).map((step) => (
-                            <div key={step.title} className="card p-6"><h3>{step.title}</h3><p className="text-secondary">{step.text}</p></div>
+                            <div key={step.title} className={styles.buyingStep}><h3>{step.title}</h3><p className="text-secondary">{step.text}</p></div>
                         ))}
                     </div>
                     <div className={styles.heroCta} style={{ marginTop: 'var(--space-xl)' }}>
@@ -109,7 +109,7 @@ export default async function HomePage() {
                     <h2 className={styles.sectionTitle}>{t('trust.title')}</h2>
                     <div className="grid grid-3">
                         {['tested', 'packaging', 'warranty', 'vintage', 'setup', 'consultation'].map((key) => (
-                            <div key={key} className={`${styles.trustCard} card`}>
+                            <div key={key} className={styles.trustCard}>
                                 <div className={styles.trustIcon}>
                                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
                                         <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />

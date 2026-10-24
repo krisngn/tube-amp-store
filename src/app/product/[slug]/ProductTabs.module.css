@@ -5,18 +5,18 @@
 
 .tabsNav {
     display: flex;
-    gap: var(--space-sm);
+    gap: var(--space-lg);
     margin-bottom: var(--space-xl);
     overflow-x: auto;
-    padding-bottom: var(--space-sm);
+    padding-bottom: 0;
     scrollbar-width: thin;
 }
 
 .tabBtn {
-    padding: var(--space-sm) var(--space-lg);
+    padding: var(--space-sm) 0;
     background: transparent;
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
+    border: 0;
+    border-bottom: 2px solid transparent;
     color: var(--color-text-secondary);
     cursor: pointer;
     white-space: nowrap;
@@ -24,15 +24,16 @@
     font-size: 0.9375rem;
 }
 
-.tabBtn:hover,
-.tabBtnActive {
-    border-color: var(--color-accent-primary);
+.tabBtn:hover {
     color: var(--color-accent-primary);
-    background: var(--color-accent-glow);
 }
+
+.tabBtnActive { border-bottom-color: var(--color-accent-primary); color: var(--color-accent-primary); }
+.tabBtn:focus-visible { outline: 2px solid var(--color-accent-primary); outline-offset: -2px; }
 
 .tabContent {
     min-height: 300px;
+    padding: var(--space-sm) 0;
 }
 
 /* Add spacing to tab content sections */
@@ -93,7 +94,6 @@
     padding: var(--space-lg);
     background: var(--color-bg-tertiary);
     border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-subtle);
 }
 
 .shippingInfo {

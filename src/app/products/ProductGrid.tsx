@@ -13,7 +13,7 @@ export default function ProductGrid({ products }: { products: ProductCardDTO[] }
     const locale = useLocale();
     const price = (value: number) => `${value.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US')} ₫`;
     return <div className={styles.grid}>
-        {products.map((product) => <article key={product.id} className={`card ${styles.card}`}>
+        {products.map((product) => <article key={product.id} className={styles.card}>
             <Link href={`/product/${product.slug}`} className={styles.image} aria-label={product.name}>
                 {product.imageUrl && product.imageUrl !== '/images/placeholder-product.jpg' ? <Image src={product.imageUrl} alt={product.name} fill style={{ objectFit: 'contain' }} sizes="(max-width: 359px) 100vw, (max-width: 640px) 50vw, (max-width: 1200px) 33vw, 25vw" unoptimized /> : <div className="skeleton w-full h-full" />}
             </Link>
@@ -29,7 +29,7 @@ export default function ProductGrid({ products }: { products: ProductCardDTO[] }
                 <div className={styles.footer}>
                     <p className={styles.price}><span>{price(product.priceVnd)}{product.priceMaxVnd != null && product.priceMaxVnd > product.priceVnd && ` – ${price(product.priceMaxVnd)}`}</span>{product.compareAtPriceVnd && <del className="text-sm text-tertiary">{price(product.compareAtPriceVnd)}</del>}</p>
                     <div className={styles.actions}>
-                        <Link href={`/product/${product.slug}`} className={`btn btn-secondary ${styles.details}`}>{t('productCard.viewDetails')}</Link>
+                        <Link href={`/product/${product.slug}`} className={styles.details}>{t('productCard.viewDetails')}<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></Link>
                         <QuickCartButton product={product} />
                     </div>
                 </div>
