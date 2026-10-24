@@ -147,12 +147,12 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
             {/* Actions */}
             <div className={styles['header-actions']}>
               <LocaleSwitcher />
-              <button className={`btn btn-ghost ${styles['search-btn']}`} aria-label="Search">
+              <Link href="/products?focus=search#product-search" className={`btn btn-ghost ${styles['search-btn']}`} aria-label="Tìm kiếm sản phẩm">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="2" />
                   <path d="M12.5 12.5L17 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-              </button>
+              </Link>
               <Link href="/cart" aria-label={cartReady ? `Giỏ hàng (${cartCount})` : 'Giỏ hàng'} className={`btn btn-ghost ${styles['cart-btn']}`}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13L5.4 5M7 13l-1.5 4.5M17 13l1.5 4.5M9 18a1 1 0 100-2 1 1 0 000 2zM15 18a1 1 0 100-2 1 1 0 000 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />

@@ -16,9 +16,17 @@
 
 .guidesGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
     gap: var(--space-xl);
 }
+
+.article { max-width: 780px; overflow-wrap: anywhere; }
+.article :global(h1) { text-align: left; margin-top: 24px; font-size: clamp(1.8rem, 5vw, 2.5rem); }
+.intro { color: var(--color-text-secondary); margin: 16px 0 32px; }
+.article section { margin: 28px 0; }
+.article section h2 { font-size: 1.4rem; margin-bottom: 12px; }
+.article section p { color: var(--color-text-secondary); line-height: 1.8; }
+.articleActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 
 .guideCard {
     padding: var(--space-xl);

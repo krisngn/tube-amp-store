@@ -9,6 +9,7 @@ import ProductTabs from './ProductTabs';
 import ProductGrid from '../../products/ProductGrid';
 import type { Metadata } from 'next';
 import styles from './ProductPage.module.css';
+import { getSalesUnit } from '@/lib/products/sales-unit';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -62,6 +63,7 @@ export default async function ProductPage({ params }: PageProps) {
   // Determine price to display
   const displayPrice = product.compareAtPriceVnd || product.priceVnd;
   const hasDiscount = !product.variants?.length && !!product.compareAtPriceVnd;
+  const salesUnit = getSalesUnit(product.name, product.description, locale);
 
   return (
     <div className={`${styles.productPage} py - 16`}>
@@ -141,6 +143,11 @@ export default async function ProductPage({ params }: PageProps) {
             </div>
 
             {/* Deposit Reservation Info */}
+            {salesUnit && (
+              <p className="text-sm text-secondary" style={{ marginBottom: 'var(--space-lg)' }}>
+                {locale === 'vi' ? 'Đơn vị bán: ' : 'Sold as: '}{salesUnit}
+              </p>
+            )}
             {product.allowDeposit && !product.variants?.length && (
               <div className="card p-6 mb-6 border-accent">
                 <div className="flex items-start gap-4">

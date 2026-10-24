@@ -277,22 +277,20 @@ export async function listProducts(
             brandId = b.id;
         }
 
-        // Name search across ALL locales (so Vietnamese terms match VI names too)
-        let searchIds: string[] | null = null;
-        if (filters.search) {
-            const { data: matches } = await supabase
-                .from('product_translations')
-                .select('product_id')
-                .ilike('name', `%${filters.search}%`);
-            searchIds = [...new Set((matches ?? []).map((m) => m.product_id))];
-            if (searchIds.length === 0) return emptyResult;
-        }
+        const searchTerm = filters.search?.trim().slice(0, 100);
 
         // Start building the query
         let query = supabase
             .from('products')
-            .select(CARD_SELECT, { count: 'exact' })
+            .select(searchTerm ? `${CARD_SELECT}, search_match:product_translations!inner(name)` : CARD_SELECT, { count: 'exact' })
             .eq('is_published', true);
+
+        // A separate inner embed filters parents while keeping every display locale.
+        // Filter and paginate in Postgres, without fetching an intermediate ID list.
+        if (searchTerm) {
+            const literal = searchTerm.replace(/[\\%_]/g, '\\$&');
+            query = query.ilike('search_match.name', `%${literal}%`);
+        }
 
         // Apply filters
         if (categoryIds) {
@@ -342,10 +340,6 @@ export async function listProducts(
             query = query.eq('is_featured', filters.isFeatured);
         }
 
-        if (searchIds) {
-            query = query.in('id', searchIds);
-        }
-
         // Apply sorting
         switch (sort) {
             case 'newest':
@@ -369,7 +363,7 @@ export async function listProducts(
         // Apply pagination
         const from = (pagination.page - 1) * pagination.pageSize;
         const to = from + pagination.pageSize - 1;
-        query = query.range(from, to);
+        query = query.order('id', { ascending: true }).range(from, to);
 
         // Execute query
         const { data, error, count } = await query;

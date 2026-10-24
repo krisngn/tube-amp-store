@@ -5,6 +5,7 @@ import type { ProductSort, Topology, Condition, TubeType } from '@/lib/types/cat
 import CollectionFilters from './CollectionFilters';
 import ProductGrid from './ProductGrid';
 import SortSelect from './SortSelect';
+import ProductSearch from './ProductSearch';
 
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -24,7 +25,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     const powerMax = search.powerMax ? Number(search.powerMax) : undefined;
     const priceMin = search.priceMin ? Number(search.priceMin) : undefined;
     const priceMax = search.priceMax ? Number(search.priceMax) : undefined;
-    const searchQuery = search.q as string | undefined;
+    const searchQuery = typeof search.q === 'string' ? search.q.trim().slice(0, 100) : undefined;
     const sort = (search.sort as ProductSort) || 'newest';
     const page = Math.max(1, Math.floor(Number(search.page)) || 1);
     const pageSize = 12;
@@ -57,6 +58,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
 
                     {/* Products Section */}
                     <div className="products-section">
+                        <ProductSearch />
                         {/* Mobile filter toggle (injected by CollectionFilters, shown in-flow here) */}
                         <div className="products-header flex justify-between items-center mb-8 flex-wrap gap-4">
                             <p className="results-count text-sm text-tertiary m-0">

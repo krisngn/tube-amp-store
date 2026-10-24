@@ -1,0 +1,7 @@
+.search { margin-bottom: 24px; scroll-margin-top: 130px; min-width: 0; }
+.search label { display: block; margin-bottom: 8px; font-weight: 500; }
+.row { display: flex; gap: 8px; }
+.row input { flex: 1; min-width: 0; }
+.row button { flex-shrink: 0; padding: 10px 16px; }
+.status { display: block; min-height: 1.5em; margin-top: 6px; font-size: 0.875rem; color: var(--color-text-secondary); overflow-wrap: anywhere; }
+@media (max-width: 400px) { .row { flex-wrap: wrap; } .row input { flex-basis: 100%; } .row button { width: 100%; } }

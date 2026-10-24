@@ -17,9 +17,9 @@ export default function ProductTabs({ product }: ProductTabsProps) {
 
     const tabs = [
         { id: 'overview', label: t('tabs.overview') },
-        { id: 'specifications', label: t('tabs.specifications') },
-        { id: 'sound', label: t('tabs.sound') },
-        { id: 'matching', label: t('tabs.matching') },
+        ...(product.topology || product.tubeType || product.powerWatts || Object.values(product.specs ?? {}).some(value => value !== null && value !== undefined && String(value).trim() !== '') ? [{ id: 'specifications', label: t('tabs.specifications') }] : []),
+        ...(product.soundCharacter?.trim() || product.recommendedGenres?.some(value => value.trim()) ? [{ id: 'sound', label: t('tabs.sound') }] : []),
+        ...(product.matchingNotes?.trim() || product.recommendedSensitivityMin || product.taps?.length || product.powerWatts ? [{ id: 'matching', label: t('tabs.matching') }] : []),
         { id: 'condition', label: t('tabs.condition') },
         { id: 'shipping', label: t('tabs.shipping') },
     ];

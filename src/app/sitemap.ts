@@ -1,12 +1,13 @@
 import type { MetadataRoute } from 'next';
 import { createClient } from '@supabase/supabase-js';
+import { guides } from '@/lib/content/guides';
 
 const BASE = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').replace(/\/$/, '');
 
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const staticUrls: MetadataRoute.Sitemap = ['', '/products', '/brands', '/guides', '/contact'].map(
+    const staticUrls: MetadataRoute.Sitemap = ['', '/products', '/brands', '/guides', ...guides.map(guide => `/guides/${guide.slug}`)].map(
         (path) => ({ url: `${BASE}${path || '/'}`, changeFrequency: 'weekly' })
     );
 

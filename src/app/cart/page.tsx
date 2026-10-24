@@ -34,7 +34,7 @@ export default function CartPage() {
                         </svg>
                         <h2>{t('empty.title')}</h2>
                         <p>{t('empty.description')}</p>
-                        <Link href="/tube-amplifiers" className="btn btn-primary">
+                        <Link href="/products" className="btn btn-primary">
                             {t('empty.cta')}
                         </Link>
                     </div>
