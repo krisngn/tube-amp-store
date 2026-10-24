@@ -3,6 +3,7 @@
 .image { width: 100%; aspect-ratio: 4 / 3; position: relative; overflow: hidden; border-radius: var(--radius-md); background: var(--color-bg-tertiary); margin-bottom: 16px; }
 .body { display: flex; flex: 1; flex-direction: column; min-width: 0; }
 .badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.badges:empty { display: none; }
 .badges :global(.badge) { border: 0; }
 .brand { min-height: 1.3em; margin: 0 0 6px; font-size: 0.8rem; color: var(--color-text-tertiary); }
 .name { font-size: clamp(1rem, 1.4vw, 1.25rem); line-height: 1.4; margin: 0 0 16px; overflow-wrap: anywhere; }

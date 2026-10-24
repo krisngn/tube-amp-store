@@ -99,11 +99,10 @@ export default async function ProductPage({ params }: PageProps) {
                   {product.topology.toUpperCase()} {product.tubeType}
                 </span>
               )}
-              <span className="badge">
+              {product.condition !== 'vintage' && <span className="badge">
                 {product.condition === 'new' && tCommon('new')}
                 {product.condition === 'like_new' && tCommon('likeNew')}
-                {product.condition === 'vintage' && tCommon('vintage')}
-              </span>
+              </span>}
               {product.isFeatured && (
                 <span className="badge badge-success">{tCommon('recommended')}</span>
               )}

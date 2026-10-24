@@ -20,7 +20,7 @@ export default function ProductGrid({ products }: { products: ProductCardDTO[] }
             <div className={styles.body}>
                 <div className={styles.badges}>
                     {product.topology && product.tubeType && <span className="badge badge-accent">{product.topology.toUpperCase()} {product.tubeType}</span>}
-                    <span className="badge">{product.condition === 'new' ? tCommon('new') : product.condition === 'like_new' ? tCommon('likeNew') : tCommon('vintage')}</span>
+                    {product.condition !== 'vintage' && <span className="badge">{product.condition === 'new' ? tCommon('new') : tCommon('likeNew')}</span>}
                     {!product.isInStock && <span className="badge badge-error">{tCommon('outOfStock')}</span>}
                 </div>
                 <p className={styles.brand}>{product.brandName || '\u00a0'}</p>

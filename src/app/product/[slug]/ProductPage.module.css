@@ -51,6 +51,8 @@
     flex-wrap: wrap;
 }
 
+.badges:empty { display: none; }
+
 .title {
     font-size: 2rem;
     line-height: 1.2;
