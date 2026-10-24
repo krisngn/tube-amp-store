@@ -69,6 +69,10 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 />
               </div>
+              <span className={styles['brand-name']}>
+                <span>Vintage Audio</span>
+                <span>Accessories Store</span>
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -179,7 +183,6 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
               </button>
             </div>
           </div>
-          <p className={styles['mobile-brand-name']}>VAAS · Vintage Audio Accessories Store</p>
         </div>
       </header>
 

@@ -26,6 +26,7 @@
     align-items: center;
     text-decoration: none;
     flex-shrink: 0;
+    gap: 10px;
 }
 
 .logo-image-wrapper {
@@ -38,8 +39,14 @@
     overflow: hidden;
 }
 
-.mobile-brand-name {
-    display: none;
+.brand-name {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-accent-primary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: nowrap;
 }
 
 .nav-desktop {
@@ -209,17 +216,6 @@
 }
 
 @media (max-width: 1024px) {
-    .mobile-brand-name {
-        display: block;
-        margin: 0;
-        padding-bottom: 10px;
-        color: var(--color-accent-primary);
-        text-align: center;
-        font-size: 0.75rem;
-        line-height: 1.4;
-        overflow-wrap: anywhere;
-    }
-
     .nav-desktop {
         display: none;
     }
@@ -236,6 +232,8 @@
 
 /* ── Mobile: shrink header to prevent overflow ── */
 @media (max-width: 480px) {
+    .logo { gap: 8px; }
+    .brand-name { font-size: 0.6875rem; }
     .header-content {
         padding: var(--space-sm) 0;
         gap: var(--space-sm);
@@ -245,4 +243,13 @@
         width: 44px; /* Same as hamburger menu */
         height: 44px;
     }
+}
+
+@media (min-width: 1025px) and (max-width: 1400px) {
+    .header-content { gap: 12px; }
+    .nav-desktop { gap: 12px; }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+    .btn-matching, .search-btn { display: none; }
 }
