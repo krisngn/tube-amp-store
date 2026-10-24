@@ -31,6 +31,19 @@
     margin-bottom: var(--space-lg);
 }
 
+.filterGroup .brandSelect {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 10px 36px 10px 12px;
+    background-position: right 12px center;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color-scheme: dark;
+}
+
 .filterGroupLabel {
     font-size: 0.8125rem;
     font-weight: 600;

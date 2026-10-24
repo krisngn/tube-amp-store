@@ -95,7 +95,8 @@ export default function CollectionFilters({ categories, brands, topologies }: Co
             {brands.length > 0 && (
                 <div className={styles.filterGroup}>
                     <h4 className={styles.filterGroupLabel}>{t('filters.brand.label')}</h4>
-                    <select className="input" aria-label={t('filters.brand.label')}
+                    <select className={`input select ${styles.brandSelect}`} aria-label={t('filters.brand.label')}
+                        title={brands.find((brand) => brand.slug === activeBrand)?.name || t('filters.brand.all')}
                         value={activeBrand || ''} onChange={(e) => updateFilters('brand', e.target.value || null)}>
                         <option value="">{t('filters.brand.all')}</option>
                         {brands.map((brand) => <option key={brand.id} value={brand.slug}>{brand.name}</option>)}
