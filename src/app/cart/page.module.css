@@ -220,3 +220,8 @@
 .cartLayout > *, .cartItem > *, .itemDetails { min-width: 0; }
 .itemDetails { overflow-wrap: anywhere; }
 .summaryRow { gap: 12px; }
+/* Keep the mobile summary in normal flow so it cannot cover the cart on short screens. */
+@media (max-width: 768px) {
+    .cartPage { padding-bottom: var(--space-2xl); }
+    .cartSummary { position: static; top: auto; bottom: auto; left: auto; right: auto; width: 100%; border-radius: var(--radius-lg); padding: var(--space-lg); }
+}
