@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
 import Link from 'next/link';
 import { getProductBySlug, getRelatedProducts } from '@/lib/repositories/products';
-import { formatPrice, generateSummaryBullets } from '@/lib/utils/formatters';
+import { formatPrice } from '@/lib/utils/formatters';
 import ProductGallery from './ProductGallery';
 import ProductActions from './ProductActions';
 import ProductTabs from './ProductTabs';
@@ -58,9 +58,6 @@ export default async function ProductPage({ params }: PageProps) {
     locale,
     3
   );
-
-  // Generate summary bullets
-  const summaryBullets = generateSummaryBullets(product, locale);
 
   // Determine price to display
   const displayPrice = product.compareAtPriceVnd || product.priceVnd;
@@ -184,18 +181,6 @@ export default async function ProductPage({ params }: PageProps) {
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {/* Summary */}
-            {summaryBullets.length > 0 && (
-              <div className="card p-6 mb-6">
-                <h3 className="text-base mb-4">{t('summary.title')}</h3>
-                <ul className={styles.summaryList}>
-                  {summaryBullets.map((bullet, index) => (
-                    <li key={index}>{bullet}</li>
-                  ))}
-                </ul>
               </div>
             )}
 
