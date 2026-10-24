@@ -7,13 +7,19 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import type { CategoryDTO } from '@/lib/types/catalog';
 import LocaleSwitcher from '../LocaleSwitcher';
+import { useCartStore } from '@/lib/cart/cart.store';
+import { useCartReady } from '@/lib/cart/use-cart-ready';
 import styles from './Header.module.css';
 
 export default function Header({ categories = [] }: { categories?: CategoryDTO[] }) {
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const cartReady = useCartReady();
+  const cartCount = useCartStore((state) => state.items.reduce((sum, item) => sum + item.quantity, 0));
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
+  const isMobileMenuOpen = mobileMenuPath === pathname;
+  const setIsMobileMenuOpen = useCallback((open: boolean) => setMobileMenuPath(open ? pathname : null), [pathname]);
   const [isProductsOpen, setIsProductsOpen] = useState(false);
 
   useEffect(() => {
@@ -36,12 +42,7 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
     };
   }, [isMobileMenuOpen]);
 
-  // Close menu when route changes
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
-
-  const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
+  const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), [setIsMobileMenuOpen]);
 
   const navLinks = [
     { href: '/brands', label: t('brands') },
@@ -150,11 +151,11 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
                   <path d="M12.5 12.5L17 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 </svg>
               </button>
-              <Link href="/cart" className={`btn btn-ghost ${styles['cart-btn']}`}>
+              <Link href="/cart" aria-label={cartReady ? `Giỏ hàng (${cartCount})` : 'Giỏ hàng'} className={`btn btn-ghost ${styles['cart-btn']}`}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <path d="M3 3h2l.4 2M7 13h10l3-8H6.4M7 13L5.4 5M7 13l-1.5 4.5M17 13l1.5 4.5M9 18a1 1 0 100-2 1 1 0 000 2zM15 18a1 1 0 100-2 1 1 0 000 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 </svg>
-                <span className={styles['cart-count']}>0</span>
+                <span className={styles['cart-count']} aria-live="polite">{cartReady ? cartCount : 0}</span>
               </Link>
               <button
                 className={`btn btn-primary ${styles['btn-matching']}`}

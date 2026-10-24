@@ -164,3 +164,5 @@
         grid-template-columns: 1fr;
     }
 }
+.productMain > * { min-width: 0; }
+.title, .breadcrumb { overflow-wrap: anywhere; }

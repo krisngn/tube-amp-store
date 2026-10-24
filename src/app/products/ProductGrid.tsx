@@ -1,111 +1,39 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import type { ProductCardDTO } from '@/lib/types/catalog';
 import Image from 'next/image';
+import type { ProductCardDTO } from '@/lib/types/catalog';
+import QuickCartButton from './QuickCartButton';
+import styles from './ProductGrid.module.css';
 
-interface ProductGridProps {
-    products: ProductCardDTO[];
-}
-
-export default function ProductGrid({ products }: ProductGridProps) {
+export default function ProductGrid({ products }: { products: ProductCardDTO[] }) {
     const t = useTranslations('collection');
     const tCommon = useTranslations('common');
-
-    return (
-        <div className="products-grid grid gap-8">
-            {products.map((product) => (
-                <div key={product.id} className="product-card card flex flex-col">
-                    <div className="product-image w-full mb-4 rounded-md overflow-hidden bg-tertiary" style={{ aspectRatio: '4/3', position: 'relative' }}>
-                        {product.imageUrl && product.imageUrl !== '/images/placeholder-product.jpg' ? (
-                            <Image
-                                src={product.imageUrl}
-                                alt={product.name}
-                                fill
-                                style={{ objectFit: 'cover' }}
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                unoptimized={true}
-                            />
-                        ) : (
-                            <div className="skeleton w-full h-full"></div>
-                        )}
-                    </div>
-
-                    <div className="product-info flex-1 flex flex-col">
-                        {/* Badges */}
-                        <div className="product-badges flex gap-1 mb-2 flex-wrap">
-                            {product.topology && product.tubeType && (
-                                <span className="badge badge-accent">
-                                    {product.topology.toUpperCase()} {product.tubeType}
-                                </span>
-                            )}
-                            <span className="badge">
-                                {product.condition === 'new' && tCommon('new')}
-                                {product.condition === 'like_new' && tCommon('likeNew')}
-                                {product.condition === 'vintage' && tCommon('vintage')}
-                            </span>
-                            {!product.isInStock && (
-                                <span className="badge" style={{ background: 'var(--color-error)', color: 'white' }}>
-                                    {tCommon('outOfStock')}
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Brand */}
-                        {product.brandName && (
-                            <p className="text-sm text-tertiary m-0 mb-1">{product.brandName}</p>
-                        )}
-
-                        {/* Product Name */}
-                        <h3 className="product-name text-lg mb-2">{product.name}</h3>
-
-                        {/* Price */}
-                        <p className="product-price text-xl font-semibold text-accent mb-2">
-                            {product.priceVnd.toLocaleString()}{tCommon('currency')}
-                            {product.priceMaxVnd != null && product.priceMaxVnd > product.priceVnd && ` – ${product.priceMaxVnd.toLocaleString()}${tCommon('currency')}`}
-                            {product.compareAtPriceVnd && (
-                                <span className="text-sm text-tertiary line-through ml-2">
-                                    {product.compareAtPriceVnd.toLocaleString()}{tCommon('currency')}
-                                </span>
-                            )}
-                        </p>
-
-                        {/* Specs (amp-specific — only when present) */}
-                        {product.powerWatts != null && (
-                            <div className="product-specs text-sm text-tertiary mb-4">
-                                <span>{t('productCard.power', { watts: product.powerWatts })}</span>
-                                {product.recommendedSensitivityMin != null && (
-                                    <>
-                                        <span> • </span>
-                                        <span>{t('productCard.minSensitivity', { db: product.recommendedSensitivityMin })}</span>
-                                    </>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Actions */}
-                        <div className="product-actions mt-auto flex flex-col gap-2">
-                            <Link
-                                href={`/product/${product.slug}`}
-                                className="btn btn-secondary w-full"
-                            >
-                                {t('productCard.viewDetails')}
-                            </Link>
-                            <button
-                                className="btn btn-ghost w-full"
-                                onClick={() => {
-                                    window.dispatchEvent(new CustomEvent('open-consultation-modal', {
-                                        detail: { productName: product.name }
-                                    }));
-                                }}
-                            >
-                                {t('productCard.chatForMatching')}
-                            </button>
-                        </div>
+    const locale = useLocale();
+    const price = (value: number) => `${value.toLocaleString(locale === 'vi' ? 'vi-VN' : 'en-US')} ₫`;
+    return <div className={styles.grid}>
+        {products.map((product) => <article key={product.id} className={`card ${styles.card}`}>
+            <Link href={`/product/${product.slug}`} className={styles.image} aria-label={product.name}>
+                {product.imageUrl && product.imageUrl !== '/images/placeholder-product.jpg' ? <Image src={product.imageUrl} alt={product.name} fill style={{ objectFit: 'contain' }} sizes="(max-width: 359px) 100vw, (max-width: 640px) 50vw, (max-width: 1200px) 33vw, 25vw" unoptimized /> : <div className="skeleton w-full h-full" />}
+            </Link>
+            <div className={styles.body}>
+                <div className={styles.badges}>
+                    {product.topology && product.tubeType && <span className="badge badge-accent">{product.topology.toUpperCase()} {product.tubeType}</span>}
+                    <span className="badge">{product.condition === 'new' ? tCommon('new') : product.condition === 'like_new' ? tCommon('likeNew') : tCommon('vintage')}</span>
+                    {!product.isInStock && <span className="badge badge-error">{tCommon('outOfStock')}</span>}
+                </div>
+                <p className={styles.brand}>{product.brandName || '\u00a0'}</p>
+                <h3 className={styles.name}><Link href={`/product/${product.slug}`}>{product.name}</Link></h3>
+                {product.powerWatts != null && <p className={styles.specs}>{t('productCard.power', { watts: product.powerWatts })}{product.recommendedSensitivityMin != null && ` · ${t('productCard.minSensitivity', { db: product.recommendedSensitivityMin })}`}</p>}
+                <div className={styles.footer}>
+                    <p className={styles.price}><span>{price(product.priceVnd)}{product.priceMaxVnd != null && product.priceMaxVnd > product.priceVnd && ` – ${price(product.priceMaxVnd)}`}</span>{product.compareAtPriceVnd && <del className="text-sm text-tertiary">{price(product.compareAtPriceVnd)}</del>}</p>
+                    <div className={styles.actions}>
+                        <Link href={`/product/${product.slug}`} className={`btn btn-secondary ${styles.details}`}>{t('productCard.viewDetails')}</Link>
+                        <QuickCartButton product={product} />
                     </div>
                 </div>
-            ))}
-        </div>
-    );
+            </div>
+        </article>)}
+    </div>;
 }

@@ -181,6 +181,8 @@ function mapCardRow(product: ProductRow, locale: string): ProductCardDTO {
         slug: product.slug,
         name: translation?.name || 'Untitled Product',
         priceVnd: product.price,
+        stockQuantity: product.stock_quantity,
+        variants: product.variants ?? [],
         priceMaxVnd: product.variants?.length ? Math.max(...product.variants.map((v) => v.price)) : undefined,
         compareAtPriceVnd: product.compare_at_price || undefined,
         imageUrl: resolveCardImageUrl(product.product_images),

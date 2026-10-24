@@ -216,3 +216,7 @@
         display: none; /* Hide the matching advice note on mobile */
     }
 }
+
+.cartLayout > *, .cartItem > *, .itemDetails { min-width: 0; }
+.itemDetails { overflow-wrap: anywhere; }
+.summaryRow { gap: 12px; }

@@ -18,6 +18,8 @@ export interface ProductCardDTO {
     name: string;
     priceVnd: number;
     priceMaxVnd?: number;
+    stockQuantity?: number;
+    variants?: ProductVariant[];
     compareAtPriceVnd?: number;
     imageUrl: string;
     // Amp-specific attributes (optional — not every product is an amplifier)

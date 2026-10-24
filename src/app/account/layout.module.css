@@ -55,3 +55,7 @@
     /* Content area */
 }
 
+
+.accountHeader { gap: 16px; flex-wrap: wrap; }
+.accountHeader > div, .accountContent { min-width: 0; overflow-wrap: anywhere; }
+.accountNav { flex-wrap: wrap; }

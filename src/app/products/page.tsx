@@ -47,7 +47,7 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                     <h1 className="text-center">{t('allProductsTitle')}</h1>
                 </div>
 
-                <div className="collection-layout" style={{ display: 'grid', gridTemplateColumns: 'var(--sidebar-cols, 280px) 1fr', gap: 'var(--space-2xl)' }}>
+                <div className="collection-layout">
                     {/* Filters Sidebar */}
                     <CollectionFilters
                         categories={filterOptions?.categories || []}

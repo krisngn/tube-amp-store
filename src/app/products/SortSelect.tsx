@@ -17,6 +17,7 @@ export default function SortSelect({ currentSort }: SortSelectProps) {
     const handleSortChange = (newSort: string) => {
         const params = new URLSearchParams(searchParams.toString());
         params.set('sort', newSort);
+        params.delete('page');
         router.push(`${pathname}?${params.toString()}`);
     };
 
@@ -26,7 +27,7 @@ export default function SortSelect({ currentSort }: SortSelectProps) {
             value={currentSort}
             onChange={(e) => handleSortChange(e.target.value)}
             className="input select sort-select"
-            style={{ width: 'auto', minWidth: '200px' }}
+            aria-label={t('sort.label')}
         >
             <option value="newest">{t('sort.options.newest')}</option>
             <option value="price_asc">{t('sort.options.priceLow')}</option>

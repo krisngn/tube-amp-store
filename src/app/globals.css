@@ -1250,7 +1250,7 @@ section:first-of-type {
    ===================================================== */
 .collection-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
   gap: var(--space-2xl);
   align-items: start;
 }
@@ -1330,4 +1330,13 @@ section:first-of-type {
   .grid-2 {
     grid-template-columns: 1fr;
   }
+}
+/* Let collection children shrink inside the responsive grid instead of forcing a desktop width. */
+.collection-layout > *, .products-section { min-width: 0; }
+.sort-select { width: min(100%, 220px); min-width: 0; }
+.products-header { gap: 12px; }
+@media (max-width: 640px) {
+  .products-header { align-items: stretch; }
+  .sort-select { width: 100%; }
+  .collection-page { padding-top: var(--space-xl); }
 }

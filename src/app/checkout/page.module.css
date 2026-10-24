@@ -147,3 +147,8 @@
     }
 }
 
+
+.checkoutLayout > *, .formGrid > *, .summaryItem > * { min-width: 0; }
+.summaryItem, .summaryRow { gap: 12px; overflow-wrap: anywhere; }
+.summaryItem > :last-child { flex-shrink: 0; }
+@media (max-width: 480px) { .checkoutActions { flex-direction: column; } .orderSummary { padding: 16px; } .paymentMethod { padding: 12px; min-width: 0; } }

@@ -214,7 +214,7 @@
     }
 
     /* Hide everything in header actions except the toggle */
-    .header-actions > :not(.mobile-menu-toggle) {
+    .header-actions > :not(.mobile-menu-toggle):not(.cart-btn) {
         display: none;
     }
 }

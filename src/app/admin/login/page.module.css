@@ -48,3 +48,7 @@
     font-size: 0.875rem;
 }
 
+
+.loginContainer { min-width: 0; overflow-wrap: anywhere; }
+.formGroup input { min-width: 0; max-width: 100%; }
+@media (max-width: 480px) { .loginPage { padding: 16px; } .loginContainer { padding: 20px; } }
