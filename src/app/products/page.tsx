@@ -4,7 +4,6 @@ import { listProducts, getFilterOptions } from '@/lib/repositories/products';
 import type { ProductSort, Topology, Condition, TubeType } from '@/lib/types/catalog';
 import CollectionFilters from './CollectionFilters';
 import ProductGrid from './ProductGrid';
-import SortSelect from './SortSelect';
 import ProductSearch from './ProductSearch';
 
 interface PageProps {
@@ -64,7 +63,6 @@ export default async function ProductsPage({ searchParams }: PageProps) {
                             <p className="results-count text-sm text-tertiary m-0">
                                 {t('results.showing', { count: result.total })}
                             </p>
-                            <SortSelect currentSort={sort} />
                         </div>
 
                         {result.items.length === 0 ? (
