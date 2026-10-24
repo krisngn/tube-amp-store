@@ -204,7 +204,7 @@
     font-size: 1.125rem;
     font-weight: 600;
     color: var(--color-text-primary);
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
 }
 
 .mobileDrawerClose {

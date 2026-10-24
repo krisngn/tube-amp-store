@@ -118,7 +118,7 @@
 }
 
 .ctaLeft h3 {
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     font-size: 1.75rem;
     color: var(--color-accent-primary);
     margin-bottom: var(--space-sm);

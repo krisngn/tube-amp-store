@@ -87,6 +87,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-sans);
+}
+
 /* Typography */
 h1,
 h2,
@@ -94,11 +101,23 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 600;
   line-height: 1.2;
   color: var(--color-text-primary);
   margin-bottom: var(--space-md);
+}
+
+h1,
+h2 {
+  font-family: var(--font-serif);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.4;
 }
 
 h1 {

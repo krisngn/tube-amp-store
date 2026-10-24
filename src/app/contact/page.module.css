@@ -176,7 +176,7 @@
 
 .formCardTitle {
     font-size: 1.35rem;
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     color: var(--color-accent-primary);
     margin-bottom: var(--space-xs);
 }
