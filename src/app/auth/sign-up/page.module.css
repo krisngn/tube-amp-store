@@ -100,3 +100,9 @@
 .formGroup { min-width: 0; }
 .formGroup input { width: 100%; min-width: 0; max-width: 100%; font-size: 16px; }
 @media (max-width: 480px) { .authCard { padding: var(--space-lg); } }
+
+.authCard { background: var(--color-bg-secondary); border: 1px solid var(--color-border-subtle); }
+.authCard h1 { font-size: 1.5rem; }
+.subtitle { font-size: 1rem; }
+.formGroup input { background: var(--color-bg-tertiary); color: var(--color-text-primary); border-color: var(--color-border-medium); }
+.formGroup input:focus { border-color: var(--color-accent-primary); box-shadow: 0 0 0 2px var(--color-accent-glow); }
