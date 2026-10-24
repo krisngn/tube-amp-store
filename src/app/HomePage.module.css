@@ -102,6 +102,23 @@
 }
 
 /* Featured */
+.featuredMore {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--space-xl);
+}
+
+@media (max-width: 640px) {
+    .featuredMore { margin-top: var(--space-lg); }
+    .featuredMore .viewAll {
+        width: auto;
+        min-height: 44px;
+        padding: 10px 20px;
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+}
+
 .featuredTabs {
     display: flex;
     justify-content: center;

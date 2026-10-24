@@ -75,13 +75,13 @@ export default async function HomePage() {
             {featuredItems.length > 0 && (
                 <section className={styles.section}>
                     <div className="container">
-                        <div className={styles.guidesHeader}>
-                            <h2 className={styles.sectionTitle}>{t('featured.title')}</h2>
-                            <Link href="/products" className="btn btn-secondary">
+                        <h2 className={styles.sectionTitle}>{t('featured.title')}</h2>
+                        <ProductGrid products={featuredItems} />
+                        <div className={styles.featuredMore}>
+                            <Link href="/products" className={`btn btn-secondary ${styles.viewAll}`}>
                                 {t('featured.viewAll')}
                             </Link>
                         </div>
-                        <ProductGrid products={featuredItems} />
                     </div>
                 </section>
             )}
