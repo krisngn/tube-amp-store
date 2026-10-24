@@ -36,7 +36,9 @@
     font-size: 0.875rem;
     color: var(--color-text-secondary);
     justify-content: center;
-    white-space: nowrap;
+    min-width: 0;
+    white-space: normal;
+    text-align: left;
 }
 
 .trustItem :global(svg) {
