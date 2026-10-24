@@ -20,7 +20,6 @@ export default function Footer() {
     ];
 
     const supportLinks = [
-        { href: '/contact', label: t('links.contact') },
         { href: '/service', label: t('links.service') },
         { href: '/guides', label: t('links.guides') },
         { href: '/order/track', label: t('links.trackOrder') },
@@ -193,7 +192,6 @@ export default function Footer() {
                 {/* Copyright & Disclaimer */}
                 <div className={styles.footerBottom}>
                     <p className={styles.copyright}>© {currentYear} {t('storeInfo.title')}. Tất cả quyền được bảo lưu.</p>
-                    <p className={styles.addressLine}>{t('storeInfo.onlineNote')} · Hotline: 0931 772 150</p>
                 </div>
             </div>
         </footer>
