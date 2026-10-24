@@ -179,6 +179,7 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
               </button>
             </div>
           </div>
+          <p className={styles['mobile-brand-name']}>VAAS · Vintage Audio Accessories Store</p>
         </div>
       </header>
 
