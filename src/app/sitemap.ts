@@ -6,7 +6,7 @@ const BASE = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000').repla
 export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const staticUrls: MetadataRoute.Sitemap = ['', '/products', '/brands', '/guides', '/reviews', '/contact'].map(
+    const staticUrls: MetadataRoute.Sitemap = ['', '/products', '/brands', '/guides', '/contact'].map(
         (path) => ({ url: `${BASE}${path || '/'}`, changeFrequency: 'weekly' })
     );
 

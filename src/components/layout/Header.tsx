@@ -47,7 +47,6 @@ export default function Header({ categories = [] }: { categories?: CategoryDTO[]
   const navLinks = [
     { href: '/brands', label: t('brands') },
     { href: '/guides', label: t('guides') },
-    { href: '/reviews', label: t('reviews') },
     { href: '/contact', label: t('contact') },
     { href: '/order/track', label: t('trackOrder') },
   ];

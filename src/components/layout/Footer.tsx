@@ -24,7 +24,6 @@ export default function Footer() {
         { href: '/service', label: t('links.service') },
         { href: '/guides', label: t('links.guides') },
         { href: '/order/track', label: t('links.trackOrder') },
-        { href: '/reviews', label: t('links.reviews') },
     ];
 
     const policyLinks = [
