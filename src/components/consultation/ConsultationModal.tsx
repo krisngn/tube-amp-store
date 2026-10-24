@@ -203,19 +203,6 @@ export default function ConsultationModal() {
                     </a>
                 </div>
 
-                {/* Showroom / Listening Room location */}
-                <div className={styles.locationCard}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z" fill="currentColor"/>
-                    </svg>
-                    <div>
-                        <strong style={{ color: 'var(--color-text-primary)', display: 'block', marginBottom: 2 }}>
-                            Cửa hàng bán online:
-                        </strong>
-                        <span>Liên hệ qua Zalo, Messenger, điện thoại hoặc để lại lời nhắn bên dưới.</span>
-                    </div>
-                </div>
-
                 {/* Quick callback form */}
                 <div className={styles.formSection}>
                     <h4 className={styles.formTitle}>Hoặc để lại số điện thoại để admin gọi lại:</h4>
