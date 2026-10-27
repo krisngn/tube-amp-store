@@ -2,6 +2,22 @@ import { validateVariants, variantSummary, type ProductVariant } from '@/lib/pro
 import { createServiceClient } from '@/lib/supabase/service';
 import type { ProductCardDTO, ProductDetailDTO } from '@/lib/types/catalog';
 
+type ProductDatabaseError = { code?: string; message: string };
+
+function isMissingVariantsColumn(error: ProductDatabaseError | null) {
+    return !!error && ['PGRST204', '42703'].includes(error.code ?? '')
+        && /\bvariants\b/i.test(error.message);
+}
+
+function productWriteError(error: ProductDatabaseError | null, fallback: string) {
+    if (isMissingVariantsColumn(error)) {
+        return new Error('Database chưa hỗ trợ phân loại sản phẩm. Hãy chạy migration 20261024_product_variants.sql trước khi lưu sản phẩm có phân loại.');
+    }
+    if (error?.code === '23505') return new Error('Slug hoặc SKU sản phẩm đã tồn tại. Vui lòng dùng mã khác.');
+    if (error?.code === '23502') return new Error(`Thiếu trường bắt buộc trong database: ${error.message}`);
+    return new Error(error ? `${fallback} (${error.code ?? 'database'}): ${error.message}` : fallback);
+}
+
 /**
  * Admin Products Repository
  * Server-only functions for admin product management
@@ -231,7 +247,7 @@ export async function adminGetProductById(id: string): Promise<ProductDetailDTO 
             `
             *,
             product_translations(locale, name, short_description, description, sound_character, recommended_genres, matching_notes, condition_notes, origin_story),
-            product_images(url, alt_text, position, is_primary)
+            product_images(id, url, alt_text, sort_order, is_primary)
         `
         )
         .eq('id', id)
@@ -246,7 +262,7 @@ export async function adminGetProductById(id: string): Promise<ProductDetailDTO 
     const viTranslation = data.product_translations?.find((t: any) => t.locale === 'vi');
     const enTranslation = data.product_translations?.find((t: any) => t.locale === 'en');
 
-    const images = (data.product_images || []).sort((a: any, b: any) => a.position - b.position);
+    const images = (data.product_images || []).sort((a: any, b: any) => a.sort_order - b.sort_order);
 
     return {
         id: data.id,
@@ -280,7 +296,7 @@ export async function adminGetProductById(id: string): Promise<ProductDetailDTO 
             id: img.id || '',
             url: img.url,
             altText: img.alt_text,
-            position: img.position,
+            position: img.sort_order,
             isPrimary: img.is_primary,
         })),
         specs: data.specifications || {},
@@ -319,7 +335,9 @@ export async function adminCreateProduct(payload: CreateProductPayload): Promise
         .from('products')
         .insert({
             slug: payload.slug.toLowerCase().replace(/\s+/g, '-'),
-            variants,
+            // Older databases have no variants column. Simple products do not
+            // need it; migrated databases supply their default empty array.
+            ...(variants.length ? { variants } : {}),
             price: summary.price,
             compare_at_price: payload.compareAtPrice,
             stock_quantity: summary.stockQuantity,
@@ -353,7 +371,7 @@ export async function adminCreateProduct(payload: CreateProductPayload): Promise
 
     if (productError || !product) {
         console.error('Error creating product:', productError);
-        throw new Error('Failed to create product');
+        throw productWriteError(productError, 'Failed to create product');
     }
 
     // Create translations
@@ -448,11 +466,18 @@ export async function adminUpdateProduct(payload: UpdateProductPayload): Promise
     }
 
     // Update product
-    const { error: productError } = await supabase.from('products').update(updateData).eq('id', payload.id);
+    let { error: productError } = await supabase.from('products').update(updateData).eq('id', payload.id);
+
+    // The form submits [] for simple products too. Retry only a rejected
+    // missing-column write, never discard real options or hide other failures.
+    if (isMissingVariantsColumn(productError) && Array.isArray(updateData.variants) && !updateData.variants.length) {
+        delete updateData.variants;
+        ({ error: productError } = await supabase.from('products').update(updateData).eq('id', payload.id));
+    }
 
     if (productError) {
         console.error('Error updating product:', productError);
-        throw new Error(productError.message || 'Failed to update product');
+        throw productWriteError(productError, 'Failed to update product');
     }
 
     // Update translations if provided

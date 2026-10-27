@@ -29,3 +29,5 @@ Use `[]` to remove all options where allowed. Omit the column entirely to leave 
 Run `pnpm test:variants`, `pnpm exec tsc --noEmit`, and `pnpm build --webpack`.
 
 Tests execute the actual migration in an isolated PGlite PostgreSQL database and verify price/selection validation, independent cart lines, atomic rollback when an order oversells, stock restoration, deletion without double restoration, malformed option data, and compatibility with products without options. They do not connect to the production store. Payment gateway end-to-end testing still requires a configured staging environment.
+
+Run `pnpm test:admin-products` to check admin creation and updates against databases both with and without the variants column. Simple products can be saved before the variants migration; saving actual options requires the migration and reports its filename if it is missing. Clearing options on a migrated database still writes an explicit empty array.

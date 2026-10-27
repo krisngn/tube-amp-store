@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:variants": "node --test tests/product-variants.test.mjs"
+    "test:variants": "node --test tests/product-variants.test.mjs",
+    "test:admin-products": "node --test tests/admin-products.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
