@@ -1,0 +1,189 @@
+﻿/* ── Checkbox column ─────────────────────────────────────── */
+.checkCol {
+    width: 44px;
+    padding: 0 var(--space-sm) !important;
+    text-align: center;
+}
+
+.checkLabel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: var(--space-xs);
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary, #6d28d9);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* ── Selected row highlight ──────────────────────────────── */
+.rowSelected {
+    background: color-mix(in srgb, var(--color-primary, #6d28d9) 8%, transparent) !important;
+    outline: 1px solid color-mix(in srgb, var(--color-primary, #6d28d9) 30%, transparent);
+}
+
+/* ── Floating toolbar ────────────────────────────────────── */
+.bulkToolbar {
+    position: fixed;
+    bottom: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-md) var(--space-xl);
+    background: var(--color-bg-secondary, #1a1a2e);
+    border: 1px solid var(--color-border-subtle, rgba(255,255,255,0.1));
+    border-radius: var(--radius-xl, 16px);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(109, 40, 217, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(16px);
+    transition: bottom 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+}
+
+.toolbarVisible {
+    bottom: var(--space-xl, 32px);
+}
+
+.count {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary, #a0aec0);
+}
+
+.count strong {
+    color: var(--color-text-primary, #fff);
+    font-size: 1rem;
+}
+
+.actions {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+/* Publish button */
+.publishBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md, 8px);
+    border: none;
+    background: linear-gradient(135deg, #6d28d9, #4f46e5);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 4px 14px rgba(109, 40, 217, 0.45);
+}
+
+.publishBtn:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.publishBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Unpublish button */
+.unpublishBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--color-border-subtle, rgba(255,255,255,0.15));
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-text-primary, #fff);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.unpublishBtn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+}
+
+.unpublishBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Cancel button */
+.cancelBtn {
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md, 8px);
+    border: none;
+    background: transparent;
+    color: var(--color-text-secondary, #a0aec0);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.cancelBtn:hover:not(:disabled) {
+    color: var(--color-text-primary, #fff);
+}
+
+.btnIcon {
+    font-size: 1rem;
+}
+
+/* ── Toast notification ──────────────────────────────────── */
+.toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md, 8px);
+    margin-bottom: var(--space-md);
+    font-size: 0.9rem;
+    animation: slideDown 0.3s ease;
+}
+
+.toastSuccess {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #10b981;
+}
+
+.toastError {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #ef4444;
+}
+
+.toastClose {
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 var(--space-xs);
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.toastClose:hover {
+    opacity: 1;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

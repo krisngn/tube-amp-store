@@ -89,6 +89,12 @@
     color: var(--color-text-secondary);
 }
 
+.emptyCell {
+    text-align: center;
+    padding: var(--space-2xl);
+    color: var(--color-text-secondary);
+}
+
 .pagination {
     display: flex;
     justify-content: center;

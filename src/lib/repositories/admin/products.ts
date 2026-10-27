@@ -566,6 +566,32 @@ export interface LowStockItem {
  * Products at or below their low-stock threshold (stock_quantity <= low_stock_threshold).
  * Compared in JS since Supabase can't compare two columns in a filter.
  */
+/**
+ * Bulk update the published status for multiple products at once
+ */
+export async function adminBulkUpdateProductStatus(
+    ids: string[],
+    isPublished: boolean
+): Promise<void> {
+    if (!ids.length) return;
+    const supabase = createServiceClient();
+
+    const updateData: Record<string, unknown> = { is_published: isPublished };
+    if (isPublished) {
+        updateData.published_at = new Date().toISOString();
+    }
+
+    const { error } = await supabase
+        .from('products')
+        .update(updateData)
+        .in('id', ids);
+
+    if (error) {
+        console.error('Error bulk-updating product status:', error);
+        throw new Error('Failed to update product statuses');
+    }
+}
+
 export async function adminListLowStock(): Promise<LowStockItem[]> {
     const supabase = createServiceClient();
     const { data, error } = await supabase

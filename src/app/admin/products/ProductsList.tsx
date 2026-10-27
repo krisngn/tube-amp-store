@@ -1,11 +1,11 @@
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
 import { adminListProducts } from '@/lib/repositories/admin/products';
 import { adminListCategories } from '@/lib/repositories/admin/categories';
 import { adminListBrands } from '@/lib/repositories/admin/brands';
 import ProductsFilters from './ProductsFilters';
-import DeleteProductButton from './DeleteProductButton';
+import ProductsBulkActions from './ProductsBulkActions';
 import styles from './page.module.css';
+import Link from 'next/link';
 
 interface ProductsListProps {
     searchParams: {
@@ -51,66 +51,41 @@ export default async function ProductsList({ searchParams }: ProductsListProps) 
     }));
     const brandOptions = brands.map((b) => ({ id: b.id, name: b.name }));
 
+    const labels = {
+        name: t('products.list.name'),
+        status: t('products.list.status'),
+        price: t('products.list.price'),
+        stock: t('products.list.stock'),
+        category: t('products.list.category'),
+        brand: t('products.list.brand'),
+        topology: t('products.list.topology'),
+        tubeType: t('products.list.tubeType'),
+        updatedAt: t('products.list.updatedAt'),
+        actions: t('products.list.actions'),
+        edit: t('products.edit'),
+        published: t('products.list.published'),
+        draft: t('products.list.draft'),
+    };
+
     return (
         <div>
             <ProductsFilters searchParams={searchParams} categories={categoryOptions} brands={brandOptions} />
 
-            <div className={styles.productsTable}>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>{t('products.list.name')}</th>
-                            <th>{t('products.list.status')}</th>
-                            <th>{t('products.list.price')}</th>
-                            <th>{t('products.list.stock')}</th>
-                            <th>{t('products.list.category')}</th>
-                            <th>{t('products.list.brand')}</th>
-                            <th>{t('products.list.topology')}</th>
-                            <th>{t('products.list.tubeType')}</th>
-                            <th>{t('products.list.updatedAt')}</th>
-                            <th>{t('products.list.actions')}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {result.items.length === 0 ? (
+            {result.items.length === 0 ? (
+                <div className={styles.productsTable}>
+                    <table>
+                        <tbody>
                             <tr>
-                                <td colSpan={10} className={styles.emptyCell}>
+                                <td colSpan={11} className={styles.emptyCell}>
                                     {t('products.list.empty')}
                                 </td>
                             </tr>
-                        ) : (
-                            result.items.map((product) => (
-                                <tr key={product.id}>
-                                    <td>{product.name}</td>
-                                    <td>
-                                        <span className={`badge ${product.status === 'published' ? 'badge-success' : 'badge-secondary'}`}>
-                                            {product.status === 'published' ? t('products.list.published') : t('products.list.draft')}
-                                        </span>
-                                    </td>
-                                    <td>{product.price.toLocaleString()} VND</td>
-                                    <td>{product.stock}</td>
-                                    <td>{product.categoryName || '—'}</td>
-                                    <td>{product.brandName || '—'}</td>
-                                    <td>{product.topology ? product.topology.toUpperCase() : '—'}</td>
-                                    <td>{product.tubeType || '—'}</td>
-                                    <td>{new Date(product.updatedAt).toLocaleDateString()}</td>
-                                    <td>
-                                        <div style={{ display: 'flex', gap: 'var(--space-xs)' }}>
-                                            <Link
-                                                href={`/admin/products/${product.id}`}
-                                                className="btn btn-ghost btn-sm"
-                                            >
-                                                {t('products.edit')}
-                                            </Link>
-                                            <DeleteProductButton id={product.id} name={product.name} />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+            ) : (
+                <ProductsBulkActions products={result.items} labels={labels} />
+            )}
 
             {result.totalPages > 1 && (
                 <div className={styles.pagination}>
@@ -144,3 +119,4 @@ export default async function ProductsList({ searchParams }: ProductsListProps) 
         </div>
     );
 }
+
