@@ -34,8 +34,7 @@ await test('admin product writes across schema versions', async (t) => {
             deposit_type text, deposit_amount numeric, deposit_percentage integer,
             deposit_due_hours integer, reservation_days integer, reservation_policy_note text,
             is_published boolean, is_featured boolean, is_vintage boolean, published_at timestamptz,
-            category_id uuid, brand_id uuid, weight_grams integer,
-            length_cm numeric, width_cm numeric, height_cm numeric
+            category_id uuid, brand_id uuid
         );
         CREATE TABLE product_translations (
             product_id uuid REFERENCES products(id), locale text, name text NOT NULL,
@@ -83,11 +82,23 @@ await test('admin product writes across schema versions', async (t) => {
     });
     let id;
     await t.test('creates a simple product and translations before the variants migration', async () => {
-        id = await repo.adminCreateProduct(payload);
+        id = await repo.adminCreateProduct({ ...payload, weightGrams: null, heightCm: null });
         const product = (await db.query('SELECT * FROM products WHERE id=$1', [id])).rows[0];
         assert.equal(Number(product.price), 3500000);
         assert.equal(product.stock_quantity, 1);
         assert.equal((await db.query('SELECT * FROM product_translations WHERE product_id=$1', [id])).rows.length, 2);
+    });
+    await t.test('requires a migration for supplied measurements, then persists them', async () => {
+        await assert.rejects(repo.adminCreateProduct({ ...payload, slug: 'shipping', heightCm: 15 }), /20261027_product_shipping_dimensions.sql/);
+        const shippingMigration = await readFile(new URL('../supabase/migrations/20261027_product_shipping_dimensions.sql', import.meta.url), 'utf8');
+        await db.exec(shippingMigration);
+        await db.exec(shippingMigration);
+        const shippingId = await repo.adminCreateProduct({ ...payload, slug: 'shipping', weightGrams: 2000, lengthCm: 30, widthCm: 20, heightCm: 15 });
+        const row = (await db.query('SELECT * FROM products WHERE id=$1', [shippingId])).rows[0];
+        assert.equal(row.weight_grams, 2000);
+        assert.equal(Number(row.height_cm), 15);
+        await repo.adminUpdateProduct({ id: shippingId, heightCm: null });
+        assert.equal((await db.query('SELECT height_cm FROM products WHERE id=$1', [shippingId])).rows[0].height_cm, null);
     });
     await t.test('updates a simple product on a legacy schema without dropping real options', async () => {
         await repo.adminUpdateProduct({ id, variants: [], price: 3600000 });

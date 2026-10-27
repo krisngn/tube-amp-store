@@ -13,6 +13,9 @@ function productWriteError(error: ProductDatabaseError | null, fallback: string)
     if (isMissingVariantsColumn(error)) {
         return new Error('Database chưa hỗ trợ phân loại sản phẩm. Hãy chạy migration 20261024_product_variants.sql trước khi lưu sản phẩm có phân loại.');
     }
+    if (error && ['PGRST204', '42703'].includes(error.code ?? '') && /\b(weight_grams|length_cm|width_cm|height_cm)\b/.test(error.message)) {
+        return new Error('Database chưa hỗ trợ khối lượng và kích thước vận chuyển. Hãy chạy migration 20261027_product_shipping_dimensions.sql.');
+    }
     if (error?.code === '23505') return new Error('Slug hoặc SKU sản phẩm đã tồn tại. Vui lòng dùng mã khác.');
     if (error?.code === '23502') return new Error(`Thiếu trường bắt buộc trong database: ${error.message}`);
     return new Error(error ? `${fallback} (${error.code ?? 'database'}): ${error.message}` : fallback);
@@ -361,10 +364,12 @@ export async function adminCreateProduct(payload: CreateProductPayload): Promise
             is_vintage: payload.isVintage || false,
             category_id: payload.categoryId || null,
             brand_id: payload.brandId || null,
-            weight_grams: payload.weightGrams ?? null,
-            length_cm: payload.lengthCm ?? null,
-            width_cm: payload.widthCm ?? null,
-            height_cm: payload.heightCm ?? null,
+            // Do not reference optional shipping columns when no measurement
+            // was supplied; older catalogs may not have this migration yet.
+            ...(payload.weightGrams != null ? { weight_grams: payload.weightGrams } : {}),
+            ...(payload.lengthCm != null ? { length_cm: payload.lengthCm } : {}),
+            ...(payload.widthCm != null ? { width_cm: payload.widthCm } : {}),
+            ...(payload.heightCm != null ? { height_cm: payload.heightCm } : {}),
         })
         .select('id')
         .single();
