@@ -141,6 +141,8 @@ export async function adminListProducts(
         pagination = { page: 1, pageSize: 20 },
     } = params;
 
+    const searchTerm = filters.search?.trim().slice(0, 100);
+
     let query = supabase
         .from('products')
         .select(
@@ -157,14 +159,19 @@ export async function adminListProducts(
             category:categories(name_vi),
             brand:brands(name),
             product_translations(name, locale)
+            ${searchTerm ? ', search_match:product_translations()' : ''}
         `,
             { count: 'exact' }
         )
 
     // Apply filters
-    if (filters.search) {
-        // Search in product translations (will match any locale)
-        query = query.ilike('product_translations.name', `%${filters.search}%`);
+    if (searchTerm) {
+        // Filter parents using a separate embed, preserving all display names.
+        // A left embed also lets slug-only matches survive without a name match.
+        const pattern = `%${searchTerm.replace(/[\\%_]/g, '\\$&')}%`;
+        const quotedPattern = pattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        query = query.ilike('search_match.name', pattern)
+            .or(`slug.ilike."${quotedPattern}",search_match.not.is.null`);
     }
 
     if (filters.status === 'published') {
@@ -190,7 +197,8 @@ export async function adminListProducts(
     }
 
     // Apply sorting
-    query = query.order(sort.field, { ascending: sort.direction === 'asc' });
+    query = query.order(sort.field, { ascending: sort.direction === 'asc' })
+        .order('id', { ascending: true });
 
     // Apply pagination
     const from = (pagination.page - 1) * pagination.pageSize;

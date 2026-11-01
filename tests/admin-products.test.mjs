@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import ts from 'typescript';
 import { PGlite } from '@electric-sql/pglite';
+import { createClient } from '@supabase/supabase-js';
 
 const require = createRequire(import.meta.url);
 async function loadTs(path, dependencies = {}) {
@@ -18,6 +19,42 @@ const payload = {
     slug: 'xac-may-r-122a', price: 3500000, stockQuantity: 1, condition: 'vintage', variants: [],
     translations: { vi: { name: 'Xác máy R-122A' }, en: { name: 'R-122A' } },
 };
+
+// Keep the real Supabase query builder; intercept only its HTTP boundary.
+// A translation-only filter must never leave unrelated parent products in a
+// paginated search result, nor strip the other display translations.
+await test('admin search emits parent filtering for names or slug without filtering display names', async () => {
+    let request;
+    const client = createClient('https://catalog.example', 'test-key', {
+        global: { fetch: async (url) => {
+            request = new URL(url);
+            return new Response('[]', { headers: { 'content-type': 'application/json', 'content-range': '*/0' } });
+        } },
+    });
+    const repo = await loadTs('src/lib/repositories/admin/products.ts', {
+        '@/lib/products/variants': variants,
+        '@/lib/supabase/service': { createServiceClient: () => client },
+    });
+    await repo.adminListProducts({ filters: { search: '  SLCE  ', status: 'published' }, pagination: { page: 2, pageSize: 20 } });
+    assert.equal(request.searchParams.get('or'), '(slug.ilike."%SLCE%",search_match.not.is.null)');
+    assert.equal(request.searchParams.get('search_match.name'), 'ilike.%SLCE%');
+    assert.equal(request.searchParams.get('product_translations.name'), null);
+    assert.match(request.searchParams.get('select'), /product_translations\(name,locale\)/);
+    assert.match(request.searchParams.get('select'), /search_match:product_translations\(\)/);
+    assert.equal(request.searchParams.get('is_published'), 'eq.true');
+    assert.equal(request.searchParams.get('offset'), '20');
+    assert.equal(request.searchParams.get('limit'), '20');
+    assert.equal(request.searchParams.get('order'), 'updated_at.desc,id.asc');
+
+    await repo.adminListProducts({ filters: { search: '  ' } });
+    assert.equal(request.searchParams.get('or'), null);
+    assert.equal(request.searchParams.get('search_match.name'), null);
+    assert.doesNotMatch(request.searchParams.get('select'), /search_match/);
+
+    await repo.adminListProducts({ filters: { search: '50%_"x,y' } });
+    assert.equal(request.searchParams.get('search_match.name'), 'ilike.%50\\%\\_"x,y%');
+    assert.equal(request.searchParams.get('or'), '(slug.ilike."%50\\\\%\\\\_\\"x,y%",search_match.not.is.null)');
+});
 
 // Exercise the real repository's SQL writes against PostgreSQL, with and
 // without the optional variants migration. No production credentials needed.
